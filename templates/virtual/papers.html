@@ -1,0 +1,220 @@
+{% extends "livebase.html" %}
+{% load documenttags %}
+{% load cache %}
+{% block title %}{{confInfo.conference}} Papers{% endblock %}
+
+{% block head %}
+
+
+    <style>
+
+
+    .typeahead {
+        background-color: #FFFFFF;
+    }
+    .typeahead:focus {
+        border: 2px solid #0097CF;
+    }
+    .tt-query {
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    }
+    .tt-hint {
+        color: #999999;
+    }
+    .tt-menu {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        margin-top: 12px;
+        padding: 8px 0;
+        width: 422px;
+    }
+    .tt-suggestion {
+        font-size: 22px;  /* Set suggestion dropdown font size */
+        padding: 3px 20px;
+    }
+    .tt-suggestion:hover {
+        cursor: pointer;
+        background-color: #0097CF;
+        color: #FFFFFF;
+    }
+    .tt-suggestion p {
+        margin: 0;
+    }
+    </style>
+
+{% endblock %}
+
+{% block body %}
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12"></div>
+        <div class="title-centered" style="text-align:center">Papers</div>
+    </div>
+</div>
+{% if access_granted %}
+<div class="container">
+    <!-- Header -->
+    <ul class="nav nav-pills justify-content-center">
+        <li class="nav-item active">
+            <a class="nav-link text-muted active " data-toggle="tab" href="#tab-browse" role="tab" aria-controls="nav-home" aria-selected="true">Browse
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-muted" href="{% url 'paper_vis' year %}">Visualization
+            </a>
+        </li>
+    </ul>
+    <div class="row"></div>
+    <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+        <form method="GET">
+            <div class="tab-pane active" id="tab-browse" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="row d-none session_notice">
+                    <div class="alert alert-warning alert-dismissible fade show col-12" role="alert">
+                        Showing papers for <span id="session_name" style="font-weight: bold;"></span>.
+                        <!-- To navigate all papers close this message. -->
+                        <button type="button" class="close remove_session" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                        <div class="input-group mb-3">
+                            <input type="text" name="search" class="form-control typeahead tt-query" autocomplete="off" spellcheck="false" placeholder="Search" value="{{search_query}}">
+                            <input type="hidden" name="search_type" id="searchinput" value="{{search_type}}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 text-center" style="margin-bottom: 10px;">
+                        <div class="btn-group btn-group-toggle filter_option" id="searchButtons">
+                            <label class="btn btn-outline-secondary{% if search_type == 'title'%} active{% endif %}" data-tippy-content="Search for papers titles">
+                                <input type="radio" name="options" value="titles" autocomplete="off" onClick="changeSearch(this);"> title
+                            </label>
+                            <label class="btn btn-outline-secondary {% if search_type == 'keyword'%} active{% endif %}" data-tippy-content="Search for papers with specific keywords">
+                                <input type="radio" name="options" value="keywords" autocomplete="off" onClick="changeSearch(this);"> keyword
+                            </label>
+                            <label class="btn btn-outline-secondary {% if search_type == 'author'%} active{% endif %}" data-tippy-content="Search for papers from specific authors">
+                                <input type="radio" name="options" value="authors" autocomplete="off" onClick="changeSearch(this);"> author
+                            </label>
+                            <!-- <label class="btn btn-outline-secondary" -->
+                            <!--        data-tippy-content="Search for papers closest related to authors or other papers"> -->
+                            <!--     <input type="radio" name="options" value="recs" -->
+                            <!--            autocomplete="off"> similar -->
+                            <!-- </label> -->
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <button class="btn btn-outline-secondary reshuffle" onClick="document.location.reload();"> shuffle
+                        </button>
+                        <div class="float-right">
+                            <div class="btn-group btn-group-toggle render_option" data-toggle="buttons">
+                                <label class="btn btn-outline-secondary">
+                                    <input type="radio" name="options" value="list" autocomplete="off" onClick="listmode();"> list
+                                </label>
+                                <label class="btn btn-outline-secondary active">
+                                    <input type="radio" name="options" value="compact" autocomplete="off" checked onClick="compactmode();"> compact
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cards row">
+                </div>
+            </div>
+        </form>
+        {# =================================================================== #}
+        <div class="container">
+            <div class="cards row">
+                {% for paper in papers %}
+                {{paper.get_virtualcard_html|safe}}
+                {% endfor %}
+            </div>
+        </div>
+        {# ======================================================================= #}
+        <script>
+        function listmode() {
+            $(".cards_img").hide();
+            $(".pp-card").addClass("pp-mode-list").removeClass("pp-mode-compact");
+        }
+
+        function compactmode() {
+            $(".cards_img").show();
+            $(".pp-card").removeClass("pp-mode-list").addClass("pp-mode-compact");
+        }
+
+        function changeSearch(e) {
+            $("#searchButtons label").removeClass("active");
+            $(e.parentElement).addClass("active");
+            searchtype = e.parentElement.textContent.trim();
+            $("#searchinput").val(searchtype);
+            
+            
+
+        }
+        </script>   
+            
+        {% else %}
+        <br><br><br>
+        <div class="container" style="text-align:center;">
+            <h4>Registration Required</h4>
+            <p>You must be <a href="/Register/view-registration">registered</a> {% if not request.user.is_authenticated %} and <a href="/login?nextp={{request.get_full_path}}">logged in</a>{% endif %} order to view this content.</p>
+        </div>
+        {% endif %}
+        <script>
+
+            $(document).ready(function(){
+                // Defining the local dataset
+                
+
+                var keywords = {{keyword_list|safe}};
+                var titles = {{titles_list|safe}};
+                /*var authors = {{authors_list|safe}};*/
+
+
+                var keywords = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                local: keywords
+                });
+
+                window.v_keywords = keywords;
+
+                var titles = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                local: titles
+                });
+
+                window.v_titles = titles;
+
+                var authors = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                local: authors
+                });
+                var authors = [];
+                window.v_authors = authors;
+
+                /*// Initializing the typeahead
+                $('.typeahead').typeahead({
+                    hint: true,
+                    highlight: true, /* Enable substring highlighting */
+                    minLength: 1 /* Specify minimum characters required for showing result */
+                },
+                {
+                    name: 'keywords',
+                    source: keywords
+                });*/
+
+
+            });
+
+
+        </script>
+        {% endblock %}

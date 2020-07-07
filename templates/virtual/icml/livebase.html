@@ -1,0 +1,107 @@
+{% load documenttags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{% block title %}Virtual Site{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link rel="stylesheet" href="/static/expo/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    {# <link rel="stylesheet" href="/static/expo/css/expo-base.css"> #}
+
+    
+    
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    {# <script src="static/js/typeahead.bundle.js"></script> #}
+    {# <link rel="stylesheet" href="static/css/typeahead.css"> #}
+    <link rel="stylesheet" href="{% static "virtual/css/virtual.css" %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>        
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js" integrity="sha512-lEb9Vp/rkl9g2E/LdHIMFTqz21+LA79f84gqP75fbimHqVTu6483JG1AwJlWLLQ8ezTehty78fObKupq3HSHPQ==" crossorigin="anonymous"></script>
+    
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+    <!-- NAV -->
+
+    
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light mr-auto " id="main-nav">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+            <img src="{% static 'nips/img/ICML-logo.svg' %}" height="40px"> {# Need to make this lookup the database name #}
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-right flex-grow-1" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    {% if request.user.is_superuser %}
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'expo' year %}">[<img src="{% static 'expo/img/icml/expo-logo-nav.png' %}">]</a>
+                    </li>
+                    {% endif %}
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/virtual/{{confInfo.year}}/index.html">Getting Started</a>
+                    </li>
+                    {% comment %}
+                    <li class="nav-item ">
+                        <a class="nav-link" href="calendar.html">Schedule</a>
+                    </li>
+                    {% endcomment %}
+                    {% if request.user.is_superuser %}
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/virtual/{{year}}/events/tutorial">[Tutorials]</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/virtual/{{year}}/papers">Papers</a>
+                    </li>
+                    {% if request.user.is_superuser %}
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'virtual_workshops' year %}">[Workshops]</a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    {% block body %}
+
+
+
+    {% endblock %}
+
+
+
+
+
+    <footer class="footer bg-light p-4">
+        <div class="container">
+            <p class="float-right"><a href="#">Back to Top</a></p>
+            {% if papers %}<p style="text-align:left">Showing {{papers.count}} Papers</p>{% endif %}
+        </div>
+    </footer>
+
+
+    {% block postbody %}
+  
+    {% endblock %}
+</body>
+
+</html>

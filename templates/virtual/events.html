@@ -1,0 +1,60 @@
+{% extends "livebase.html" %}
+{% load documenttags %}
+{% load cache %}
+
+{% block title %}{{confInfo.conference}} Papers{% endblock %}
+
+{% block body %}
+   
+   
+
+
+    <br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12"></div>
+            <div class="title-centered" style="text-align:center">{{event_type|title}}</div>
+        </div>
+    </div>
+
+    {% if access_granted %}
+
+
+
+
+        {# =================================================================== #}
+
+        <div class="container">
+            <div class="cards row">
+                {% for event in events %}
+                    
+                    {{event.get_virtualcard_html|safe}}
+
+                {% endfor %}
+            </div>
+        </div>
+
+        {# ======================================================================= #}
+        <script>
+            function listmode(){
+                $(".cards_img").hide();
+                $(".pp-card").addClass("pp-mode-list").removeClass("pp-mode-compact");
+            }
+            function compactmode(){
+                $(".cards_img").show();
+                $(".pp-card").removeClass("pp-mode-list").addClass("pp-mode-compact");
+            }
+        </script>
+    
+
+    {% else %}
+        <br><br><br>
+        <div class="container"  style="text-align:center;">
+            <h4>Registration Required</h4>
+            <p>You must be <a href="/Register/view-registration">registered</a> {% if not request.user.is_authenticated %} and <a href="/login?nextp={{request.get_full_path}}">logged in</a>{% endif %} order to view this content.</p>
+        </div>
+
+    {% endif %}
+
+       
+{% endblock %}
