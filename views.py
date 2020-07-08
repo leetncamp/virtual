@@ -154,80 +154,73 @@ def ical(request, eventid, number):
 
     """number is either the first or 2nd instance of this presentation"""
 
-    conf_event = Events.objects.filter(pk=eventid).first()
+    if request.user.is_authenticated:
+        access_granted = get_access(request, year)
+
+        if access_granted:
+
+            conf_event = Events.objects.filter(pk=eventid).first()
+
+            from icalendar import Calendar, Event
+            from nips.models import IcalUserEvents
+            cal = Calendar()
+            cal.add('prodid', '-//ICML 2020//icml.cc//')
+            cal.add('version', '2.0')
+
+            event = Event()
+            event.add('summary', conf_event.name)
+            if number == 1:
+                event.add('dtstart', conf_event.starttime)
+                event.add('dtend', conf_event.endtime)
+            elif number == 2:
+                event.add('dtstart', conf_event.starttime2)
+                event.add('dtend', conf_event.endtime2)
+            event.add('dtstamp', now())
 
 
-    from icalendar import Calendar, Event
-    from nips.models import IcalUserEvents
-    cal = Calendar()
-    cal.add('prodid', '-//ICML 2020//icml.cc//')
-    cal.add('version', '2.0')
+            from icalendar import vCalAddress, vText
+            domain = conf_event.session.conference.organization.get_domain()
+            organizer = vCalAddress('MAILTO:do-not-reply@icml.cc')
 
-    event = Event()
-    event.add('summary', conf_event.name)
-    if number == 1:
-        event.add('dtstart', conf_event.starttime)
-        event.add('dtend', conf_event.endtime)
-    elif number == 2:
-        event.add('dtstart', conf_event.starttime2)
-        event.add('dtend', conf_event.endtime2)
-    event.add('dtstamp', now())
-    # event.add('dtstamp', datetime(2005,4,4,0,10,0,tzinfo=pytz.utc))
+            speakers = conf_event.get_speakers()
+            if speakers:
+                speaker = speakers[0]
+            else:
+                speaker = ''
 
-    from icalendar import vCalAddress, vText
-    domain = conf_event.session.conference.organization.get_domain()
-    organizer = vCalAddress('MAILTO:do-not-reply@icml.cc')
+            organizer.params['cn'] = vText(speaker.get_full_name())
 
-    speakers = conf_event.get_speakers()
-    if speakers:
-        speaker = speakers[0]
+            event['organizer'] = organizer
+
+
+
+            if conf_event.type == "Poster":
+                event['url'] = request.build_absolute_uri(reverse("virtual_paper_detail", args=[conf_event.session.conference.id, conf_event.id]))
+
+            event['uid'] = '{}'.format(request.get_full_path())
+            event['location'] = vText(conf_event.get_semicolonSpeakerStr())
+
+
+            cal.add_component(event)
+            
+            tmp = io.BytesIO()
+            tmp.write(cal.to_ical())
+            tmp.flush()
+            tmp.seek(0)
+            response = HttpResponse(
+                tmp.read(), content_type="application/octet-stream")
+            response['Content-Disposition'] = 'attachment; filename="{0}.ics"'.format(
+                event['uid'])
+
+            icaluserevent, created = IcalUserEvents.objects.get_or_create(user=request.user, event=conf_event, number=number)
+            if created:
+                icaluserevent.save()
+                log.info("ICALEVENT {}".format(icaluserevent))
+        else:
+            log.info("User {} acessed an ical link without having access")
+            return HttpResponseNotFound('<h1>You are not logged in and registered</h1>')
     else:
-        speaker = ''
-
-    organizer.params['cn'] = vText(speaker.get_full_name())
-    # organizer.params['role'] = vText('Speaker')
-    event['organizer'] = organizer
-    # look for conf
-    # event['location'] = vText('Odense, Denmark')
-
-
-    if conf_event.type == "Poster":
-        event['url'] = request.build_absolute_uri(reverse("virtual_paper_detail", args=[conf_event.session.conference.id, conf_event.id]))
-
-    event['uid'] = '{}'.format(request.get_full_path())
-    event['location'] = vText(conf_event.get_semicolonSpeakerStr())
-
-
-    cal.add_component(event)
-    # event.add('priority', 5)
-
-    # attendee = vCalAddress('MAILTO:maxm@example.com')
-    # attendee.params['cn'] = vText('Max Rasmussen')
-    # attendee.params['ROLE'] = vText('REQ-PARTICIPANT')
-    # event.add('attendee', attendee, encode=0)
-
-    # attendee = vCalAddress('MAILTO:the-dude@example.com')
-    # attendee.params['cn'] = vText('The Dude')
-    # attendee.params['ROLE'] = vText('REQ-PARTICIPANT')
-    # event.add('attendee', attendee, encode=0)
-
-    #directory = tempfile.mkdtemp()
-    #f = open(os.path.join(directory, 'example.ics'), 'wb')
-    # f.write(cal.to_ical())
-    # f.close()
-    tmp = io.BytesIO()
-    tmp.write(cal.to_ical())
-    tmp.flush()
-    tmp.seek(0)
-    response = HttpResponse(
-        tmp.read(), content_type="application/octet-stream")
-    response['Content-Disposition'] = 'attachment; filename="{0}.ics"'.format(
-        event['uid'])
-
-    icaluserevent, created = IcalUserEvents.objects.get_or_create(user=request.user, event=conf_event, number=number)
-    if created:
-        icaluserevent.save()
-        log.info("ICALEVENT {}".format(icaluserevent))
+        return HttpResponseNotFound('<h1>You are not logged in and registered</h1>')
 
     return(response)
 
