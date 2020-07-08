@@ -75,6 +75,35 @@
                     </li>
                     {% endif %}
 
+
+                    {% if confInfo.user.is_authenticated %}
+
+                        <div class="btn-group">
+
+                          <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-user"></i> {{request.user.firstname}}</button>
+                          <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                          </button>
+
+                          <div class="dropdown-menu dropdown-menu-right">
+
+                            <a class="dropdown-item" href="/Profile">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="Profile/change-password">Password</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Log Out</a>
+                            <div class="dropdown-divider"></div>
+                            <a class = "dropdown-item" href="/set_timezone?nextp={{request.get_full_path}}">TZ: {{request.session.django_timezone}}</a>
+                          </div>
+                        </div>
+                        
+
+                    {% else %}
+                        {# This may never get used since @login decorates all the sponsorhall views #}
+                        <a href="/accounts/login?nextp={{ request.path }} " class="navbar-brand"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+
+                    {% endif %}
+
                 </ul>
             </div>
         </div>
