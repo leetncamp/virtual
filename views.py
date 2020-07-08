@@ -125,8 +125,9 @@ def papers(request, year):
         "pk", flat=True)), session__conference__id=settings.CURRENT_CONFERENCE).order_by("?")
 
     all_papers = Events.objects.filter(session__conference__id=settings.CURRENT_CONFERENCE, type="Poster")
-    keyword_list = json.dumps([i for i in all_papers.exclude(subject_areas=None).values_list("subject_areas__name", 
-        flat=True).distinct().order_by("subject_areas__name")])
+    keywords = all_papers.exclude(subject_areas=None).order_by("subject_areas__name").values_list("subject_areas__name", 
+        flat=True).distinct().order_by("subject_areas__name")  #used in as source of Show topics/keywords »
+    keyword_list = json.dumps([i for i in keywords]) #used in typeahead
 
     titles_list = json.dumps([i for i in all_papers.values_list("name", flat=True).distinct().order_by("name")])
     

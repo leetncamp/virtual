@@ -128,6 +128,29 @@
                 </div>
             </div>
         </form>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p> 
+                      <a data-toggle="collapse" href="#collapseKeywords" role="button" aria-expanded="false" aria-controls="collapseKeywords">
+                        Show topics/keywords &raquo;
+                      </a>
+                    </p>
+                </div>
+                    <div class="collapse" id="collapseKeywords">
+                      <div class="cards card-body">
+                        {% for keyword in keywords %} {# keywords is a python list strings, not the typeahead json #}
+                            <div class="f">
+                                <a class="keyword-link" href="{% url 'papers' year %}?search_type=keyword&search={{keyword}}">{{keyword}}</a>
+                                {# /virtual/2020/papers?search=techniques&search_type=keyword&options=compact# #}
+                            </div>
+                        {% endfor %}
+
+                      </div>
+
+                </div>
+            </div>
+        </div>
         {# =================================================================== #}
         <div class="container">
             <div class="cards row">

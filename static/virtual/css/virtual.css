@@ -342,3 +342,7 @@ body .carousel-control-prev {
 li:not(:last-child) {
     margin-bottom: 5px;
 }
+
+.keyword-link {
+  display:inline !important;
+}
