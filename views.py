@@ -188,10 +188,11 @@ def ical(request, eventid, number):
             speakers = conf_event.get_speakers()
             if speakers:
                 speaker = speakers[0]
+                organizer.params['cn'] = vText(speaker.get_full_name())
             else:
                 speaker = ''
 
-            organizer.params['cn'] = vText(speaker.get_full_name())
+            
 
             event['organizer'] = organizer
 
