@@ -14,6 +14,7 @@ import io
 from django.urls import reverse
 from django.contrib import messages
 
+
 from nips.models import Events, Eventspeakers, Timezones, Conferences, Registrations, Users, conferenceDict, Userlinks, now, Q, escape
 
 import logging
@@ -154,8 +155,10 @@ def ical(request, eventid, number):
 
     """number is either the first or 2nd instance of this presentation"""
 
+    debug()
+
     if request.user.is_authenticated:
-        access_granted = get_access(request, year)
+        access_granted = True
 
         if access_granted:
 
