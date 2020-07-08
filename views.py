@@ -155,7 +155,7 @@ def ical(request, eventid, number):
 
     """number is either the first or 2nd instance of this presentation"""
 
-    debug()
+
 
     if request.user.is_authenticated:
         access_granted = True
