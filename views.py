@@ -131,7 +131,7 @@ def papers(request, year):
 
     titles_list = json.dumps([i for i in all_papers.values_list("name", flat=True).distinct().order_by("name")])
     
-    #Calculating names take almost 5 seconds becuase I don't cache the full name in the user model.  Calculate and store them in a pickle.
+    #Calculating names take almost 5 seconds because I don't cache the full name in the user model.  Calculate and store them in a pickle.
 
     author_list_path = "/tmp/author-list-{}.pickle".format(settings.DATABASE)
 
