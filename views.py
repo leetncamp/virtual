@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from pdb import set_trace as debug
 import traceback
-from django.http import HttpResponse, HttpResponseNotFound, JsonResponse, FileResponse
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse, FileResponse, Http404
 from nips.conference import ConferenceInfo
 from django.template.loader import get_template
 from django.conf import settings
@@ -174,11 +174,17 @@ def ical(request, eventid, number):
             event = Event()
             event.add('summary', conf_event.name)
             if number == 1:
-                event.add('dtstart', conf_event.starttime)
-                event.add('dtend', conf_event.endtime)
+                if conf_event.starttime and conf_event.endtime:
+                    event.add('dtstart', conf_event.starttime)
+                    event.add('dtend', conf_event.endtime)
+                else:
+                    raise Http404("An ical attachment cannot be generated.  An engineer has been notified. ")
             elif number == 2:
-                event.add('dtstart', conf_event.starttime2)
-                event.add('dtend', conf_event.endtime2)
+                if conf_event.starttime2 and conf_event.endtime2:
+                    event.add('dtstart', conf_event.starttime2)
+                    event.add('dtend', conf_event.endtime2)
+                else:
+                    raise Http404("An ical attachment cannot be generated.  An engineer has been notified. ")
             event.add('dtstamp', now())
 
 
