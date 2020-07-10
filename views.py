@@ -58,6 +58,7 @@ def home(request, year):
 
     confInfo = getConfInfo(request, year=year)
     pagePermission = confInfo.get_permission(textid=request.META.get("PATH_INFO", None))
+    pagePermission['view'] = True
     timezone_nextp = request.get_full_path()
     return(render(request, "virtual/index.html", locals()))
 
