@@ -14,7 +14,7 @@ urlpatterns = [
     
     path("<int:year>/papers", virtual.views.papers, name="papers"),
     
-    path("<int:year>/paper/<int:eventid>",
+    path("<int:year>/poster/<int:eventid>",
          virtual.views.paper_detail, name="virtual_paper_detail"),
     
     path("<int:year>/events/<slug:event_type>",
