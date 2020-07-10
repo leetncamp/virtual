@@ -6,7 +6,7 @@ from nips.conference import ConferenceInfo
 from django.template.loader import get_template
 from django.conf import settings
 from django.urls import reverse
-from datetime import datetime
+from datetime import datetime, timedelta
 import pickle
 import json
 import os
@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.contrib import messages
 
 
-from nips.models import Events, Eventspeakers, Timezones, Conferences, Registrations, Users, conferenceDict, Userlinks, now, Q, escape
+from nips.models import Events, Eventspeakers, Timezones, Conferences, Registrations, Users, conferenceDict, Userlinks, now, Q, escape, Sessions
 
 import logging
 log = logging.getLogger(__name__)
@@ -321,6 +321,71 @@ def workshops(request, year):
     access_granted = get_access(request, year)
 
     wks = Events.objects.filter(
-        session__conference__id=year, type__istartswith="Workshop").order_by("?")
+        session__conference__id=year, type__icontains="Workshop").order_by("?")
 
     return(render(request, "virtual/workshops.html", locals()))
+
+
+
+
+def workshop_detail(request, year, eventid):
+
+    confInfo = getConfInfo(request, year=year)
+
+    access_granted = get_access(request, year)
+
+    workshop = Events.objects.filter(pk=eventid).first()
+
+    
+
+    if workshop:
+        wkapp = workshop.get_application()
+        if wkapp:
+            
+            wkapp = wkapp[0]  #This returns a list not queryset
+
+            meeting_opens = Events.objects.exclude(starttime=None).order_by("starttime").first().starttime - timedelta(days=2)  #Show zoom links the day before the meeting starts
+            meeting_closes = Events.objects.exclude(endtime=None).order_by("endtime").last().endtime + timedelta(days=2)  #Show zoom links the day before the meeting starts
+
+            show_zoom_links = now() > meeting_opens and now() < meeting_closes
+            show_zoom_links = True
+
+            show_start_link = wkapp.organizers.filter(pk=request.user.pk).exists()
+
+        else:
+            wkapp = None
+
+
+
+    from rocketchat_conferences import helpers as rch
+
+    rci = rch.get_active_rocketchat_conf_inst_obj()
+
+    if access_granted and workshop and rci:
+
+        rcu = rch.find_or_create_user(request.user)
+
+        try:
+
+            event_channel = rch.find_or_create_events_channel(workshop)
+
+            if event_channel:
+
+                rocketchat_new_window_url = "{}?resumeToken={}".format(
+                    event_channel.get_url(), rcu.rocketchat_token)
+
+                rocketchat_iframe_url = "{}?layout=embedded".format(
+                    event_channel.get_url(), rcu.rocketchat_token)
+
+                rocketchat_iframe_id = 'eventPageChat'
+
+                event_channel_auth_js = rch.make_authenticate_script_js(
+                    rocketchat_iframe_id, rcu.rocketchat_token)
+
+        except Exception as e:
+
+            msg = str(e) + traceback.format_exc()
+
+            log.critical(msg)
+
+    return(render(request, "virtual/workshop_detail.html", locals()))

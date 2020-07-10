@@ -50,8 +50,15 @@
         {% else %}
         <br><br><br>
         <div class="container" style="text-align:center;">
+            
             <h4>Registration Required</h4>
-            <p>You must be <a href="/Register/view-registration">registered</a> {% if not request.user.is_authenticated %} and <a href="/login?nextp={{request.get_full_path}}">logged in</a>{% endif %} order to view this content.</p>
+
+            <p>You must be <a href="/Register/view-registration">registered</a> 
+                {% if not request.user.is_authenticated %} 
+                    and <a href="/login?nextp={{request.get_full_path}}">logged in</a>
+                {% endif %} 
+                in order to view this content.</p>
+
         </div>
         {% endif %}
         {% endblock %}

@@ -1,0 +1,160 @@
+{% extends "livebase.html" %}
+{% load documenttags %}
+{% load cache %}
+
+{% block title %}{{confInfo.conference}} Paper Detail{% endblock %}
+
+{% block body %}
+
+
+
+
+
+
+
+    {% if access_granted %}
+
+        <div class="container">
+            <!-- Title -->
+            <div class="pp-card m-3" style="">
+                <div class="card-header">
+                    <h2 class="card-title main-title text-center" style="">
+                        {{workshop.name}}
+                    </h2>
+
+                    <h3 class="card-subtitle mb-2 text-muted text-center">
+                        {% for es in workshop.get_eventspeakers %}
+                            <a href="{% url 'papers' year %}?filter=authors&search={{es.speaker.id}}" class="text-muted">{{es.speaker.get_full_name}}</a>,
+                        {% endfor %}
+                    </h3>
+                    <p class="card-text text-center"><span class="">Keywords:</span>
+                        {% for kw in workshop.subject_areas.all %}
+                            [ {{kw.name}} ]
+                        {% endfor %}
+
+                    </p>
+                    <div class="text-center p-3">
+                        <a class="card-link" data-toggle="collapse" role="button" href="#details">
+                            Abstract 
+                        </a>
+                        
+                        <a class="card-link" target='_blank' role="button" href="{{wkapp.externaluri}}">Workshop Website </a> 
+
+                        {% if show_zoom_links %}
+                            <a class="card-link" target='_blank' href="{{workshop.zoom_join_link}}">Join Zoom Webinar</a> 
+                        {% endif %}
+
+
+                        
+                        {% if workshop.starttime %}<div>{{workshop.starttime|date:"D M j P e (O)"}}<a href="{% url 'ical' workshop.id 1 %}"> [iCal] </a></div>{% endif %}
+
+                        {% if workshop.starttime2 %}<div>{{workshop.starttime2|date:"D M j P e (O)"}}<a href="{% url 'ical' workshop.id 2 %}"> [iCal] </a></div>{% endif %}
+                        
+
+
+                    </div>
+                    <div class=" text-center text-muted text-monospace ">
+                        <div> {{workshop.get_session_str_virtualsite}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="details" class="pp-card m-3 collapse">
+                <div class="card-body">
+                    <p class="card-text">
+                        <div id="abstractExample">
+                            <span class="font-weight-bold">Abstract:</span>
+                            {{ workshop.get_abstract }}
+                        </div>
+                    </p>
+
+
+                </div>
+            </div>
+        </div>
+        <!-- SlidesLive -->
+        {% if workshop.slideslive_video %}
+
+            <div class="container" style="background-color:white; padding: 0px;">
+                <div class="row m-2">
+                    <div class="col-md-12 col-xs-12 my-auto p-2">
+                        
+                        {{workshop.get_slideslive_embed|safe}}
+                    
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="container">
+            {{workshop.get_slideslive_embed|safe}}
+        </div>
+
+
+        {# RocketChat #}
+        {% if rci %}
+            <div class="container">
+                <div class="pp-card m-3">
+                    <div class="">
+                        <div class="public-chat-title-box">
+                            <a style="float:right;" href="{{rocketchat_new_window_url}}" target="_blank" title="Full Size"> <i class="fas fa-expand"></i></i></a>
+                            Chat
+                        </div>
+                        <iframe frameBorder="0" width='100%' height='400px' src="{{rocketchat_iframe_url}}"  id="{{ rocketchat_iframe_id }}"></iframe>
+                        {{event_channel_auth_js|safe}}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="container" >
+                <div style="color:#ccc;text-align:centered;"><h3>RocketChat is not active.</h3></div>
+            </div>
+        {% endif %}
+
+        <div class="container" style="background-color:white; padding: 0px;">
+            <div class="row m-2">
+
+                <div class="col-md-12 col-xs-12 my-auto p-2">
+                    
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <span class="pull-right">Timezone: <a href="/set_timezone?nextp={{request.get_full_path}}">{{request.session.django_timezone}} &raquo;</a></span>
+                            <h3>Schedule</h3>
+                            
+                        </div>
+
+
+                            <table class="table table-sm">
+                            {{wkapp.event.get_workshop_schedule}}
+
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!-- Recs -->
+        <p></p>
+        <div class="container" style="padding-bottom: 30px; padding-top:30px">
+            <center>
+
+            </center>
+        </div>
+
+
+
+    {% else %} {# If access granted #}
+        <br><br><br>
+        <div class="container"  style="text-align:center;">
+            <h4>Registration Required</h4>
+            <p>You must be {% if request.user.is_authenticated %}<a href="/Register/view-registration">registered</a> {% else %} <a href="/login?nextp={{request.get_full_path}}">logged in</a>{% endif %} to view this content.</p>
+        </div>
+
+    {% endif %}
+
+
+{% endblock %}
