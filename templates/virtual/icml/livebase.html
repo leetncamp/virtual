@@ -117,7 +117,17 @@
     {% endblock %}
 
 
+    {% if pagePermission.change %}
 
+        {% include "editable-snippet.html" %}
+            <div id="editFooter" class="noprint">
+                <br><br>
+                    <button class="editFooterButton btn btn-default btn-sm" title="Enable editing of content where possible" id="editpage" onclick="start_edit();"><i class="far fa-edit"></i></button>
+                    <button class="editFooterButton btn btn-default" title="Save edited content and reload the page" id="noeditpage" onclick="stop_edit();" style="display:none"><i class="far fa-save font2 gray"></i></button>
+            </div>
+    {% endif %}
+
+    {% csrf_token %}
 
 
     <footer class="footer bg-light ">

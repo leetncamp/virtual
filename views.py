@@ -57,6 +57,7 @@ def getConfInfo(request, year=None):
 def home(request, year):
 
     confInfo = getConfInfo(request, year=year)
+    pagePermission = confInfo.get_permission(textid=request.META.get("PATH_INFO", None))
     timezone_nextp = request.get_full_path()
     return(render(request, "virtual/index.html", locals()))
 
@@ -336,7 +337,7 @@ def workshop_detail(request, year, eventid):
 
     workshop = Events.objects.filter(pk=eventid).first()
 
-    
+
 
     if workshop:
         wkapp = workshop.get_application()
