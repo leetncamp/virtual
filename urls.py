@@ -26,6 +26,8 @@ urlpatterns = [
     path("<int:year>/affinityworkshop/<int:eventid>",
          virtual.views.workshop_detail, name="virtual_workshop_detail"),
 
+    path("<int:year>/tutorial/<int:eventid>",
+         virtual.views.tutorial_detail, name="virtual_tutorial_detail"),
     
     path("<int:year>/workshops", virtual.views.workshops, name="virtual_workshops"),
     
