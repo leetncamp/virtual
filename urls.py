@@ -17,7 +17,7 @@ urlpatterns = [
     path("<int:year>/poster/<int:eventid>",
          virtual.views.paper_detail, name="virtual_paper_detail"),
     
-    path("<int:year>/events/<slug:event_type>",
+    path("<int:year>/events/<event_type>",
          virtual.views.events, name="virtual_events"),
 
     path("<int:year>/workshop/<int:eventid>",
@@ -33,5 +33,11 @@ urlpatterns = [
     
     path("ical/<int:eventid>/<int:number>", virtual.views.ical, name="ical"),
 
+    re_path(r"(?P<year>\d+)/invited\stalk/(?P<eventid>\d*)",
+     virtual.views.invited_talk_detail, name="virtual_invited_talk_detail"),
+
+
+    path("<int:year>/invited%20talk/<int:eventid>",
+         virtual.views.invited_talk_detail, name="virtual_invited_talk_detail"),
     
 ]

@@ -2,7 +2,7 @@
 {% load documenttags %}
 {% load cache %}
 
-{% block title %}{{confInfo.conference}} Paper Detail{% endblock %}
+{% block title %}{{confInfo.conference}} Tutorial Detail{% endblock %}
 
 {% block body %}
 
@@ -18,37 +18,41 @@
             <!-- Title -->
             <div class="pp-card m-3" style="">
                 <div class="card-header">
-                    <h2 class="card-title main-title text-center" style="">
-                        {{paper.name}}
-                    </h2>
+                    <h3 class="text-center">Tutorial</h3>
 
+                    <h2 class="card-title main-title text-center" style="">
+                        {{tutorial.name}}
+                    </h2>
+                    
                     <h3 class="card-subtitle mb-2 text-muted text-center">
-                        {% for es in paper.get_eventspeakers %}
-                            <a href="{% url 'papers' year %}?filter=authors&search={{es.speaker.id}}" class="text-muted">{{es.speaker.get_full_name}}</a>,
-                        {% endfor %}
+                        {{tutorial.get_eventSpeakerStr}}
                     </h3>
+                    
                     {% comment %}
                     <p class="card-text text-center"><span class="">Keywords:</span>
-                        {% for kw in paper.subject_areas.all %}
-                            [ <a href="{% url 'papers' year %}?filter=keywords&search={{kw.name}}" class="text-secondary text-decoration-none">{{kw.name}}</a> ]
+                        {% for kw in tutorial.subject_areas.all %}
+                            [ <a href="{% url 'tutorials' year %}?filter=keywords&search={{kw.name}}" class="text-secondary text-decoration-none">{{kw.name}}</a> ]
                         {% endfor %}
-
                     </p>
                     {% endcomment %}
-                    <div class="text-center p-3">
-                        <a class="card-link" data-toggle="collapse" role="button" href="#details">
-                            Abstract
-                        </a>
 
-                        <a class="card-link" role="button" href="https://proceedings.{{confInfo.conference.organization.get_domain}}/static/paper_files/{{confInfo.orgName|lower}}/{{year}}/{{paper.sourceid}}-Paper.pdf">Paper</a>
-                        {% if paper.starttime %}<div>{{paper.starttime|date:"D M j P e (O)"}}<a href="{% url 'ical' paper.id 1 %}"> [iCal] </a></div>{% endif %}
-                        {% if paper.starttime2 %}<div>{{paper.starttime2|date:"D M j P e (O)"}}<a href="{% url 'ical' paper.id 2 %}"> [iCal] </a></div>{% endif %}
+
+                    <div class="text-center p-3">
+                        {% if tutorial.abstract %}
+                            <a class="card-link" data-toggle="collapse" role="button" href="#details">
+                                Abstract
+                            </a>
+                        {% endif %}
+
+                        
+                        {% if tutorial.starttime %}<div>{{tutorial.starttime|date:"D M j P e (O)"}}<a href="{% url 'ical' tutorial.id 1 %}"> [iCal] </a></div>{% endif %}
+                        {% if tutorial.starttime2 %}<div>{{tutorial.starttime2|date:"D M j P e (O)"}}<a href="{% url 'ical' tutorial.id 2 %}"> [iCal] </a></div>{% endif %}
                         
 
 
                     </div>
                     <div class=" text-center text-muted text-monospace ">
-                        <div> {{paper.get_session_str_virtualsite}}
+                        <div> {{tutorial.get_session_str_virtualsite}}
                         </div>
                     </div>
                 </div>
@@ -58,7 +62,7 @@
                     <p class="card-text">
                         <div id="abstractExample">
                             <span class="font-weight-bold">Abstract:</span>
-                            {{ paper.get_abstract }}
+                            {{ tutorial.get_abstract }}
                         </div>
                     </p>
 
@@ -66,13 +70,13 @@
             </div>
         </div>
         <!-- SlidesLive -->
-        {% if paper.slideslive_video %}
+        {% if tutorial.slideslive_video %}
 
             <div class="container" style="background-color:white; padding: 0px;">
                 <div class="row m-2">
                     <div class="col-md-12 col-xs-12 my-auto p-2">
 
-                        {{paper.get_slideslive_embed|safe}}
+                        {{tutorial.get_slideslive_embed|safe}}
                     </div>
                 </div>
             </div>

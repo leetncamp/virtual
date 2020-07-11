@@ -63,9 +63,13 @@
                     {% endcomment %}
                     {% if request.user.is_superuser %}
                     <li class="nav-item ">
-                        <a class="nav-link" href="/virtual/{{year}}/events/tutorial">[Tutorials]</a>
+                        <a class="nav-link" href="/virtual/{{year}}/events/Tutorial">[Tutorials]</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/virtual/{{year}}/events/Invited Talk">[Invited Talks]</a>
                     </li>
                     {% endif %}
+
                     <li class="nav-item ">
                         <a class="nav-link" href="/virtual/{{year}}/papers">Papers</a>
                     </li>

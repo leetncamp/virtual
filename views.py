@@ -291,6 +291,93 @@ def paper_detail(request, year, eventid):
     return(render(request, "virtual/paper_detail.html", locals()))
 
 
+def tutorial_detail(request, year, eventid):
+
+    confInfo = getConfInfo(request, year=year)
+
+    tutorial = Events.objects.filter(
+        pk=eventid, session__conference__id=year).first()  #tutorial is actually a tutorial
+
+    access_granted = get_access(request, year)
+
+    """Create or get the rocketchat channel for this tutorial and make sure the request user has a rocketchat account"""
+    from rocketchat_conferences import helpers as rch
+
+    rci = rch.get_active_rocketchat_conf_inst_obj()
+
+    if access_granted and tutorial and rci:
+
+        rcu = rch.find_or_create_user(request.user)
+
+        try:
+
+            event_channel = rch.find_or_create_events_channel(tutorial)
+
+            if event_channel:
+
+                rocketchat_new_window_url = "{}?resumeToken={}".format(
+                    event_channel.get_url(), rcu.rocketchat_token)
+
+                rocketchat_iframe_url = "{}?layout=embedded".format(
+                    event_channel.get_url(), rcu.rocketchat_token)
+
+                rocketchat_iframe_id = 'eventPageChat'
+
+                event_channel_auth_js = rch.make_authenticate_script_js(
+                    rocketchat_iframe_id, rcu.rocketchat_token)
+
+        except Exception as e:
+
+            msg = str(e) + traceback.format_exc()
+
+            log.critical(msg)
+
+    return(render(request, "virtual/tutorial_detail.html", locals()))
+
+
+def invited_talk_detail(request, year, eventid):
+
+    confInfo = getConfInfo(request, year=year)
+
+    talk = Events.objects.filter(
+        pk=eventid, session__conference__id=year).first()  #talk is actually a talk
+
+    access_granted = get_access(request, year)
+
+    """Create or get the rocketchat channel for this talk and make sure the request user has a rocketchat account"""
+    from rocketchat_conferences import helpers as rch
+
+    rci = rch.get_active_rocketchat_conf_inst_obj()
+
+    if access_granted and talk and rci:
+
+        rcu = rch.find_or_create_user(request.user)
+
+        try:
+
+            event_channel = rch.find_or_create_events_channel(talk)
+
+            if event_channel:
+
+                rocketchat_new_window_url = "{}?resumeToken={}".format(
+                    event_channel.get_url(), rcu.rocketchat_token)
+
+                rocketchat_iframe_url = "{}?layout=embedded".format(
+                    event_channel.get_url(), rcu.rocketchat_token)
+
+                rocketchat_iframe_id = 'eventPageChat'
+
+                event_channel_auth_js = rch.make_authenticate_script_js(
+                    rocketchat_iframe_id, rcu.rocketchat_token)
+
+        except Exception as e:
+
+            msg = str(e) + traceback.format_exc()
+
+            log.critical(msg)
+
+    return(render(request, "virtual/invited_talk_detail.html", locals()))
+
 def events(request, year, event_type):
 
     confInfo = getConfInfo(request, year=year)
@@ -298,7 +385,14 @@ def events(request, year, event_type):
     access_granted = get_access(request, year)
 
     events = Events.objects.filter(
-        session__conference__id=year, type__istartswith=event_type).order_by("?")
+        session__conference__id=year, type__istartswith=event_type)  #This should probably be iexact but we have AffinityWorkshops which are workshops.  
+
+
+
+    if event_type == "paper":
+        events = events.order_by("?")
+    else:
+        events = events.order_by("starttime")
 
     search_type = request.GET.get("filter")
     if search_type:
