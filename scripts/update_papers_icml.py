@@ -3,6 +3,8 @@ import json
 import os
 
 
+"""Takes the output of /api/eventinformation endpoint, filters the data and creates miniconf papers file static/virtual/data/icml_paper.json"""
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description="MiniConf Portal Command Line")
 
