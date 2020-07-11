@@ -72,7 +72,7 @@ def get_urls():
         "logo": "https://icml.cc/static/nips/img/ICML-logo.svg",
         "expo_img": "https://icml.cc/static/expo/img/icml/expo-logo-nav.png",
         "expo": "https://icml.cc/ExpoConferences/2020/Expo",
-        "workshops": "workshops",
+        "workshops": "/virtual/2020/workshops",
         "js": '/static/virtual/js',
         "css": '/static/virtual/css',
         "data_dir": '/static/virtual/data',
@@ -276,6 +276,8 @@ def paper_detail(request, year, eventid):
     paper = Events.objects.filter(
         pk=eventid, session__conference__id=year).first()
 
+    urls = get_urls()
+
     access_granted = get_access(request, year)
 
     """Create or get the rocketchat channel for this paper and make sure the request user has a rocketchat account"""
@@ -319,6 +321,8 @@ def tutorial_detail(request, year, eventid):
 
     tutorial = Events.objects.filter(
         pk=eventid, session__conference__id=year).first()  #tutorial is actually a tutorial
+
+    urls = get_urls()
 
     access_granted = get_access(request, year)
 
@@ -364,6 +368,8 @@ def invited_talk_detail(request, year, eventid):
     talk = Events.objects.filter(
         pk=eventid, session__conference__id=year).first()  #talk is actually a talk
 
+    urls = get_urls()
+
     access_granted = get_access(request, year)
 
     """Create or get the rocketchat channel for this talk and make sure the request user has a rocketchat account"""
@@ -406,6 +412,8 @@ def events(request, year, event_type):
 
     access_granted = get_access(request, year)
 
+    urls = get_urls()
+
     events = Events.objects.filter(
         session__conference__id=year, type__istartswith=event_type)  #This should probably be iexact but we have AffinityWorkshops which are workshops.  
 
@@ -438,6 +446,8 @@ def workshops(request, year):
 
     access_granted = get_access(request, year)
 
+    urls = get_urls()
+
     wks = Events.objects.filter(
         session__conference__id=year, type__icontains="Workshop").order_by("?")
 
@@ -451,6 +461,8 @@ def workshop_detail(request, year, eventid):
     confInfo = getConfInfo(request, year=year)
 
     access_granted = get_access(request, year)
+
+    urls = get_urls()
 
     workshop = Events.objects.filter(pk=eventid).first()
 
