@@ -25,9 +25,8 @@
                     </h2>
 
                     <h3 class="card-subtitle mb-2 text-muted text-center">
-                        {% for es in workshop.get_eventspeakers %}
-                            <a href="{% url 'papers' year %}?filter=authors&search={{es.speaker.id}}" class="text-muted">{{es.speaker.get_full_name}}</a>,
-                        {% endfor %}
+                        {{ workshop.get_eventSpeakerStr }}
+                           
                     </h3>
                     <p class="card-text text-center"><span class="">Keywords:</span>
                         {% for kw in workshop.subject_areas.all %}
@@ -89,6 +88,7 @@
         {% endif %}
         
         <div class="container">
+            <!--SlidesLiveEmbed-->
             {{workshop.get_slideslive_embed|safe}}
         </div>
 
