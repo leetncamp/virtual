@@ -1,0 +1,13 @@
+name: icml
+channels:
+  - anaconda-fusion
+  - defaults
+dependencies:
+  - python=3.7
+  - flask
+  - pyyaml
+  - pip
+  - pip:
+     - Frozen-Flask
+     - Flask-Markdown
+

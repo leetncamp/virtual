@@ -346,3 +346,8 @@ li:not(:last-child) {
 .keyword-link {
   display:inline !important;
 }
+
+.kw_list_item {
+  font-size: 9pt;
+  margin:  1pt;
+}

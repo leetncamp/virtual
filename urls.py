@@ -13,6 +13,8 @@ urlpatterns = [
     path("<int:year>/papers_vis", virtual.views.paper_vis, name="paper_vis"),
     
     path("<int:year>/papers", virtual.views.papers, name="papers"),
+
+    path("<int:year>/papers.html", virtual.views.papers, name="miniconf-papers"),
     
     path("<int:year>/poster/<int:eventid>",
          virtual.views.paper_detail, name="virtual_paper_detail"),

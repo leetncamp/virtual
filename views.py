@@ -63,11 +63,33 @@ def home(request, year):
     return(render(request, "virtual/index.html", locals()))
 
 
+def get_urls():
+    
+    urls = {
+        "paper_vis": "paper_vis.html",
+        "papers": "papers.html",
+        "main_style": "/static/virtual/css/virtual.css",
+        "logo": "https://icml.cc/static/nips/img/ICML-logo.svg",
+        "expo_img": "https://icml.cc/static/expo/img/icml/expo-logo-nav.png",
+        "expo": "https://icml.cc/ExpoConferences/2020/Expo",
+        "workshops": "workshops",
+        "js": '/static/virtual/js',
+        "css": '/static/virtual/css',
+        "data_dir": '/static/virtual/data',
+        "thumbnail_dir": "/static/virtual/img/paper_thumbnails/icml/2020"
+    }
+
+    return urls
+
+
 def papers(request, year):
 
     confInfo = getConfInfo(request, year=year)
 
     access_granted = get_access(request, year)
+
+
+    urls = get_urls()
 
     papers = Events.objects.filter(
         session__conference__id=year, type="Poster").order_by("?")
@@ -241,7 +263,7 @@ def ical(request, eventid, number):
 def paper_vis(request, year):
 
     confInfo = getConfInfo(request, year=year)
-
+    urls = get_urls()
     papers = Events.objects.filter(
         session__conference__id=year, type="Poster").order_by("?")
 

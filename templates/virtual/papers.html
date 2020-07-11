@@ -1,243 +1,252 @@
 {% extends "livebase.html" %}
-{% load documenttags %}
-{% load cache %}
-{% block title %}{{confInfo.conference}} Papers{% endblock %}
+{% block title %}{{ confInfo.conference }} Papers{% endblock %}
 
 {% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tippy.js@6/dist/tippy-bundle.umd.min.js"></script>
 
+    <script src="{{ urls.js }}/icons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+    <link rel="stylesheet" href="{{ urls.css }}/typeahead.css">
+    <link rel="stylesheet" href="{{ urls.css }}/lazy_load.css">
 
     <style>
-
-
-    .typeahead {
-        background-color: #FFFFFF;
-    }
-    .typeahead:focus {
-        border: 2px solid #0097CF;
-    }
-    .tt-query {
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-    }
-    .tt-hint {
-        color: #999999;
-    }
-    .tt-menu {
-        background-color: #fff;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        border-radius: 8px;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-        margin-top: 12px;
-        padding: 8px 0;
-        width: 422px;
-    }
-    .tt-suggestion {
-        font-size: 22px;  /* Set suggestion dropdown font size */
-        padding: 3px 20px;
-    }
-    .tt-suggestion:hover {
-        cursor: pointer;
-        background-color: #0097CF;
-        color: #FFFFFF;
-    }
-    .tt-suggestion p {
-        margin: 0;
-    }
+        .tt-hint {
+            opacity: 0 !important;
+        }
     </style>
+
 
 {% endblock %}
 
 {% block body %}
-<br><br>
-<div class="container">
-    <div class="row">
-        <div class="col-md-12"></div>
-        <div class="title-centered" style="text-align:center">Papers</div>
-    </div>
-</div>
-{% if access_granted %}
-<div class="container">
-    <!-- Header -->
-    <ul class="nav nav-pills justify-content-center">
-        <li class="nav-item active">
-            <a class="nav-link text-muted active " data-toggle="tab" href="#tab-browse" role="tab" aria-controls="nav-home" aria-selected="true">Browse
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-muted" href="{% url 'paper_vis' year %}">Visualization
-            </a>
-        </li>
-    </ul>
-    <div class="row"></div>
-    <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
-        <form method="GET">
-            <div class="tab-pane active" id="tab-browse" role="tabpanel" aria-labelledby="nav-profile-tab">
+    {#    <br><br>#}
+    {#    <div class="container">#}
+    {#        <div class="row">#}
+    {#            <div class="col-md-12"></div>#}
+    {#            <div class="title-centered" style="text-align:center">Papers</div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+    {% if access_granted %}
+        <div class="container">
+            {% block tabs %}
+                <ul class="nav nav-pills justify-content-center">
+                <li class="nav-item">
+                    <button class="btn btn-outline-secondary " type="button"
+                                data-toggle="collapse"
+                                data-target="#collapseExample"
+                                aria-expanded="false"
+                                aria-controls="collapseExample"
+                            style="margin-right: 10pt;"
+                    >
+                            Show/Hide Keywords
+                        </button>
+                </li>
+                    <li class="nav-item active">
+                        <a
+                                class="nav-link text-muted active"
+                                data-toggle="tab"
+                                href="#tab-browse"
+                                role="tab"
+                                aria-controls="nav-home"
+                                aria-selected="true"
+                        >Browse Papers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="paper_vis.html">Paper
+                            Visualization</a>
+                    </li>
+
+
+
+                </ul>
+{#                                <div class="nav-item nav-left">#}
+{#                        <button class="btn btn-outline-secondary" type="button"#}
+{#                                data-toggle="collapse"#}
+{#                                data-target="#collapseExample"#}
+{#                                aria-expanded="false"#}
+{#                                aria-controls="collapseExample">#}
+{#                            Show/Hide Keywords#}
+{#                        </button>#}
+{#                    </div>#}
+
+
+            {% endblock %}
+            {% block content %}
+                <div class="row p-3"></div>
+
+                <!-- Session -->
                 <div class="row d-none session_notice">
-                    <div class="alert alert-warning alert-dismissible fade show col-12" role="alert">
-                        Showing papers for <span id="session_name" style="font-weight: bold;"></span>.
-                        <!-- To navigate all papers close this message. -->
-                        <button type="button" class="close remove_session" data-dismiss="alert" aria-label="Close">
+                    <div
+                            class="alert alert-warning alert-dismissible fade show col-12"
+                            role="alert"
+                    >
+                        Showing papers for
+                        <span id="session_name"
+                              style="font-weight: bold;"></span>.
+                        <button
+                                type="button"
+                                class="close remove_session"
+                                data-dismiss="alert"
+                                aria-label="Close"
+                        >
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                 </div>
+
+
+                <div class="collapse row" id="collapseExample">
+                    <div class="" id="all_kw_show" style="padding: 10px; margin-bottom:10px;background-color: #eee;">
+
+
+                    </div>
+                </div>
+                <!-- Buttons -->
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                         <div class="input-group mb-3">
-                            <input type="text" name="search" class="form-control typeahead tt-query" autocomplete="off" spellcheck="false" placeholder="Search" value="{{search_query}}">
-                            <input type="hidden" name="search_type" id="searchinput" value="{{search_type}}">
+                            <input
+                                    type="text"
+                                    class="form-control typeahead_all"
+                                    placeholder="Search"
+                            />
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-search" aria-hidden="true"></i>
+
+                                <button
+                                        class="btn btn-outline-secondary typeahead_all_clear"
+                                        type="button"
+                                >
+                                    &times;
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 text-center" style="margin-bottom: 10px;">
-                        <div class="btn-group btn-group-toggle filter_option" id="searchButtons">
-                            <label class="btn btn-outline-secondary{% if search_type == 'title'%} active{% endif %}" data-tippy-content="Search for papers titles">
-                                <input type="radio" name="options" value="titles" autocomplete="off" onClick="changeSearch(this);"> title
+                    <div
+                            class="col-12 col-sm-6 col-md-6 col-lg-4 text-center"
+                            style="margin-bottom: 10px;"
+                    >
+                        <div class="btn-group btn-group-toggle filter_option">
+                            <label
+                                    class="btn btn-outline-secondary"
+                                    data-tippy-content="Search for papers titles"
+                            >
+                                <input
+                                        type="radio"
+                                        name="options"
+                                        value="titles"
+                                        autocomplete="off"
+                                        checked
+                                />
+                                title
                             </label>
-                            <label class="btn btn-outline-secondary {% if search_type == 'keyword'%} active{% endif %}" data-tippy-content="Search for papers with specific keywords">
-                                <input type="radio" name="options" value="keywords" autocomplete="off" onClick="changeSearch(this);"> keyword
+                            <label
+                                    class="btn btn-outline-secondary"
+                                    data-tippy-content="Search for papers with specific keywords"
+                            >
+                                <input
+                                        type="radio"
+                                        name="options"
+                                        value="keywords"
+                                        autocomplete="off"
+                                />
+                                subject area
                             </label>
-                            <label class="btn btn-outline-secondary {% if search_type == 'author'%} active{% endif %}" data-tippy-content="Search for papers from specific authors">
-                                <input type="radio" name="options" value="authors" autocomplete="off" onClick="changeSearch(this);"> author
+                            <label
+                                    class="btn btn-outline-secondary active"
+                                    data-tippy-content="Search for papers from specific authors"
+                            >
+                                <input type="radio" name="options"
+                                       value="authors"
+                                       autocomplete="off"/>
+                                author
                             </label>
-                            <!-- <label class="btn btn-outline-secondary" -->
-                            <!--        data-tippy-content="Search for papers closest related to authors or other papers"> -->
-                            <!--     <input type="radio" name="options" value="recs" -->
-                            <!--            autocomplete="off"> similar -->
-                            <!-- </label> -->
                         </div>
                     </div>
                     <div class="col-12 col-lg-4">
-                        <button class="btn btn-outline-secondary reshuffle" onClick="document.location.reload();"> shuffle
+                        <button class="btn btn-outline-secondary reshuffle">
+                            shuffle
                         </button>
                         <div class="float-right">
-                            <div class="btn-group btn-group-toggle render_option" data-toggle="buttons">
-                                <label class="btn btn-outline-secondary">
-                                    <input type="radio" name="options" value="list" autocomplete="off" onClick="listmode();"> list
+                            <div
+                                    class="btn-group btn-group-toggle render_option"
+                                    data-toggle="buttons"
+                            >
+                                <label class="btn btn-outline-secondary active">
+                                    <input type="radio" name="options"
+                                           value="list"
+                                           autocomplete="off"/>
+                                    mini
                                 </label>
                                 <label class="btn btn-outline-secondary active">
-                                    <input type="radio" name="options" value="compact" autocomplete="off" checked onClick="compactmode();"> compact
+                                    <input
+                                            type="radio"
+                                            name="options"
+                                            value="compact"
+                                            autocomplete="off"
+                                            checked
+                                    />
+                                    compact
+                                </label>
+                                <label class="btn btn-outline-secondary">
+                                    <input
+                                            type="radio"
+                                            name="options"
+                                            value="detail"
+                                            autocomplete="off"
+                                    />
+                                    detail
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="cards row">
-                </div>
-            </div>
-        </form>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <p> 
-                      <a data-toggle="collapse" href="#collapseKeywords" role="button" aria-expanded="false" aria-controls="collapseKeywords">
-                        Show topics/keywords &raquo;
-                      </a>
-                    </p>
-                </div>
-                    <div class="collapse" id="collapseKeywords">
-                      <div class="cards card-body">
-                        {% for keyword in keywords %} {# keywords is a python list strings, not the typeahead json #}
-                            <div class="f">
-                                <a class="keyword-link" href="{% url 'papers' year %}?search_type=keyword&search={{keyword}}">{{keyword}}</a>
-                                {# /virtual/2020/papers?search=techniques&search_type=keyword&options=compact# #}
-                            </div>
-                        {% endfor %}
 
-                      </div>
+                <!-- Cards -->
+                <div class="cards row"></div>
+                <script src="{{ urls.js }}/little_helpers.js"></script>
+                <script src="{{ urls.js }}/lazy_load.js"></script>
+                <script src="{{ urls.js }}/persistor.js"></script>
+                <script src="{{ urls.js }}/papers.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        tippy("[data-tippy-content]",
+                          {trigger: "mouseenter focus"});
 
+                        thumbnail_prefix = "{{ urls.thumbnail_dir }}"
+                        start("{{ urls.data_dir }}/icml_papers.json");
+                    });
+                </script>
+
+            {% endblock %}
+            {% block footer %}
+
+                <div class="gdpr bg-dark text-light"
+                     style="padding: 10pt; position: fixed; bottom: 50px; display: none;">
+                    We use cookies to store which papers have been visited.
+                    <div class="gdpr-btn btn btn-sm btn-info"
+                         style="margin-left: 15pt;">
+                        I agree
+                    </div>
                 </div>
-            </div>
+                <script src="{{ urls.js }}/gdpr_cookies.js"></script>
+
+            {% endblock %}
+
         </div>
-        {# =================================================================== #}
-        <div class="container">
-            <div class="cards row">
-                {% for paper in papers %}
-                {{paper.get_virtualcard_html|safe}}
-                {% endfor %}
-            </div>
-        </div>
-        {# ======================================================================= #}
-        <script>
-        function listmode() {
-            $(".cards_img").hide();
-            $(".pp-card").addClass("pp-mode-list").removeClass("pp-mode-compact");
-        }
 
-        function compactmode() {
-            $(".cards_img").show();
-            $(".pp-card").removeClass("pp-mode-list").addClass("pp-mode-compact");
-        }
-
-        function changeSearch(e) {
-            $("#searchButtons label").removeClass("active");
-            $(e.parentElement).addClass("active");
-            searchtype = e.parentElement.textContent.trim();
-            $("#searchinput").val(searchtype);
-            
-            
-
-        }
-        </script>   
-            
-        {% else %}
+    {% else %}
         <br><br><br>
         <div class="container" style="text-align:center;">
             <h4>Registration Required</h4>
-            <p>You must be <a href="/Register/view-registration">registered</a> {% if not request.user.is_authenticated %} and <a href="/login?nextp={{request.get_full_path}}">logged in</a>{% endif %} order to view this content.</p>
+            <p>You must be <a href="/Register/view-registration">registered</a>
+                {% if not request.user.is_authenticated %} and
+                    <a href="/login?nextp={{ request.get_full_path }}">logged
+                        in</a>{% endif %} order to view this content.</p>
         </div>
-        {% endif %}
-        <script>
+    {% endif %}
 
-            $(document).ready(function(){
-                // Defining the local dataset
-                
-
-                var keywords = {{keyword_list|safe}};
-                var titles = {{titles_list|safe}};
-                /*var authors = {{authors_list|safe}};*/
-
-
-                var keywords = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.whitespace,
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: keywords
-                });
-
-                window.v_keywords = keywords;
-
-                var titles = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.whitespace,
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: titles
-                });
-
-                window.v_titles = titles;
-
-                var authors = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.whitespace,
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: authors
-                });
-                var authors = [];
-                window.v_authors = authors;
-
-                /*// Initializing the typeahead
-                $('.typeahead').typeahead({
-                    hint: true,
-                    highlight: true, /* Enable substring highlighting */
-                    minLength: 1 /* Specify minimum characters required for showing result */
-                },
-                {
-                    name: 'keywords',
-                    source: keywords
-                });*/
-
-
-            });
-
-
-        </script>
-        {% endblock %}
+{% endblock %}
