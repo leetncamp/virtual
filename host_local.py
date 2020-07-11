@@ -22,7 +22,7 @@ urls = {
     "workshops": "workshops.html",
     "js": '/static/virtual/js',
     "css": '/static/virtual/css',
-    "data_dir": '/static/data',
+    "data_dir": '/static/virtual/data',
     "thumbnail_dir": "/static/virtual/img/paper_thumbnails/icml/2020"
 }
 

@@ -7,7 +7,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="MiniConf Portal Command Line")
 
     parser.add_argument("papers", help="papers file to parse")
-    parser.add_argument("--out", default="../static/data/icml_papers.json",
+    parser.add_argument("--out", default="../static/virtual/data/icml_papers.json",
                         help="out file")
 
     return parser.parse_args()
