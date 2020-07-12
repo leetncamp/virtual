@@ -351,3 +351,7 @@ li:not(:last-child) {
   font-size: 9pt;
   margin:  1pt;
 }
+
+.workshopevent-date {
+  font-size: .8em;
+}
