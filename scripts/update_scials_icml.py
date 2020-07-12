@@ -28,7 +28,8 @@ def add_file(file_name, all_socials, type):
                     "description": event["Description"],
                     "sessions": [{"time": event['Session1'].replace('\n', ' '),
                                   "link": event.get("Session1_zoom", '')}],
-                    "type": type
+                    "type": type,
+                    "chat": event['Rocket_chat']
                 }
 
                 if event['Session2']:

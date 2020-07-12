@@ -2,14 +2,15 @@ import argparse
 import json
 import os
 
-
 """Takes the output of /api/eventinformation endpoint, filters the data and creates miniconf papers file static/virtual/data/icml_paper.json"""
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="MiniConf Portal Command Line")
 
     parser.add_argument("papers", help="papers file to parse")
-    parser.add_argument("--out", default="../static/virtual/data/icml_papers.json",
+    parser.add_argument("--out",
+                        default="../static/virtual/data/icml_papers.json",
                         help="out file")
 
     return parser.parse_args()
@@ -39,10 +40,13 @@ def transform(papers, out):
                         "abstract": event["abstract"],
                         "TLDR": event["abstract"],
                         "recs": [],
-                        "session": [],
+                        "session": [event['starttime']],
                         "pdf_url": '',
                     },
                 }
+                if event['starttime2']:
+                    poster_entry['content']['session'].append(
+                        event['starttime2'])
                 all_posters.append(poster_entry)
 
         print("{} entries".format(len(all_posters)))

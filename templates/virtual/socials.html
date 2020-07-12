@@ -41,16 +41,17 @@
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-action"><h5>The Conference Center</h5>
                         is a virtual space to meet and hangout at virtual ICML in a virtual 2D world at GatherTown.
-                        <a href="aaa"> Enter ICML-Town here </a>
+                        <a href="" class="text-muted"> Enter ICML-Town here soon </a>
                     </li>
                     <li class="list-group-item list-group-item-action"> <h5>The Coffee Stand</h5>
-                        is a 24-hr video chat for more a more face to face experience using an open Zoom session.
-                        <a href="https://us02web.zoom.us/j/89733474172?pwd=ZlBXQXpjYnVkYXRmNzNnZW16NFN4dz09"> Connect here </a>
+                        is a 24-hr video chat for more face to face experience using an open Zoom session
+                        <div class="text-monospace" style="font-size: 13px;">[Open in the period Tuesday 14 July 00:00 GMT - Friday 17 July 23:59 GMT]</div>
+                        <a href="https://us02web.zoom.us/j/89733474172?pwd=ZlBXQXpjYnVkYXRmNzNnZW16NFN4dz09" > Connect here </a>
                     </li>
                     <li class="list-group-item list-group-item-action"> <h5>Mentoring </h5>
                         Talk to leaders in the field and ask questions. Some mentor sessions have been scheduled already (see below).
                         We also welcome informal and impromptu mentoring sessions organized in Rocket chat.
-                        <a href="aaa"> Check channel #mentoring </a></li>
+                        <a href="https://icml-rocketchat.meteorapp.com/channel/mentoring" > Check channel #mentoring </a></li>
                 </ul>
 
                 {#                <p>It uses utility classes for typography and spacing to space#}
@@ -108,10 +109,9 @@
         <script src="{{ urls.js }}/socials.js"></script>
         <script>
             $(document).ready(function () {
-                tippy("[data-tippy-content]",
-                  {trigger: "mouseenter focus"});
+                {#tippy("[data-tippy-content]",#}
+                {#  {trigger: "mouseenter focus"});#}
 
-                thumbnail_prefix = "{{ urls.thumbnail_dir }}"
                 start("{{ urls.data_dir }}/icml_socials.json");
             });
         </script>

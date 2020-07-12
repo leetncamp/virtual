@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
     {% if False %}
-        This is rendered by miniconf using jinja. Use this if False method to create comments. 
+        This is rendered by miniconf using jinja. Use this if False method to create comments.
     {% endif %}
 
     <meta charset="utf-8">
@@ -55,7 +55,7 @@
 
                     {% if request.user.is_superuser %}
                     <li class="nav-item ">
-                        <a class="nav-link" href="calendar.html">[Schedule]</a>
+                        <a class="nav-link" href="/virtual/{{year}}/calendar.html">[Schedule]</a>
                     </li>
 
                     {% endif %}
@@ -72,7 +72,7 @@
                     <li class="nav-item ">
                         <a class="nav-link" href="/virtual/{{year}}/papers.html">Papers</a>
                     </li>
-                    
+
                     {% if request.user.is_superuser %}
                     <li class="nav-item ">
 
@@ -145,12 +145,12 @@
     {# {% csrf_token %} #}
 
 
-    <footer class="footer bg-light ">
-        <div class="container">
-            <p class="float-right"><a href="#">Back to Top</a></p>
-            {% if papers %}<p style="text-align:left">Showing {{papers.count}} Papers</p>{% endif %}
-        </div>
-    </footer>
+{#    <footer class="footer bg-light ">#}
+{#        <div class="container">#}
+{#            <p class="float-right"><a href="#">Back to Top</a></p>#}
+{#            {% if papers %}<p style="text-align:left">Showing {{papers.count}} Papers</p>{% endif %}#}
+{#        </div>#}
+{#    </footer>#}
 
 
     {% block postbody %}
