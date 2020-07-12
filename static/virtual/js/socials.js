@@ -24,7 +24,7 @@ const sessions = event => {
     return event.sessions.map(s =>
       `<p>  
         <span class="session_times"> ${s.time}</span> 
-        [<a href="${s.link}" target="_blank">Live</a>] 
+        [<a href="${s.link}" target="_blank">Live Zoom</a>] 
         </p>`)
       .join(' ')
 }
@@ -41,7 +41,8 @@ function imageExists(image_url){
 }
 
 function image(event) {
-    const link = `/static/virtual/img/social_thumbnails/${event.title}.png`
+    const cleanTitle = event.title.replace(':','-').replace('?','_')
+    const link = `/static/virtual/img/social_thumbnails/${cleanTitle}.png`
 
     if (imageExists(link)){
         return `<img src="${link}" style="max-width: 100%; height: auto;max-height: 100px;" >`
@@ -84,7 +85,9 @@ const socials_template = (event) => `
                             ${sessions(event)}
                         
                         </div>
-
+                        <p class="text-center text-muted card-title">
+                        <a href="${event.chat}" target="_blank"> TextChat </a>
+                        </p>
 <!--                        <p class="text-center text-muted card-title">-->
 <!--                            <a href="chat.html?room=channel/social_{{social.id}}" target="_blank"> Chat </a>-->
 <!--                            {% if social.website %}-->

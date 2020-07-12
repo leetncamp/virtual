@@ -3,6 +3,10 @@ function make_cal(name, timezoneOffset) {
     const config = {
         calendar: {
             colors: {
+                tutorial: '#fff',
+                expo: '#fff',
+            },
+            bg_colors: {
                 '---': '#f79e11',
                 tutorial: '#2a419f',
                 workshop: '#94d222',
@@ -144,15 +148,17 @@ function make_cal(name, timezoneOffset) {
 
         all_cals.push(calendar);
 
-        const cols = config.calendar.colors;
+        const cols = config.calendar.bg_colors;
         if (cols) {
             const cals = [];
             Object.keys(cols).forEach(k => {
-                const v = cols[k];
+                const col = config.calendar.colors[k] || '#000';
+                const bgCol = config.calendar.bg_colors[k];
                 cals.push({
                     id: k,
                     name: k,
-                    bgColor: v,
+                    color: col,
+                    bgColor: bgCol,
                 })
             })
 
