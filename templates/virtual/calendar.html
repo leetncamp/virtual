@@ -1,0 +1,116 @@
+{% extends "livebase.html" %}
+{% block title %}{{ confInfo.conference }} Schedule {% endblock %}
+
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tippy.js@6/dist/tippy-bundle.umd.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.4.0/build/ical.min.js"
+            integrity="sha256-iFbWWsVYU6rIgbq5wJc4mp8zvV3SkqupxgH/7a9PanY="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js"
+            integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.28/builds/moment-timezone-with-data.min.js"
+            integrity="sha256-IWYg4uIC8/erItNXYvLtyYHioRi2zT1TFva8qaAU/ww="
+            crossorigin="anonymous"></script>
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/npm/tui-calendar@1/dist/tui-calendar.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/tui-code-snippet@1.5.2/dist/tui-code-snippet.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tui-dom@3.0.0/dist/tui-dom.min.js"
+            integrity="sha256-Ha3QUAK/d/Z2BMN/hDoBjwP0Q0f5uS9MploTRSLqrLI="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tui-calendar@1/dist/tui-calendar.min.js"></script>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.10/dist/css/bootstrap-select.min.css"
+    />
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+
+    <script src="{{ urls.js }}/little_helpers.js"></script>
+    <script src="{{ urls.js }}/lazy_load.js"></script>
+    <script src="{{ urls.js }}/persistor.js"></script>
+    <script src="{{ urls.js }}/calendar.js"></script>
+
+    <link rel="stylesheet" href="{{ urls.css }}/typeahead.css">
+    <link rel="stylesheet" href="{{ urls.css }}/lazy_load.css">
+
+    <style>
+        #calendar {
+            height: 150px; /*calc(100% - 50px);*/
+        }
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+    {#    <br><br>#}
+    {#    <div class="container">#}
+    {#        <div class="row">#}
+    {#            <div class="col-md-12"></div>#}
+    {#            <div class="title-centered" style="text-align:center">Socials</div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+    {% if access_granted %}
+        <div class="container">
+            {#            <div class="form-group col">#}
+            {#                <label for="tzOptions">Timezone:</label>#}
+            {#                <select id="tzOptions" class="selectpicker"#}
+            {#                        data-live-search="true">#}
+            {#                </select>#}
+            {#            </div>#}
+
+            <div class="row">
+                <div class="col-9">
+                    Timezone: {{ tz_name }}. <a
+                        href="https://icml.cc/virtual/2020/index.html">Change
+                    here</a>
+                </div>
+                <div class="col-3" style="text-align: right;">
+                    <a
+                            href="https://calendar.google.com/calendar/ical/tr53j93rd5ht1nq9g1ge2t5jls%40group.calendar.google.com/public/basic.ics">Download
+                        Cal</a>
+                </div>
+            </div>
+            {#            <div class="row">#}
+            <!-- full cal for browser-->
+            <div id="calendar" class="d-none d-sm-block"></div>
+
+            <!-- small cal for smart phones-->
+            <div id="calendar_small" class="d-sm-none"></div>
+
+            {#            </div>#}
+
+
+            <script type="text/javascript">
+                console.log(moment, "--- moment");
+                make_cal("{{ urls.data_dir }}/icml_calendar.json",
+                  {{ tz_offset }});
+            </script>
+        </div>
+
+
+
+    {% else %}
+        <br><br><br>
+        <div class="container" style="text-align:center;">
+            <h4>Registration Required</h4>
+            <p>You must be <a href="/Register/view-registration">registered</a>
+                {% if not request.user.is_authenticated %} and
+                    <a href="/login?nextp={{ request.get_full_path }}">logged
+                        in</a>{% endif %} order to view this content.</p>
+        </div>
+    {% endif %}
+    {% csrf_token %}
+{% endblock %}
+
+
