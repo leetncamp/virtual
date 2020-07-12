@@ -58,7 +58,7 @@ def convert(args):
             tpe = 'tutorial'
         elif title.startswith('Invited'):
             tpe = 'invited'
-        elif title.endswith('orkshop'):
+        elif title.endswith('orkshop') or 'ueer' in title or 'atinX' in title:
             tpe = 'workshop'
 
 

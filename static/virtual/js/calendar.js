@@ -5,11 +5,12 @@ function make_cal(name, timezoneOffset) {
             colors: {
                 tutorial: '#fff',
                 expo: '#fff',
+                '---': "#fff"
             },
             bg_colors: {
-                '---': '#f79e11',
+                '---': '#5e5e5e',
                 tutorial: '#2a419f',
-                workshop: '#94d222',
+                workshop: "#f79e11",
                 invited: "#f79e11",
                 // invited: '#ed1e24',
                 expo: '#5e5e5e',
