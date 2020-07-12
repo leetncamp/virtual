@@ -11,7 +11,7 @@ const filters = {
     title: null
 };
 
-const summaryBy = 'keywords' // or: "abstract"
+const summaryBy = 'keywords' // options: "abstract" | "keywords"
 
 let currentTippy = null;
 let brush = null;
@@ -24,7 +24,8 @@ const explain_text_plot = d3.select('#explain_text_plot');
 const summary_selection = d3.select('#summary_selection');
 const sel_papers = d3.select('#sel_papers');
 
-const persistor = new Persistor('Mini-Conf-Papers');
+const persistor = new Persistor('Mini-Conf-Papers-ICML');
+let thumbnail_prefix = '/'
 
 
 const plot_size = () => {
@@ -83,7 +84,7 @@ function brush_ended() {
     all_sel.forEach(paper => {
         if (summaryBy === 'keywords') {
             paper.content.keywords.forEach(kw => {
-                count = words_abstract.get(kw) | 0;
+                count = words_abstract.get(kw) || 0;
                 count += 1;
                 words_abstract.set(kw, count);
             })
@@ -92,7 +93,7 @@ function brush_ended() {
             parts.forEach(p => {
                 if (p.length < 3) return;
                 p = p.toLowerCase();
-                count = words_abstract.get(p) | 0;
+                count = words_abstract.get(p) || 0;
                 count += 1;
                 words_abstract.set(p, count);
             })
@@ -192,7 +193,7 @@ const updateVis = () => {
       .classed('non-highlight', d => !d.is_selected && is_filtered)
       .on('click',
         function(d) {
-            window.open(`poster_${d.id}.html`, '_blank');
+            window.open(`/virtual/2020/poster/${d.id}`, '_blank');
             persistor.set(d.id, true);
             d3.select(this).classed('read', true);
         })
@@ -245,17 +246,18 @@ const render = () => {
 //language=HTML
 const tooltip_template = (d) => `
     <div>
+        
+        <img src="${thumbnail_prefix}/${d.sourceid}-PaperThumbnail.jpg" width=100% />
         <div class="tt-title">${d.content.title}</div>
         <p>${d.content.authors.join(', ')}</p>
-        <img src="https://iclr.github.io/iclr-images/${d.id}.png" width=100%/>
      </div>   
 `
 
 
-const start = () => {
+const start = (paper_file, projections_file) => {
     Promise.all([
-        d3.json('papers.json'),
-        d3.json('serve_papers_projection.json')
+        d3.json(paper_file),
+        d3.json(projections_file)
     ]).then(([papers, proj]) => {
         // all_proj = proj;
 
@@ -442,4 +444,5 @@ will
 just
 don
 should
+show
 now`.split('\n');

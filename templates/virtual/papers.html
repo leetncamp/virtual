@@ -33,45 +33,41 @@
         <div class="container">
             {% block tabs %}
                 <ul class="nav nav-pills justify-content-center">
-                <li class="nav-item">
-                    <button class="btn btn-outline-secondary " type="button"
+                    <li class="nav-item">
+                        <button class="btn btn-outline-secondary " type="button"
                                 data-toggle="collapse"
                                 data-target="#collapseExample"
                                 aria-expanded="false"
                                 aria-controls="collapseExample"
-                            style="margin-right: 10pt;"
-                    >
+                                style="margin-right: 10pt;"
+                        >
                             Show/Hide Keywords
                         </button>
-                </li>
-                    <li class="nav-item active">
+                    </li>
+                    <li class="nav-item">
                         <a
                                 class="nav-link text-muted active"
-                                data-toggle="tab"
-                                href="#tab-browse"
-                                role="tab"
-                                aria-controls="nav-home"
-                                aria-selected="true"
+                                href="papers.html"
                         >Browse Papers
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-muted disabled" href="">Paper
-                            Visualization (to come)</a>
+                        <a class="nav-link text-muted"
+                           href="paper_vis.html">Paper
+                            Visualization</a>
                     </li>
 
 
-
                 </ul>
-{#                                <div class="nav-item nav-left">#}
-{#                        <button class="btn btn-outline-secondary" type="button"#}
-{#                                data-toggle="collapse"#}
-{#                                data-target="#collapseExample"#}
-{#                                aria-expanded="false"#}
-{#                                aria-controls="collapseExample">#}
-{#                            Show/Hide Keywords#}
-{#                        </button>#}
-{#                    </div>#}
+                {#                                <div class="nav-item nav-left">#}
+                {#                        <button class="btn btn-outline-secondary" type="button"#}
+                {#                                data-toggle="collapse"#}
+                {#                                data-target="#collapseExample"#}
+                {#                                aria-expanded="false"#}
+                {#                                aria-controls="collapseExample">#}
+                {#                            Show/Hide Keywords#}
+                {#                        </button>#}
+                {#                    </div>#}
 
 
             {% endblock %}
@@ -100,7 +96,8 @@
 
 
                 <div class="collapse row" id="collapseExample">
-                    <div class="" id="all_kw_show" style="padding: 10px; margin-bottom:10px;background-color: #eee;">
+                    <div class="" id="all_kw_show"
+                         style="padding: 10px; margin-bottom:10px;background-color: #eee;">
 
 
                     </div>
