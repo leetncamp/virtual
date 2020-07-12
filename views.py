@@ -17,6 +17,8 @@ from django.contrib import messages
 
 from nips.models import Events, Eventspeakers, Timezones, Conferences, Registrations, Users, conferenceDict, Userlinks, now, Q, escape, Sessions
 
+from django.utils.timezone import activate, deactivate, get_current_timezone
+
 import logging
 log = logging.getLogger(__name__)
 
@@ -81,6 +83,15 @@ def get_urls():
 
     return urls
 
+def get_timezone():  
+
+    tz = get_current_timezone()
+    tz_name = tz.zone
+    local_now = datetime.now(tz)
+    tz_offset = local_now.utcoffset().total_seconds() /60
+
+    return(tz_name, tz_offset)
+
 
 def papers(request, year):
 
@@ -90,6 +101,8 @@ def papers(request, year):
 
 
     urls = get_urls()
+
+    tz_name, tz_offset = get_timezone()
 
     papers = Events.objects.filter(
         session__conference__id=year, type="Poster").order_by("?")
@@ -267,6 +280,8 @@ def paper_vis(request, year):
     papers = Events.objects.filter(
         session__conference__id=year, type="Poster").order_by("?")
 
+    tz_name, tz_offset = get_timezone()
+
     return(render(request, "virtual/paper_vis.html", locals()))
 
 def paper_detail(request, year, eventid):
@@ -414,6 +429,8 @@ def events(request, year, event_type):
 
     urls = get_urls()
 
+    tz_name, tz_offset = get_timezone()
+
     events = Events.objects.filter(
         session__conference__id=year, type__istartswith=event_type)  #This should probably be iexact but we have AffinityWorkshops which are workshops.  
 
@@ -528,8 +545,20 @@ def socials(request, year):
 
     access_granted = get_access(request, year)
 
+    tz_name, tz_offset = get_timezone()
 
     urls = get_urls()
-
     
     return(render(request, "virtual/socials.html", locals()))
+
+def calendar(request, year):
+
+    confInfo = getConfInfo(request, year=year)
+
+    access_granted = get_access(request, year)
+
+    tz_name, tz_offset = get_timezone()
+
+    urls = get_urls()
+    
+    return(render(request, "virtual/calendar.html", locals()))
