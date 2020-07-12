@@ -483,7 +483,7 @@ def workshop_detail(request, year, eventid):
 
     workshop = Events.objects.filter(pk=eventid).first()
 
-
+    
 
     if workshop:
         wkapp = workshop.get_application()

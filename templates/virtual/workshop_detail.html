@@ -45,12 +45,15 @@
                             <a class="card-link" target='_blank' href="{{workshop.zoom_join_link}}">Join Zoom Webinar</a> 
                         {% endif %}
 
-
+                        <br><small  style="color:red;">Please do not share or post zoom links</small>
                         
                         {% if workshop.starttime %}<div>{{workshop.starttime|date:"D M j P e (O)"}}<a href="{% url 'ical' workshop.id 1 %}"> [iCal] </a></div>{% endif %}
 
                         {% if workshop.starttime2 %}<div>{{workshop.starttime2|date:"D M j P e (O)"}}<a href="{% url 'ical' workshop.id 2 %}"> [iCal] </a></div>{% endif %}
+
                         
+                        
+
 
 
                     </div>
