@@ -25,7 +25,8 @@ def transform(papers, out):
         for event in all_events:
             if event["type"] == "Poster":
                 poster_entry = {
-                    "id": event["sourceid"],
+                    "id": event["id"],
+                    "sourceid": event["sourceid"],
                     "forum": event["sourceid"],
                     "content": {
                         "title": event["title"],

@@ -125,6 +125,10 @@ def paper_vis():
     data = _data()
     return render_template("paper_vis.html", **data)
 
+@app.route("/socials.html")
+def socials():
+    data = _data()
+    return render_template("socials.html", **data)
 
 # @app.route("/calendar.html")
 # def schedule():
@@ -300,7 +304,7 @@ if __name__ == "__main__":
     if args.build:
         freezer.freeze()
     else:
-        debug_val = False
+        debug_val = True
         if os.getenv("FLASK_DEBUG") == "True":
             debug_val = True
 

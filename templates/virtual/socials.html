@@ -1,0 +1,130 @@
+{% extends "livebase.html" %}
+{% block title %}{{ confInfo.conference }} Socials {% endblock %}
+
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tippy.js@6/dist/tippy-bundle.umd.min.js"></script>
+
+    <script src="{{ urls.js }}/icons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+    <link rel="stylesheet" href="{{ urls.css }}/typeahead.css">
+    <link rel="stylesheet" href="{{ urls.css }}/lazy_load.css">
+
+    <style>
+        .tt-hint {
+            opacity: 0 !important;
+        }
+    </style>
+
+
+{% endblock %}
+
+{% block body %}
+
+    {#    <br><br>#}
+    {#    <div class="container">#}
+    {#        <div class="row">#}
+    {#            <div class="col-md-12"></div>#}
+    {#            <div class="title-centered" style="text-align:center">Socials</div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+    {% if access_granted %}
+        <div class="container">
+            <div class="jumbotron">
+                <h4>Socials at ICML 2020</h4>
+                <p> Welcome to the social page.
+                    Please find a list of socials and mentor sessions below. We
+                    also provide some conference-wide
+                    options to interact:</p>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-action"><h5>The Conference Center</h5>
+                        is a virtual space to meet and hangout at virtual ICML in a virtual 2D world at GatherTown.
+                        <a href="aaa"> Enter ICML-Town here </a>
+                    </li>
+                    <li class="list-group-item list-group-item-action"> <h5>The Coffee Stand</h5>
+                        is a 24-hr video chat for more a more face to face experience using an open Zoom session.
+                        <a href="https://us02web.zoom.us/j/89733474172?pwd=ZlBXQXpjYnVkYXRmNzNnZW16NFN4dz09"> Connect here </a>
+                    </li>
+                    <li class="list-group-item list-group-item-action"> <h5>Mentoring </h5>
+                        Talk to leaders in the field and ask questions. Some mentor sessions have been scheduled already (see below).
+                        We also welcome informal and impromptu mentoring sessions organized in Rocket chat.
+                        <a href="aaa"> Check channel #mentoring </a></li>
+                </ul>
+
+                {#                <p>It uses utility classes for typography and spacing to space#}
+                {#                    content out within the larger container.</p>#}
+                {#                <p class="lead">#}
+                {#                    <a class="btn btn-primary btn-lg" href="#" role="button">Learn#}
+                {#                        more</a>#}
+                {#                </p>#}
+            </div>
+
+
+            <ul class="nav nav-pills justify-content-center">
+                <li class="nav-item active">
+                    <a
+                            class="nav-link text-muted active"
+                            data-toggle="tab"
+                            href="#socials"
+                            role="tab"
+                            aria-controls="nav-home"
+                            aria-selected="true"
+                    >Socials
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a
+                            class="nav-link text-muted "
+                            data-toggle="tab"
+                            href="#mentors"
+                            role="tab"
+                            aria-controls="nav-home"
+                            aria-selected="true"
+                    >Mentor Sessions
+                    </a>
+                </li>
+
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="socials">
+                    <div class="cards row" id="socials_content">
+
+                    </div>
+                </div>
+                <div class="tab-pane" id="mentors">
+                    <div class="cards row" id="mentors_content">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cards -->
+        <div style="height:50px;"></div>
+        <script src="{{ urls.js }}/little_helpers.js"></script>
+        <script src="{{ urls.js }}/lazy_load.js"></script>
+        <script src="{{ urls.js }}/socials.js"></script>
+        <script>
+            $(document).ready(function () {
+                tippy("[data-tippy-content]",
+                  {trigger: "mouseenter focus"});
+
+                thumbnail_prefix = "{{ urls.thumbnail_dir }}"
+                start("{{ urls.data_dir }}/icml_socials.json");
+            });
+        </script>
+    {% else %}
+        <br><br><br>
+        <div class="container" style="text-align:center;">
+            <h4>Registration Required</h4>
+            <p>You must be <a href="/Register/view-registration">registered</a>
+                {% if not request.user.is_authenticated %} and
+                    <a href="/login?nextp={{ request.get_full_path }}">logged
+                        in</a>{% endif %} order to view this content.</p>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
