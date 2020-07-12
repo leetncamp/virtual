@@ -203,21 +203,39 @@ function make_cal(name, timezoneOffset) {
             })
 
             all_cals.push(cal);
-            const cols = config.calendar.colors;
-            if (cols) {
-                const cals = [];
-                Object.keys(cols).forEach(k => {
-                    const v = cols[k];
-                    cals.push({
-                        id: k,
-                        name: k,
-                        bgColor: v,
-                    })
+             // const cols = config.calendar.bg_colors;
+        if (cols) {
+            const cals = [];
+            Object.keys(cols).forEach(k => {
+                const col = config.calendar.colors[k] || '#000';
+                const bgCol = config.calendar.bg_colors[k];
+                cals.push({
+                    id: k,
+                    name: k,
+                    color: col,
+                    bgColor: bgCol,
                 })
+            })
 
-                cal.setCalendars(cals);
+            cal.setCalendars(cals);
 
-            }
+        }
+
+            // const cols = config.calendar.colors;
+            // if (cols) {
+            //     const cals = [];
+            //     Object.keys(cols).forEach(k => {
+            //         const v = cols[k];
+            //         cals.push({
+            //             id: k,
+            //             name: k,
+            //             bgColor: v,
+            //         })
+            //     })
+            //
+            //     cal.setCalendars(cals);
+            //
+            // }
 
             i++;
 
