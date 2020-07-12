@@ -108,10 +108,9 @@
         <script src="{{ urls.js }}/socials.js"></script>
         <script>
             $(document).ready(function () {
-                tippy("[data-tippy-content]",
-                  {trigger: "mouseenter focus"});
+                {#tippy("[data-tippy-content]",#}
+                {#  {trigger: "mouseenter focus"});#}
 
-                thumbnail_prefix = "{{ urls.thumbnail_dir }}"
                 start("{{ urls.data_dir }}/icml_socials.json");
             });
         </script>

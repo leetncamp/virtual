@@ -79,6 +79,7 @@ const render = () => {
     Object.keys(filters)
       .forEach(k => {filters[k] ? f_test.push([k, filters[k]]) : null})
 
+
     // console.log(f_test, filters, "--- f_test, filters");
     if (f_test.length === 0) updateCards(allPapers)
     else {
@@ -115,6 +116,7 @@ const updateFilterSelectionBtn = value => {
 
 const updateSession = () => {
     const urlSession = getUrlParameter("session");
+
     if (urlSession) {
         filters['session'] = urlSession
         d3.select('#session_name').text(urlSession);
@@ -148,7 +150,12 @@ const start = (papers_json_path) => {
 
 
     d3.json(papers_json_path).then(papers => {
-        console.log(papers, "--- papers");
+
+
+        // TODO: bad hack
+        papers.forEach(p => {
+            p.content.session = p.content.session.map(s=>s.replace(' ',"T"))
+        })
 
         shuffleArray(papers);
 

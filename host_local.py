@@ -45,6 +45,8 @@ pagePermission = {
 }
 
 
+
+
 def main(site_data_path):
     global site_data, extra_files
     extra_files = []
@@ -87,6 +89,8 @@ def _data():
     data["request"] = request
     data["pagePermission"] = pagePermission
     data["access_granted"] = True
+    data["tz_offset"] = '-240'
+    data["tz_name"] = 'America/New York'
     return data
 
 
@@ -129,6 +133,11 @@ def paper_vis():
 def socials():
     data = _data()
     return render_template("socials.html", **data)
+
+@app.route("/calendar.html")
+def cal():
+    data = _data()
+    return render_template("calendar.html", **data)
 
 # @app.route("/calendar.html")
 # def schedule():
