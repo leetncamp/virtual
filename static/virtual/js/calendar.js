@@ -16,7 +16,7 @@ function make_cal(name, timezoneOffset) {
                 poster: '#94d222',
             },
             sunday_saturday: true,
-            min_date: "2020-07-15T04:45:00+00:00"
+            min_date: "2020-06-01T04:45:00+00:00"
         }
     }
 
@@ -136,6 +136,7 @@ function make_cal(name, timezoneOffset) {
                 },
             },
         });
+        console.log(Date.parse(min_date),"--- Date.parse(min_date)");
         calendar.setDate(Date.parse(min_date));
         calendar.createSchedules(events);
         calendar.on({
