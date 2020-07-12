@@ -45,8 +45,8 @@
                         {% endif %}
 
                         
-                        {% if tutorial.starttime %}<div>{{tutorial.starttime|date:"D M j P"}} &mdash; {{tutorial.endtime|date:"P e (O)"}}<a href="{% url 'ical' tutorial.id 1 %}"> [iCal] </a></div>{% endif %}
-                        {% if tutorial.starttime2 %}<div>{{tutorial.starttime2|date:"D M j P"}} &mdash; {{tutorial.endtime2|date:"P e (O)"}}<a href="{% url 'ical' tutorial.id 2 %}"> [iCal] </a></div>{% endif %}
+                        {% if tutorial.starttime %}<div>{{tutorial.starttime|date:"D M j P"}} &mdash; {{tutorial.endtime|date:"P e "}}<a href="{% url 'ical' tutorial.id 1 %}"> [iCal] </a></div>{% endif %}
+                        {% if tutorial.starttime2 %}<div>{{tutorial.starttime2|date:"D M j P"}} &mdash; {{tutorial.endtime2|date:"P e "}}<a href="{% url 'ical' tutorial.id 2 %}"> [iCal] </a></div>{% endif %}
                         
 
 
