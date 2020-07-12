@@ -15,7 +15,8 @@ function make_cal(name, timezoneOffset) {
                 expo: '#5e5e5e',
                 poster: '#94d222',
             },
-            sunday_saturday: true
+            sunday_saturday: true,
+            min_date: "2020-07-15T04:45:00+00:00"
         }
     }
 
@@ -81,7 +82,8 @@ function make_cal(name, timezoneOffset) {
         const all_cals = [];
         const timezoneName = '';
 
-        const min_date = d3.min(events.map(e => e.start));
+        const min_date = config.calendar.min_date || d3.min(events.map(e => e.start));
+        console.log(min_date,"--- min_date");
         // var min_hours = d3.min(
         //   events.map(e => moment(e.start).tz(timezoneName).hours())) - 1;
         // var max_hours = d3.max(
