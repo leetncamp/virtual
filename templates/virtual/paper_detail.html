@@ -43,7 +43,7 @@
                         <a class="card-link" role="button" href="https://proceedings.{{confInfo.conference.organization.get_domain}}/static/paper_files/{{confInfo.orgName|lower}}/{{year}}/{{paper.sourceid}}-Paper.pdf">Paper</a>
                         {% if paper.starttime %}<div>{{paper.starttime|date:"D M j P e (O)"}}<a href="{% url 'ical' paper.id 1 %}"> [iCal] </a></div>{% endif %}
                         {% if paper.starttime2 %}<div>{{paper.starttime2|date:"D M j P e (O)"}}<a href="{% url 'ical' paper.id 2 %}"> [iCal] </a></div>{% endif %}
-                        
+
 
 
                     </div>
@@ -85,6 +85,7 @@
                 <div class="pp-card m-3">
                     <div class="">
                         <div class="public-chat-title-box">
+                            <span class="float-left"><a class="text-warning text-sm" href="{% url 'concerns' %}"  target="_blank">Concerns</a></span>
                             <a style="float:right;" href="{{rocketchat_new_window_url}}" target="_blank" title="Full Size"> <i class="fas fa-expand"></i></i></a>
                             Chat
                         </div>
