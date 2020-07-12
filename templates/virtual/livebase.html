@@ -53,9 +53,9 @@
                         <a class="nav-link" href="/virtual/{{confInfo.year}}/index.html">Getting Started</a>
                     </li>
 
-                    {% if True %}
+                    {% if request.user.is_superuser %}
                     <li class="nav-item ">
-                        <a class="nav-link" href="calendar.html">Schedule</a>
+                        <a class="nav-link" href="calendar.html">[Schedule]</a>
                     </li>
 
                     {% endif %}
@@ -79,7 +79,16 @@
                         <a class="nav-link" href="/virtual/{{year}}/workshops">[Workshops]</a>
 
                     </li>
+
                     {% endif %}
+
+                    <li class="nav-item ">
+
+                        <a class="nav-link" href="/virtual/{{year}}/socials.html">Socials</a>
+
+                    </li>
+
+
 
 
                     {% if confInfo.user.is_authenticated %}

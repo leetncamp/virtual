@@ -15,6 +15,8 @@ urlpatterns = [
     path("<int:year>/papers", virtual.views.papers, name="papers"),
 
     path("<int:year>/papers.html", virtual.views.papers, name="miniconf-papers"),
+
+    path("<int:year>/socials.html", virtual.views.socials, name="miniconf-socials"),
     
     path("<int:year>/poster/<int:eventid>",
          virtual.views.paper_detail, name="virtual_paper_detail"),

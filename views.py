@@ -519,3 +519,17 @@ def workshop_detail(request, year, eventid):
             log.critical(msg)
 
     return(render(request, "virtual/workshop_detail.html", locals()))
+
+
+
+def socials(request, year):
+
+    confInfo = getConfInfo(request, year=year)
+
+    access_granted = get_access(request, year)
+
+
+    urls = get_urls()
+
+    
+    return(render(request, "virtual/socials.html", locals()))
