@@ -3,10 +3,13 @@ function make_cal(name, timezoneOffset) {
     const config = {
         calendar: {
             colors: {
-                '---': '#bed972',
-                qa: '#4FCAEB',
-                talk: '#ccc',
-                Poster: '#4FCAEB',
+                '---': '#f79e11',
+                tutorial: '#2a419f',
+                workshop: '#94d222',
+                invited: "#f79e11",
+                // invited: '#ed1e24',
+                expo: '#5e5e5e',
+                poster: '#94d222',
             },
             sunday_saturday: true
         }
@@ -61,8 +64,11 @@ function make_cal(name, timezoneOffset) {
 
         events.forEach(e => {
             e.category = 'time'
-            if (e.calendarId === "Poster") {
-                e.location = `papers.html?session=${encodeURIComponent(e.session)}`
+            if (e.calendarId === "poster") {
+                e.location = `papers.html?session=${encodeURIComponent(e.start)}`
+                e.title = e.title.replace('session ','')
+            }else{
+                e.location = e.link
             }
 
         })
@@ -129,6 +135,7 @@ function make_cal(name, timezoneOffset) {
         calendar.on({
             'clickSchedule': function (e) {
                 const s = e.schedule
+                console.log(s,"--- s");
                 if (s.location.length > 0) {
                     window.open(s.location, '_blanket');
                 }
@@ -182,6 +189,7 @@ function make_cal(name, timezoneOffset) {
             cal.on({
                 'clickSchedule': function (e) {
                     const s = e.schedule
+
                     if (s.location.length > 0) {
                         window.open(s.location, '_blanket');
                     }
