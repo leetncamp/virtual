@@ -276,9 +276,13 @@ def ical(request, eventid, number):
 def paper_vis(request, year):
 
     confInfo = getConfInfo(request, year=year)
-    urls = get_urls()
+
     papers = Events.objects.filter(
         session__conference__id=year, type="Poster").order_by("?")
+
+    urls = get_urls()
+
+    access_granted = get_access(request, year)
 
     tz_name, tz_offset = get_timezone()
 
@@ -550,6 +554,18 @@ def socials(request, year):
     urls = get_urls()
     
     return(render(request, "virtual/socials.html", locals()))
+
+def awards(request, year):
+
+    confInfo = getConfInfo(request, year=year)
+
+    access_granted = get_access(request, year)
+
+    tz_name, tz_offset = get_timezone()
+
+    urls = get_urls()
+    
+    return(render(request, "virtual/awards.html", locals()))
 
 def calendar(request, year):
 
