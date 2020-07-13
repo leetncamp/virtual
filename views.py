@@ -214,12 +214,19 @@ def ical(request, eventid, number):
                 if conf_event.starttime and conf_event.endtime:
                     event.add('dtstart', conf_event.starttime)
                     event.add('dtend', conf_event.endtime)
+                elif conf_event.starttime:  #Workshop organizers sometimes don't fill in the endtime
+                    event.add('dtstart', conf_event.starttime)
+
+                    event.add('dtstart', conf_event.starttime + timedelta(minutes=30))
                 else:
                     raise Http404("An ical attachment cannot be generated.  An engineer has been notified. ")
             elif number == 2:
                 if conf_event.starttime2 and conf_event.endtime2:
                     event.add('dtstart', conf_event.starttime2)
                     event.add('dtend', conf_event.endtime2)
+                elif conf_event.starttime2:
+                    event.add('dtstart', conf_event.starttime2)
+                    event.add('dtstart', conf_event.starttime2 + timedelta(minutes=30))
                 else:
                     raise Http404("An ical attachment cannot be generated.  An engineer has been notified. ")
             event.add('dtstamp', now())
