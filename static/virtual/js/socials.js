@@ -29,7 +29,7 @@ const sessions = event => {
       .join(' ')
 }
 
-function imageExists(image_url){
+function imageExists(image_url) {
 
     const http = new XMLHttpRequest();
 
@@ -41,16 +41,25 @@ function imageExists(image_url){
 }
 
 function image(event) {
-    const cleanTitle = event.title.replace(':','-').replace('?','_')
+    const cleanTitle = event.title.replace(':', '-').replace('?', '_')
     const link = `/static/virtual/img/social_thumbnails/${cleanTitle}.png`
 
-    if (imageExists(link)){
+    if (imageExists(link)) {
         return `<img src="${link}" style="max-width: 100%; height: auto;max-height: 100px;" >`
-    }else{
+    } else {
         return `<img height="100" src="/static/virtual/img/social_thumbnails/ICML_social_temp.png" >`
     }
 
 
+}
+
+function chat_part(event) {
+    if (event.chat !== '')
+        return `<p class="text-center text-muted card-title">
+     <a href="${event.chat}" target="_blank"> TextChat </a>
+     </p>`
+    else
+        return ''
 }
 
 const socials_template = (event) => `
@@ -85,9 +94,8 @@ const socials_template = (event) => `
                             ${sessions(event)}
                         
                         </div>
-                        <p class="text-center text-muted card-title">
-                        <a href="${event.chat}" target="_blank"> TextChat </a>
-                        </p>
+                        ${chat_part(event)}
+                        
 <!--                        <p class="text-center text-muted card-title">-->
 <!--                            <a href="chat.html?room=channel/social_{{social.id}}" target="_blank"> Chat </a>-->
 <!--                            {% if social.website %}-->

@@ -32,6 +32,12 @@ def add_file(file_name, all_socials, type):
                     "chat": event['Rocket_chat']
                 }
 
+                # print (event["Title"], 'Happy_to_use_rocket_chat' in event )
+                if ('Happy_to_use_rocket_chat' in event) and not (event[
+                    'Happy_to_use_rocket_chat']):
+                    # print ('===del')
+                    poster_entry["chat"] = ""
+
                 if event['Session2']:
                     poster_entry['sessions'].append(
                         {"time": event['Session2'].replace('\n', ' '),
@@ -71,6 +77,6 @@ if __name__ == "__main__":
     #     if len(event['sessions']) > 1:
     #         print(event)
 
-    with open(args.out,'w') as out_file:
+    with open(args.out, 'w') as out_file:
         json.dump(all_events, out_file)
     # print(all_events)

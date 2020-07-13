@@ -41,8 +41,9 @@
                         </a>
 
                         <a class="card-link" role="button" href="https://proceedings.{{confInfo.conference.organization.get_domain}}/static/paper_files/{{confInfo.orgName|lower}}/{{year}}/{{paper.sourceid}}-Paper.pdf">Paper</a>
-                        {% if paper.starttime %}<div>{{paper.starttime|date:"D M j P e (O)"}}<a href="{% url 'ical' paper.id 1 %}"> [iCal] </a></div>{% endif %}
-                        {% if paper.starttime2 %}<div>{{paper.starttime2|date:"D M j P e (O)"}}<a href="{% url 'ical' paper.id 2 %}"> [iCal] </a></div>{% endif %}
+
+                        {% if paper.starttime %}<div>{{paper.starttime|date:"D M j P e "}}<a href="{% url 'ical' paper.id 1 %}"> [iCal] </a></div>{% endif %}
+                        {% if paper.starttime2 %}<div>{{paper.starttime2|date:"D M j P e "}}<a href="{% url 'ical' paper.id 2 %}"> [iCal] </a></div>{% endif %}
 
 
 
@@ -77,7 +78,6 @@
                 </div>
             </div>
         {% endif %}
-
 
         {# RocketChat #}
         {% if rci %}

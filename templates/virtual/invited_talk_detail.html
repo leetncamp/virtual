@@ -45,10 +45,8 @@
                         {% endif %}
 
 
-                        {% if talk.starttime %}<div>{{talk.starttime|date:"D M j P e (O)"}}<a href="{% url 'ical' talk.id 1 %}"> [iCal] </a></div>{% endif %}
-                        {% if talk.starttime2 %}<div>{{talk.starttime2|date:"D M j P e (O)"}}<a href="{% url 'ical' talk.id 2 %}"> [iCal] </a></div>{% endif %}
-
-
+                        {% if talk.starttime %}<div>{{talk.starttime|date:"D M j P e "}}<a href="{% url 'ical' talk.id 1 %}"> [iCal] </a></div>{% endif %}
+                        {% if talk.starttime2 %}<div>{{talk.starttime2|date:"D M j P e "}}<a href="{% url 'ical' talk.id 2 %}"> [iCal] </a></div>{% endif %}
 
                     </div>
                     <div class=" text-center text-muted text-monospace ">

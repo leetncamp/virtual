@@ -14,9 +14,9 @@
     </div>
     <div class="container">
         <div class="row">
-            
+
             <h2 class="title-centered">Getting Started</h2>
-            
+
         </div>
 
         <div class="row">
@@ -25,13 +25,19 @@
 
               <h3>Requirements</h3>
                 <ul class="requirements">
-                    <li><strong>Javascript</strong> must be enabled for this site to work.  
-                    <li >{% set_timezone_form nextp=timezone_nextp %} Be sure to set a timezone so the schedule appears in your local time. <br>You may also set this in the upper right corner using the profile dropdown from any page. 
+                    <li><strong>Javascript</strong> must be enabled for this site to work.
+                    <li >{% set_timezone_form nextp=timezone_nextp %} Be sure to set a timezone so the schedule appears in your local time. <br>You may also set this in the upper right corner using the profile dropdown from any page.
                       <br>Avoid using the GMT+/- timezone names because the names are the reverse of the timezone names.<br>Try to choose a neary city instead.</li>
                     <li>Keywords and topic-based searching will become available Fri July 9th.</li>
                     <li>Workshops, Tutorials, and the Expo are coming soon</li>
                 </ul>
+                {% if rci and rcu %}
+                <h3>Chat</h3>
+                    <p>
+                        <a href="{{ rocketchat_new_window_url }}" target="_blank">Full browser chat client</a><br/>
 
+                    </p>
+                {% endif %}
                 <br><br><br>
                 {# ================================================================ #}
 
@@ -39,7 +45,7 @@
 
               {% document "/public/VirtualIntro" %}
 
-                
+
 
 
 
@@ -60,8 +66,8 @@
             </div>
             <br><br><br><br><br><br><br><br><br><br>
 
-            
-            
+
+
         {% endblock %}
 
         {% block postbody %}

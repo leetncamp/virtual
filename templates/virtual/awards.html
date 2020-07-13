@@ -1,0 +1,403 @@
+{% extends "livebase.html" %}
+{% block title %}{{ confInfo.conference }} Awards{% endblock %}
+
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tippy.js@6/dist/tippy-bundle.umd.min.js"></script>
+
+    <script src="{{ urls.js }}/icons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+    <link rel="stylesheet" href="{{ urls.css }}/typeahead.css">
+    <link rel="stylesheet" href="{{ urls.css }}/lazy_load.css">
+
+    <style>
+        .tt-hint {
+            opacity: 0 !important;
+        }
+
+        body {
+            font-family: "Exo";
+        }
+    </style>
+
+
+{% endblock %}
+
+{% block body %}
+    {#    <br><br>#}
+    {#    <div class="container">#}
+    {#        <div class="row">#}
+    {#            <div class="col-md-12"></div>#}
+    {#            <div class="title-centered" style="text-align:center">Papers</div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+    {% if access_granted %}
+        <div class="container">
+            {% block content %}
+                <div class="row p-3"></div>
+                <div class="row">
+                <h2 class="col-12">ICML 2020 Awards</h2>
+
+                    <p class="col-12">To recognize excellent work conducted by members of the
+                        ICML community, we have two types of awards. The <a
+                                href="#tot">Test of Time award</a> is given to a
+                        paper from ICML ten years ago that has had significant
+                        impact, and <a href="#opa">Outstanding Paper awards</a>
+                        are given to papers in the current ICML that are
+                        exemplary.</p>
+                </div>
+
+                <div class="row">
+
+                    <h3 class="col-12">Live talk &amp; Q/A </h3>
+                    <div class="col-12">
+                        <p>The recipients of the Test of Time award will
+                            give a plenary talk at the following times on
+                            <strong>Monday, July 13:</strong></p>
+
+                        <ul>
+                            <li><strong>Live talk &amp; Q/A @ 11:00-12:00
+                                UTC</strong> (4:00 PDT, 7:00 EDT, 13:00 CEST,
+                                16:30
+                                IST, 19:00 CST)
+                            </li>
+                            <li><strong>Recorded talk &amp; Live Q/A @
+                                21:00-22:00
+                                UTC</strong> (14:00 PDT, 17:00 EDT, 23:00 CEST;
+                                Tuesday July 14, 2:30 IST, 5:00 CST)
+                            </li>
+                        </ul>
+                    </div>
+
+
+
+                    <div id="presentation-embed-38931844" class="slp my-auto"></div>
+                    <script src='https://slideslive.com/embed_presentation.js'></script>
+                    <script>
+                    embed = new SlidesLiveEmbed('presentation-embed-38931844', {
+                        presentationId: '38931844',
+                        autoPlay: false, // change to true to autoplay the embedded presentation
+                        verticalEnabled: true,
+                        allowHiddenControlsWhenPaused: true,
+                        hideTitle: true
+                    });
+                    </script>
+
+                    <div class="col-12 text-center p-3">
+                        <a class="btn btn-secondary" href="https://us02web.zoom.us/j/83620083676">Join Zoom</a>
+                        {# <a class="btn btn-secondary" href=""> RocketChat</a> #}
+                    </div>
+
+
+                </div>
+
+                {% if True %}
+                <div class="row p-3">
+                    <!--rocketchatembed-->
+
+                    {% if rci %}
+                        <div class="container">
+                            <div class="pp-card m-3">
+                                <div class="">
+                                    <div class="public-chat-title-box">
+                                        <span class="float-left"><a class="text-warning text-sm" href="{% url 'concerns' %}"  target="_blank">Concerns</a></span>
+                                        <a style="float:right; color:white;" href="{{rocketchat_new_window_url}}" target="_blank" title="Full Size">Full &nbsp;<i class="fas fa-expand"></i></i></a>
+                                        Chat
+                                    </div>
+                                    <iframe frameBorder="0" width='100%' height='400px' src="{{rocketchat_iframe_url}}"  id="{{ rocketchat_iframe_id }}"></iframe>
+                                    {{event_channel_auth_js|safe}}
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="container" >
+                            <div style="color:#ccc"><h3>RocketChat is not active.</h3></div>
+                        </div>
+                    {% endif %}
+
+                </div>
+                {% endif %}
+
+
+                <div class="row p-3">
+
+                    <h3 class="col-12"><a id="tot" name="tot"></a>Test of Time Award</h3>
+
+                    <p class="col-12">The test of time award is given to a paper from ICML ten
+                        years ago that has had substantial impact on the field
+                        of machine learning, including both research and
+                        practice. The award recipient was selected by the ICML
+                        2020 General Chair (David Blei) and Program Co-Chairs
+                        (Aarti Singh and Hal Daumé III) in consultation with a
+                        Test of Time Award committee, members listed below,
+                        including the General and Program Chairs from ICML
+                        2010.</p>
+
+                    <p class="col-12">We are thrilled to announce that
+                        the 2020 Test of Time
+                        Award goes to....</p>
+
+                    <div class="card">
+                        <h5 class="card-header"><a
+                                href="https://icml.cc/Conferences/2010/papers/422.pdf">Gaussian
+                            Process Optimization in the Bandit Setting:
+                            No Regret and Experimental Design</a></h5>
+
+                        <div class="card-body">
+                            <p class="card-text">
+                            <table align="left" border="0" cellpadding="1"
+                                   cellspacing="1"
+                                   style="width:500px; margin-right: 20px;">
+                                <tbody>
+                                <tr>
+
+                                    <td>
+                                        <a href="https://twitter.com/niranjan628496">Niranjan
+                                            Srinivas</a>,
+                                    </td>
+                                    <td>
+                                        <a href="https://las.inf.ethz.ch/krausea">Andreas
+                                            Krause</a>,
+                                    </td>
+                                    <td>
+                                        <a href="https://homes.cs.washington.edu/~sham/">Sham
+                                            Kakade</a>,
+                                    </td>
+                                    <td><a href="https://mseeger.github.io/">Matthias
+                                        Seeger</a></td>
+                                </tr>
+                                <tr>
+
+                                    <td><img alt="Photo of Niranjan Srinivas"
+                                             src="https://mcb.berkeley.edu/labs/garcia/sites/mcb.berkeley.edu.labs.garcia/files/styles/medium/public/NS_portrait_cropped.png?itok=esnyP-fD"
+                                             style="height:100px; width:74px">
+                                    </td>
+                                    <td><img alt="Photo of Andreas Krause"
+                                             src="https://las.inf.ethz.ch/wp-content/uploads/2015/10/krause.jpg"
+                                             style="height:100px; width:67px">
+                                    </td>
+                                    <td><img alt="Photo of Sham Kakade"
+                                             src="https://news.cs.washington.edu/wp-content/uploads/2015/05/sham.jpg"
+                                             style="height:100px; width:83px">
+                                    </td>
+                                    <td><img alt="Photo of Matthias Seeger"
+                                             src="https://mseeger.github.io/files/seeger_photo_small_portr.jpg"
+                                             style="height:100px; width:90px">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            </p>
+                            {#                            <h5 class="card-title">Special title treatment</h5>#}
+                            <p class="card-text">
+                                <strong>Abstract:</strong> Many applications
+                                require optimizing an unknown, noisy function
+                                that
+                                is expensive to evaluate. We formalize this task
+                                as
+                                a multiarmed bandit problem, where the payoff
+                                function is either sampled from a Gaussian
+                                process
+                                (GP) or has low RKHS norm. We resolve the
+                                important
+                                open problem of deriving regret bounds for this
+                                setting, which imply novel convergence rates for
+                                GP
+                                optimization. We analyze GP-UCB, an intuitive
+                                upper-confidence based algorithm, and bound its
+                                cumulative regret in terms of maximal
+                                information
+                                gain, establishing a novel connection between GP
+                                optimization and experimental design. Moreover,
+                                by
+                                bounding the latter in terms of operator
+                                spectra, we
+                                obtain explicit sublinear regret bounds for many
+                                commonly used covariance functions. In some
+                                important cases, our bounds have surprisingly
+                                weak
+                                dependence on the dimensionality. In our
+                                experiments
+                                on real sensor data, GP-UCB compares favorably
+                                with
+                                other heuristical GP optimization
+                                approaches.
+                            </p>
+
+                            <p class="card-text"><strong>Justification:</strong>
+                                This paper brought together the fields of
+                                Bayesian
+                                optimization, bandits and experimental design by
+                                analyzing Gaussian process bandit optimization,
+                                giving a
+                                novel approach to derive finite-sample regret
+                                bounds in
+                                terms of a mutual information gain quantity.
+                                This paper
+                                has had profound impact over the past ten years,
+                                including the method itself, the proof
+                                techniques used,
+                                and the practical results. These have all
+                                enriched our
+                                community by sparking creativity in myriad
+                                subsequent
+                                works, ranging from theory to practice. When
+                                nominating
+                                papers for this award, members of the award
+                                committee
+                                had the following to say about this paper:</p>
+
+                            <div class="font-weight-light font-italic">
+                                <p>"The results of this paper have influenced
+                                    current methods of hyperparameter search in
+                                    modern
+                                    deep learning systems, [and the algorithm]
+                                    continues
+                                    to be a popular acquisition algorithm even
+                                    after a
+                                    decade. The theorems and lemmas of this
+                                    paper are
+                                    quoted in recent papers, and their proof
+                                    technique
+                                    is borrowed in follow-up papers. On the duo
+                                    of
+                                    technical depth and impact this paper
+                                    clearly stands
+                                    out."</p>
+
+                                <p>"Bayesian optimization has become a powerful
+                                    tool in many machine learning problems in
+                                    the last
+                                    10 years.... the mathematical technique used
+                                    in the
+                                    proof influenced subsequent research
+                                    significantly."</p>
+
+                                <p>"This is a nice, original analysis that has
+                                    influenced many subsequent papers on GP
+                                    bandit
+                                    optimization and Bayesian optimization, and
+                                    underlies the convergence analysis in very
+                                    many
+                                    Bayesian Optimization papers. Hence, it has
+                                    become a
+                                    well-known paper, which has had influence
+                                    both in
+                                    theory and practice, due to the ongoing
+                                    practical
+                                    impact of Bayesian Optimization for
+                                    experimental
+                                    design, hyperparameter tuning and more."</p>
+
+                                <p>"Bayesian optimization using Gaussian
+                                    processes is an important technique for
+                                    black-box
+                                    hyperparameter tuning and autoML. However,
+                                    there was
+                                    no explicit finite sample convergence theory
+                                    for
+                                    this method. This paper treats Bayesian
+                                    optimization
+                                    as a bandit problem, and obtained a
+                                    cumulative
+                                    regret bound for GP-UCB in terms of the
+                                    information
+                                    gain. This leads to a first finite sample
+                                    theoretical analysis for Bayesian
+                                    optimization....
+                                    it will have significant long term impact
+                                    both
+                                    theoretically and practically."</p>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="row" style="margin-top: 2em;">
+
+                        <p>Thank you to the Test of Time Award Committee
+                            Members:</p>
+
+                        <ul>
+                            <li>Anima Anandkumar</li>
+                            <li>Johannes Furnkranz <em>(ICML 2010 Program
+                                Co-Chair)</em></li>
+                            <li>Stefanie Jegelka</li>
+                            <li>Thorsten Joachims <em>(ICML 2010 Program
+                                Co-Chair)</em></li>
+                            <li>John Langford</li>
+                            <li>Hugo Larochelle</li>
+                            <li>Claire Monteleoni</li>
+                            <li>Sunita Sarawagi</li>
+                            <li>Masashi Sugiyama</li>
+                            <li>Stefan Wrobel <em>(ICML 2010 General Chair)</em>
+                            </li>
+                            <li>Tong Zhang</li>
+                        </ul>
+
+                        <p></p>
+                    </div>
+
+                    <div class="row">
+                        <h3><a id="opa" name="opa"></a>Outstanding Paper Awards
+                        </h3>
+
+                        <p>The Outstanding Paper awards are given to papers from
+                            the
+                            current conference that are strong representatives
+                            of
+                            solid theoretical and empirical work in our field.
+                            The
+                            awards will be announced at the presentation of the
+                            Test
+                            of Time award during the conference. Please check
+                            back
+                            here later! The award recipients were selected from
+                            a
+                            pool of papers (nominated by Meta Reviewers) by the
+                            Paper Awards committee:</p>
+
+                        <ul>
+                            <li>Alina Beygelzimer (co-chair)</li>
+                            <li>Jennifer Dy (co-chair)</li>
+                            <li>Nicolas Le Roux (co-chair)</li>
+                            <li>Sebastian Bubeck</li>
+                            <li>Ali Eslami</li>
+                            <li>Mario Figueiredo</li>
+                            <li>Ankur Moitra</li>
+                            <li>Sayan Mukherjee</li>
+                            <li>Sunita Sarawagi</li>
+                            <li>Matthias Seeger</li>
+                            <li>Jun Zhu</li>
+                        </ul>
+                    </div>
+
+
+                </div>
+
+
+                </div>
+
+
+            {% endblock %}
+
+
+        </div>
+
+    {% else %}
+        <br><br><br>
+        <div class="container" style="text-align:center;">
+            <h4>Registration Required</h4>
+            <p>You must be <a href="/Register/view-registration">registered</a>
+                {% if not request.user.is_authenticated %} and
+                    <a href="/login?nextp={{ request.get_full_path }}">logged
+                        in</a>{% endif %} order to view this content.</p>
+        </div>
+    {% endif %}
+
+{% endblock %}

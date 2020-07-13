@@ -89,7 +89,7 @@ def _data():
     data["request"] = request
     data["pagePermission"] = pagePermission
     data["access_granted"] = True
-    data["tz_offset"] = '-240'
+    data["tz_offset"] = '-420'
     data["tz_name"] = 'America/New York'
     return data
 
@@ -138,6 +138,13 @@ def socials():
 def cal():
     data = _data()
     return render_template("calendar.html", **data)
+
+
+@app.route("/awards.html")
+def awards():
+    data = _data()
+    return render_template("awards.html", **data)
+
 
 # @app.route("/calendar.html")
 # def schedule():
