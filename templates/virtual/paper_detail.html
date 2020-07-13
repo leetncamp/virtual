@@ -24,7 +24,7 @@
 
                     <h3 class="card-subtitle mb-2 text-muted text-center">
                         {% for es in paper.get_eventspeakers %}
-                            <a href="{% url 'papers' year %}?filter=authors&search={{es.speaker.id}}" class="text-muted">{{es.speaker.get_full_name}}</a>,
+                            <a href="{% url 'papers' year %}?filter=authors&search={{es.speaker.firstname}} {{es.speaker.lastname}}" class="text-muted">{{es.speaker.get_full_name}}</a>,
                         {% endfor %}
                     </h3>
                     {% comment %}
