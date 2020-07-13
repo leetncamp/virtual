@@ -11,7 +11,7 @@ const filters = {
     title: null
 };
 
-const summaryBy = 'keywords' // options: "abstract" | "keywords"
+const summaryBy = 'abstract' // options: "abstract" | "keywords"
 
 let currentTippy = null;
 let brush = null;
