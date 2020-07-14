@@ -66,7 +66,22 @@
                         {% endif %}
                         
                         {% if paper.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
-
+                        
+                        {% if request_user_is_author %}
+                            <div class="card">
+                              <div class="card-body">
+                                <h5 class="card-title">Author Instructions for Starting Zoom</h5>
+                                <p class="card-text">You are seeing this because you are an author of this paper. Do not share this information.</p>
+                                
+                                <div>Log into to <a href="https://zoom.us/">zoom.us</a> with your default web browser using the email address
+                                    <strong>zoom+2020-{{paper.sourceid}}@icml.cc</strong> and the password <strong>rockyGreen2</strong> then click this 
+                                    <a href="{{paper.zoom_start_link}}">start_link</a>. The start_link will not work if you remain logged into your 
+                                    personal zoom account in your browser. 
+                                </div>
+                              
+                              </div>
+                            </div>
+                        {% endif %}
 
                     </div>
                     <div class=" text-center text-muted text-monospace ">
