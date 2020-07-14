@@ -22,7 +22,7 @@ urlpatterns = [
 
     path("<int:year>/awards.html", virtual.views.awards, name="miniconf-awards"),
 
-    path("<int:year>/awards.html", virtual.views.awards, name="miniconf-awards"),    
+    path("<int:year>/townhall", virtual.views.townhall, name="townhall"),    
     
     path("<int:year>/poster/<int:eventid>",
          virtual.views.paper_detail, name="virtual_paper_detail"),
@@ -45,7 +45,6 @@ urlpatterns = [
 
     re_path(r"(?P<year>\d+)/invited\stalk/(?P<eventid>\d*)",
      virtual.views.invited_talk_detail, name="virtual_invited_talk_detail"),
-
 
     path("<int:year>/invited%20talk/<int:eventid>",
          virtual.views.invited_talk_detail, name="virtual_invited_talk_detail"),

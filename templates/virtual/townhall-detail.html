@@ -1,0 +1,146 @@
+{% extends "livebase.html" %}
+{% load documenttags %}
+{% load cache %}
+
+{% block title %}{{confInfo.conference}} Town Hall{% endblock %}
+
+{% block body %}
+
+
+
+
+
+
+
+    {% if access_granted %}
+
+        <div class="container">
+            <!-- Title -->
+            <div class="pp-card m-3" style="">
+                <div class="card-header">
+                    <h3 class="text-center">Town Hall</h3>
+
+                    <h2 class="card-title main-title text-center" style="">
+                        {{event.name}}
+                    </h2>
+                    
+                    <h3 class="card-subtitle mb-2 text-muted text-center">
+                        {{event.get_eventSpeakerStr}}
+                    </h3>
+                    
+                    {% comment %}
+                    <p class="card-text text-center"><span class="">Keywords:</span>
+                        {% for kw in event.subject_areas.all %}
+                            [ <a href="{% url 'events' year %}?filter=keywords&search={{kw.name}}" class="text-secondary text-decoration-none">{{kw.name}}</a> ]
+                        {% endfor %}
+                    </p>
+                    {% endcomment %}
+
+
+                    <div class="text-center p-3">
+                        {% if event.abstract %}
+                            <a class="card-link" data-toggle="collapse" role="button" href="#details">
+                                Abstract
+                            </a>
+                        {% endif %}
+
+                        
+                        {% if event.starttime %}
+                            <div>{{event.starttime|date:"D M j P"}} &mdash; {{event.endtime|date:"P e "}}
+                                <a href="{% url 'ical' event.id 1 %}"> [iCal] </a>
+                                {% if event.zoom_join_link %} 
+                                    <a href="{{event.zoom_join_link}}"> [ Join Zoom ]</a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        {% if event.starttime2 %}
+                            <div>{{event.starttime2|date:"D M j P"}} &mdash; {{event.endtime2|date:"P e "}}
+                                <a href="{% url 'ical' event.id 2 %}"> [iCal] </a>
+                                {% if event.zoom_join_link %}   {# For ICML 2020, we used the same zoom session for both times #}
+                                    <a href="{{event.zoom_join_link}}"> [ Join Zoom ]</a>
+                                {% endif %}
+                            </div>
+                        {% endif %} 
+
+                        {% if event.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
+                        
+
+
+                    </div>
+                    <div class=" text-center text-muted text-monospace ">
+                        <div> {{event.get_session_str_virtualsite}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="details" class="pp-card m-3 collapse">
+                <div class="card-body">
+                    <p class="card-text">
+                        <div id="abstractExample">
+
+                            {{ event.get_abstract }}
+                        </div>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        <!-- SlidesLive -->
+        {% if event.slideslive_video %}
+
+            <div class="container" style="background-color:white; padding: 0px;">
+                <div class="row m-2">
+                    <div class="col-md-12 col-xs-12 my-auto p-2">
+
+                        {{event.get_slideslive_embed|safe}}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+
+        {# RocketChat #}
+        {% if rci %}
+            <div class="container">
+                <div class="pp-card m-3">
+                    <div class="">
+                        <div class="public-chat-title-box">
+                            <a style="float:right;" href="{{rocketchat_new_window_url}}" target="_blank" title="Full Size"> <i class="fas fa-expand"></i></i></a>
+                            Chat
+                        </div>
+                        <iframe frameBorder="0" width='100%' height='400px' src="{{rocketchat_iframe_url}}"  id="{{ rocketchat_iframe_id }}"></iframe>
+                        {{event_channel_auth_js|safe}}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="container" >
+                <div style="color:#ccc"><h3>RocketChat is not active.</h3></div>
+            </div>
+        {% endif %}
+
+
+
+
+        <!-- Recs -->
+        <p></p>
+        <div class="container" style="padding-bottom: 30px; padding-top:30px">
+            <center>
+
+            </center>
+        </div>
+
+
+
+    {% else %} {# If access granted #}
+        <br><br><br>
+        <div class="container"  style="text-align:center;">
+            <h4>Registration Required</h4>
+            <p>You must be {% if request.user.is_authenticated %}<a href="/Register/view-registration">registered</a> {% else %} <a href="/login?nextp={{request.get_full_path}}">logged in</a>{% endif %} to view this content.</p>
+        </div>
+
+    {% endif %}
+
+
+{% endblock %}
