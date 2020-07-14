@@ -339,7 +339,7 @@ def paper_detail(request, year, eventid):
             log.critical(msg)
 
 
-    if paper:
+    if request.user.is_authenticated and paper:
         request_user_is_author = paper.eventspeakers_set.filter(speaker__in=request.user.get_all_user_links()).exists()
 
 
