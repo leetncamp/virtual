@@ -20,7 +20,11 @@ urlpatterns = [
 
     path("<int:year>/calendar.html", virtual.views.calendar, name="miniconf-calendar"),    
 
-    path("<int:year>/awards.html", virtual.views.awards, name="miniconf-awards"),    
+
+    path("<int:year>/awards.html", virtual.views.awards, name="miniconf-awards"),
+
+    path("<int:year>/townhall", virtual.views.townhall, name="townhall"),    
+
     
     path("<int:year>/poster/<int:eventid>",
          virtual.views.paper_detail, name="virtual_paper_detail"),
