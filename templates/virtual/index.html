@@ -2,8 +2,13 @@
 {% load documenttags %}
 {% block title %}{{confInfo.conference}} Virtual Site{% endblock %}
 {% block body %}
+
+
 <div id="welcome-image">
+
 </div>
+
+
 <div class="container">
     {% if messages %}
     {% for message in messages %}
@@ -11,22 +16,40 @@
     {% endfor %}
     {% endif %}
 </div>
-<div class="container">
-    <div class="row">
-        <h2 class="title-centered">Getting Started</h2>
+<div class="">
+
+    <div class="feature-box-card">
+
+        <div class="card-body text-center" >
+            <div class="featured-box">
+                <p class="card-text"><a href="/virtual/2020/townhall" class="btn-primary btn btn-lg">Town Hall</a></p>
+            </div>
+            <div class="featured-box">
+                <p class="card-text"><a href="/virtual/2020/socials.html" class="btn-primary btn btn-lg">Socials</a></p>
+            </div>
+            <div class="featured-box">
+                <p class="card-text"><a href="/virtual/2020/awards.html" class="btn-primary btn btn-lg">Awards</a></p>
+            </div>
+            
+        </div>
     </div>
+</div>
+
+<div class="container">
+
+
     <div class="row">
         <div class="col-sm-6">
-            <br><br><br>
+            <br><br>
             <h3>Requirements</h3>
             <ul class="requirements">
 
                 <li><strong>Javascript</strong> must be enabled for this site to work.</li>
 
-                <li>{% set_timezone_form nextp=timezone_nextp %} Be sure to set a timezone so the schedule appears in your local time. <br>You may also set this in the upper right corner using the profile dropdown from any page.
+                <li>{% set_timezone_form nextp=timezone_nextp %} Be sure to set a timezone so the schedule appears in your local time. 
                 
-                    <br>Avoid using the GMT+/- timezone names because the names are the reverse of the timezone
-                    names.<br>Choose a neary city instead.
+                    Avoid using the GMT+/- timezone names because the names are the reverse of the timezone
+                    names. Choose a neary city instead.
 
                 </li>
 
@@ -35,10 +58,10 @@
 
         <div class="col-sm-5">
 
-            <div style="margin-top:70px;">
+            <div style="margin-top:50px;">
                 <h3 class="text-center">Welcome Video from David Blei, General Chair</h3>
 
-                <div id="presentation-embed-38931993"></div>
+                <div id="presentation-embed-38931993" style="max-height:200px"></div>
                 <script src='https://slideslive.com/embed_presentation.js'></script>
                 <script>
                     embed = new SlidesLiveEmbed('presentation-embed-38931993', {
@@ -53,7 +76,7 @@
         </div>
 
 
-            <br><br><br>
+
 
             {# ================================================================ #}
             {% document "/public/VirtualIntro" %}

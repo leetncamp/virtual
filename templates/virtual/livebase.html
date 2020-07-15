@@ -43,6 +43,10 @@
             </button>
             <div class="collapse navbar-collapse text-right flex-grow-1" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
+                    
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/virtual/{{confInfo.year}}/index.html">Getting Started</a>
+                    </li>
 
 
                     <li class="nav-item ">
@@ -59,10 +63,7 @@
                     </li>
 
 
-                    <li class="nav-item ">
-                        <a class="nav-link" href="/virtual/{{confInfo.year}}/index.html">Getting Started</a>
-                    </li>
-
+                    
 
                     <li class="nav-item ">
                         <a class="nav-link" href="/virtual/{{year}}/calendar.html">Schedule</a>
@@ -82,10 +83,12 @@
                     <li class="nav-item ">
                         <a class="nav-link" href="/virtual/{{year}}/papers.html">Papers</a>
                     </li>
-
+                    
+                    {% if False %}
                     <li class="nav-item ">
                         <a class="nav-link" href="/virtual/{{year}}/awards.html">Awards</a>
                     </li>
+                    {% endif %}
 
 
                     <li class="nav-item ">
@@ -93,11 +96,12 @@
                         <a class="nav-link" href="/virtual/{{year}}/workshops">Workshops</a>
 
                     </li>
-
+                    {% if False %}
                     <li class="nav-item">
                         <a class="nav-link" href="/virtual/{{year}}/townhall">Town Hall</a>
 
                     </li>
+                    
 
 
 
@@ -106,13 +110,14 @@
                         <a class="nav-link" href="/virtual/{{year}}/socials.html">Socials</a>
 
                     </li>
+                    {% endif %}
 
 
 
 
                     {% if confInfo.user.is_authenticated %}
 
-                        <div class="btn-group">
+                        <div class="btn-group" style="max-width:200px">
 
                           <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-user"></i> {{request.user.firstname}}</button>
                           <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

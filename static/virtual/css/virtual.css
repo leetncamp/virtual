@@ -10,8 +10,8 @@
 #welcome-image {
     background: url('https://media.icml.cc/Conferences/ICML2020/virtual/virtual-splash.jpg')  no-repeat center;
     background-size:cover !important;
-    background-size: 100%;
-    min-height: 300px;
+
+    min-height: 250px;
 
 }
 
@@ -354,4 +354,25 @@ li:not(:last-child) {
 
 .workshopevent-date {
   font-size: .8em;
+}
+
+.featured-box {
+  display: inline-block; 
+  padding:5px; 
+  margin:5px; 
+  max-width:40%
+}
+
+.featured-box a {
+  color:white;
+}
+
+.feature-box-card {
+  background-color:#f6f6f6 !important;
+  color:white; 
+  width:100%;
+  border-top:0px;
+  border-radius: 0px !important;
+  position:relative;
+  top:-10px;
 }
