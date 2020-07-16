@@ -9,16 +9,17 @@
             <div class="col-md-12"></div>
             <div class="title-centered" style="text-align:center">Workshops
             </div>
+
         </div>
     </div>
     {% if access_granted %}
         <div class="container">
 
-        <div class="row"></div>
-        <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+        <div class="row">Your timezone is "{{ tz_name }}"</div>
+{#        <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">#}
 
         {# =================================================================== #}
-        <div class="container" id="cards">
+        <div id="cards">
         </div>
         {# ======================================================================= #}
         <script>
@@ -60,7 +61,7 @@
                             res.append('div')
                               .attr("class", "h4 col-12 bg-light")
                               {#.style()#}
-                              .html(d => d)
+                              .html(d => d +' (-/+ 1 day)')
                             return res;
                         })
                         .attr('class', 'cards row cardRow')
