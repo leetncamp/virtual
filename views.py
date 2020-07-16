@@ -479,6 +479,8 @@ def workshops(request, year):
 
     access_granted = get_access(request, year)
 
+    tz_name, tz_offset = get_timezone()
+
     urls = get_urls()
 
     wks = Events.objects.filter(
