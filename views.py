@@ -229,6 +229,10 @@ def ical(request, eventid, number):
                 if conf_event.starttime and conf_event.endtime:
                     event.add('dtstart', conf_event.starttime)
                     event.add('dtend', conf_event.endtime)
+                elif conf_event.starttime:  #Workshop organizers sometimes don't fill in the endtime
+                    event.add('dtstart', conf_event.starttime)
+
+                    event.add('dtstart', conf_event.starttime + timedelta(minutes=30))
                 else:
                     raise Http404(
                         "An ical attachment cannot be generated.  An engineer has been notified. ")
@@ -236,6 +240,9 @@ def ical(request, eventid, number):
                 if conf_event.starttime2 and conf_event.endtime2:
                     event.add('dtstart', conf_event.starttime2)
                     event.add('dtend', conf_event.endtime2)
+                elif conf_event.starttime2:
+                    event.add('dtstart', conf_event.starttime2)
+                    event.add('dtstart', conf_event.starttime2 + timedelta(minutes=30))
                 else:
                     raise Http404(
                         "An ical attachment cannot be generated.  An engineer has been notified. ")
@@ -343,6 +350,11 @@ def paper_detail(request, year, eventid):
             msg = str(e) + traceback.format_exc()
 
             log.critical(msg)
+
+
+    if request.user.is_authenticated and paper:
+        request_user_is_author = paper.eventspeakers_set.filter(speaker__in=request.user.get_all_user_links()).exists()
+
 
     return(render(request, "virtual/paper_detail.html", locals()))
 

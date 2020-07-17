@@ -154,7 +154,7 @@ const start = (papers_json_path) => {
 
         // TODO: bad hack
         papers.forEach(p => {
-            p.content.session = p.content.session.map(s=>s.replace(' ',"T"))
+            p.content.session = p.content.session.map(s=>s.replace(' ',"T").replace(/\+/g, ' '))
         })
 
         shuffleArray(papers);

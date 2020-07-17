@@ -18,7 +18,7 @@
             <!-- Title -->
             <div class="pp-card m-3" style="">
                 <div class="card-header">
-
+                    
                     <h3 class="text-center">{{workshop.type}}</h3>
                     <h2 class="card-title main-title text-center" style="">
                         {{workshop.name}}
@@ -26,7 +26,7 @@
 
                     <h3 class="card-subtitle mb-2 text-muted text-center">
                         {{ workshop.get_eventSpeakerStr }}
-
+                           
                     </h3>
                     <p class="card-text text-center"><span class="">Keywords:</span>
                         {% for kw in workshop.subject_areas.all %}
@@ -36,23 +36,22 @@
                     </p>
                     <div class="text-center p-3">
                         <a class="card-link" data-toggle="collapse" role="button" href="#details">
-                            Abstract
+                            Abstract 
                         </a>
-
-                        <a class="card-link" target='_blank' role="button" href="{{wkapp.externaluri}}">Workshop Website </a>
+                        
+                        <a class="card-link" target='_blank' role="button" href="{{wkapp.externaluri}}">Workshop Website </a> 
 
                         {% if show_zoom_links %}
-                            <a class="card-link" target='_blank' href="{{workshop.zoom_join_link}}">Join Zoom</a>
+                            <a class="card-link" target='_blank' href="{{workshop.zoom_join_link}}">Join Zoom</a> 
                         {% endif %}
 
                         <br><small  style="color:red;">Please do not share or post zoom links</small>
-
+                        
                         {% if workshop.starttime %}<div>{{workshop.starttime|date:"D M j P e "}}<a href="{% url 'ical' workshop.id 1 %}"> [iCal] </a></div>{% endif %}
 
-                        {% if workshop.starttime2 %}<div>{{workshop.starttime2|date:"D M j P e "}}<a href="{% url 'ical' workshop.id 2 %}"> [iCal] </a></div>{% endif %}
 
-
-
+                        
+                        
 
 
 
@@ -82,18 +81,15 @@
             <div class="container" style="background-color:white; padding: 0px;">
                 <div class="row m-2">
                     <div class="col-md-12 col-xs-12 my-auto p-2">
-
+                        
                         {{workshop.get_slideslive_embed|safe}}
-
+                    
                     </div>
                 </div>
             </div>
         {% endif %}
-
-        <div class="container">
-            <!--SlidesLiveEmbed-->
-            {{workshop.get_slideslive_embed|safe}}
-        </div>
+        
+       
 
 
         {# RocketChat #}
@@ -102,8 +98,7 @@
                 <div class="pp-card m-3">
                     <div class="">
                         <div class="public-chat-title-box">
-                            <span class="float-left"><a class="text-warning text-sm" href="{% url 'concerns' %}"  target="_blank">Concerns</a></span>
-                            <a style="float:right; color:white;" href="{{rocketchat_new_window_url}}" target="_blank" title="Full Size">Full&nbsp;<i class="fas fa-expand"></i></i></a>
+                            <a style="float:right;" href="{{rocketchat_new_window_url}}" target="_blank" title="Full Size"> <i class="fas fa-expand"></i></i></a>
                             Chat
                         </div>
                         <iframe frameBorder="0" width='100%' height='400px' src="{{rocketchat_iframe_url}}"  id="{{ rocketchat_iframe_id }}"></iframe>
@@ -121,12 +116,12 @@
             <div class="row m-2">
 
                 <div class="col-md-12 col-xs-12 my-auto p-2">
-
+                    
                     <div class="card card-default">
                         <div class="card-header">
                             <span class="pull-right">Timezone: <a href="/set_timezone?nextp={{request.get_full_path}}">{{request.session.django_timezone}} &raquo;</a></span>
                             <h3>Schedule</h3>
-
+                            
                         </div>
 
 
@@ -135,7 +130,7 @@
 
                         </div>
                     </div>
-
+                
                 </div>
             </div>
         </div>

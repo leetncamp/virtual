@@ -24,7 +24,7 @@
 
                     <h3 class="card-subtitle mb-2 text-muted text-center">
                         {% for es in paper.get_eventspeakers %}
-                            <a href="{% url 'papers' year %}?filter=authors&search={{es.speaker.id}}" class="text-muted">{{es.speaker.get_full_name}}</a>,
+                            <a href="{% url 'papers' year %}?filter=authors&search={{es.speaker.firstname}} {{es.speaker.lastname}}" class="text-muted">{{es.speaker.get_full_name}}</a>,
                         {% endfor %}
                     </h3>
                     {% comment %}
@@ -41,11 +41,47 @@
                         </a>
 
                         <a class="card-link" role="button" href="https://proceedings.{{confInfo.conference.organization.get_domain}}/static/paper_files/{{confInfo.orgName|lower}}/{{year}}/{{paper.sourceid}}-Paper.pdf">Paper</a>
+                        
+                        {% if paper.starttime %}
+                            <div>{{paper.starttime|date:"D M j P e "}}
+                                <a href="{% url 'ical' paper.id 1 %}"> [iCal] </a>
+                                {% if paper.zoom_join_link %} 
+                                    <a href="{{paper.zoom_join_link}}"> [ Join Zoom ]</a>
+                                {% endif %}
+                            </div>
+                            
+                        {% endif %}
+                        
+                        {% if paper.starttime2 %}
+                            <div>{{paper.starttime2|date:"D M j P e "}}
 
-                        {% if paper.starttime %}<div>{{paper.starttime|date:"D M j P e "}}<a href="{% url 'ical' paper.id 1 %}"> [iCal] </a></div>{% endif %}
-                        {% if paper.starttime2 %}<div>{{paper.starttime2|date:"D M j P e "}}<a href="{% url 'ical' paper.id 2 %}"> [iCal] </a></div>{% endif %}
+                                {# Note that we use the same zoom link for both presentations of a poster.  #}
 
-
+                                <a href="{% url 'ical' paper.id 2 %}"> [iCal] </a>
+                                {% if paper.zoom_join_link %} 
+                                    <a href="{{paper.zoom_join_link}}"> [ Join Zoom ]</a>
+                                {% endif %}
+                            </div>
+                            
+                        {% endif %}
+                        
+                        {% if paper.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
+                        
+                        {% if request_user_is_author %}
+                            <div class="card">
+                              <div class="card-body">
+                                <h5 class="card-title">Author Instructions for Starting Zoom</h5>
+                                <p class="card-text">You are seeing this because you are an author of this paper. Do not share this information.</p>
+                                
+                                <div>Log into to <a href="https://zoom.us/">zoom.us</a> with your default web browser using the email address
+                                    <strong>zoom+2020-{{paper.sourceid}}@icml.cc</strong> and the password <strong>rockyGreen2</strong> then click this 
+                                    <a class="btn btn-primary btn-sm" href="{{paper.zoom_start_link}}">start_link &raquo;</a> The start_link will not work if you remain logged into your 
+                                    personal zoom account in your browser. 
+                                </div>
+                              
+                              </div>
+                            </div>
+                        {% endif %}
 
                     </div>
                     <div class=" text-center text-muted text-monospace ">
@@ -79,14 +115,14 @@
             </div>
         {% endif %}
 
+
         {# RocketChat #}
         {% if rci %}
             <div class="container">
                 <div class="pp-card m-3">
                     <div class="">
                         <div class="public-chat-title-box">
-                            <span class="float-left"><a class="text-warning text-sm" href="{% url 'concerns' %}"  target="_blank">Concerns</a></span>
-                            <a style="float:right; color:white;" href="{{rocketchat_new_window_url}}" target="_blank" title="Full Size">Full&nbsp;<i class="fas fa-expand"></i></i></a>
+                            <a style="float:right;" href="{{rocketchat_new_window_url}}" target="_blank" title="Full Size"> <i class="fas fa-expand"></i></i></a>
                             Chat
                         </div>
                         <iframe frameBorder="0" width='100%' height='400px' src="{{rocketchat_iframe_url}}"  id="{{ rocketchat_iframe_id }}"></iframe>
