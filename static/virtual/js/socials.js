@@ -24,7 +24,7 @@ const sessions = event => {
     return event.sessions.map(s =>
       `<p>  
         <span class="session_times"> ${s.time}</span> 
-        [<a href="${s.link}" target="_blank">Live Zoom</a>] 
+        [<a href="${s.link}" target="_blank">${s.link.includes('zoom')?"Live Zoom":"GatherTown"}</a>] 
         </p>`)
       .join(' ')
 }
@@ -45,7 +45,7 @@ function image(event) {
     const link = `/static/virtual/img/social_thumbnails/${cleanTitle}.png`
 
     if (imageExists(link)) {
-        return `<img src="${link}" style="max-width: 100%; height: auto;max-height: 100px;" >`
+        return `<img src="${link}" style="max-width: 100%; height: auto;max-height: 150px;" >`
     } else {
         return `<img height="100" src="/static/virtual/img/social_thumbnails/ICML_social_temp.png" >`
     }

@@ -40,7 +40,7 @@
                     <div class="text-center p-3">
                         {% if talk.abstract %}
                             <a class="card-link" data-toggle="collapse" role="button" href="#details">
-                                Abstract
+                                Details
                             </a>
                         {% endif %}
 
@@ -74,11 +74,11 @@
                     </div>
                 </div>
             </div>
-            <div id="details" class="pp-card m-3 collapse">
+            <div id="details" class="pp-card m-3">
                 <div class="card-body">
                     <p class="card-text">
                         <div id="abstractExample">
-                            <span class="font-weight-bold">Abstract:</span>
+
                             {{ talk.get_abstract }}
                         </div>
                     </p>

@@ -59,30 +59,14 @@ def getConfInfo(request, year=None):
 def home(request, year):
 
     confInfo = getConfInfo(request, year=year)
-    pagePermission = confInfo.get_permission(
-        textid=request.META.get("PATH_INFO", None))
+    pagePermission = confInfo.get_permission(textid=request.META.get("PATH_INFO", None))
     pagePermission['view'] = True
     timezone_nextp = request.get_full_path()
-
-    if request.user.is_authenticated:
-
-        from rocketchat_conferences import helpers as rch
-
-        rci = rch.get_active_rocketchat_conf_inst_obj()
-
-        rcu = rch.find_or_create_user(request.user)
-
-        rocketchat_new_window_url = "{}?resumeToken={}".format(
-            rci.host_url, rcu.rocketchat_token)
-        host = rci.host_url.replace("https://", "")
-        rocketchat_desktop_client = "https://go.rocket.chat/auth?host={}&token={}&userId={}".format(
-            host, rcu.rocketchat_token, rcu.rocketchat_user_id)
-
     return(render(request, "virtual/index.html", locals()))
 
 
 def get_urls():
-
+    
     urls = {
         "paper_vis": "paper_vis.html",
         "papers": "papers.html",
@@ -99,12 +83,12 @@ def get_urls():
 
     return urls
 
-def get_timezone():
+def get_timezone():  
 
     tz = get_current_timezone()
     tz_name = tz.zone
     local_now = datetime.now(tz)
-    tz_offset = local_now.utcoffset().total_seconds() / 60
+    tz_offset = local_now.utcoffset().total_seconds() /60
 
     return(tz_name, tz_offset)
 
@@ -114,6 +98,7 @@ def papers(request, year):
     confInfo = getConfInfo(request, year=year)
 
     access_granted = get_access(request, year)
+
 
     urls = get_urls()
 
@@ -176,16 +161,14 @@ def papers(request, year):
     papers = Events.objects.filter(pk__in=list(papers.distinct().values_list(
         "pk", flat=True)), session__conference__id=settings.CURRENT_CONFERENCE).order_by("?")
 
-    all_papers = Events.objects.filter(
-        session__conference__id=settings.CURRENT_CONFERENCE, type="Poster")
-    keywords = all_papers.exclude(subject_areas=None).order_by("subject_areas__name").values_list("subject_areas__name",
-                                                                                                  flat=True).distinct().order_by("subject_areas__name")  # used in as source of Show topics/keywords »
-    keyword_list = json.dumps([i for i in keywords])  # used in typeahead
+    all_papers = Events.objects.filter(session__conference__id=settings.CURRENT_CONFERENCE, type="Poster")
+    keywords = all_papers.exclude(subject_areas=None).order_by("subject_areas__name").values_list("subject_areas__name", 
+        flat=True).distinct().order_by("subject_areas__name")  #used in as source of Show topics/keywords »
+    keyword_list = json.dumps([i for i in keywords]) #used in typeahead
 
-    titles_list = json.dumps([i for i in all_papers.values_list(
-        "name", flat=True).distinct().order_by("name")])
-
-    # Calculating names take almost 5 seconds because I don't cache the full name in the user model.  Calculate and store them in a pickle.
+    titles_list = json.dumps([i for i in all_papers.values_list("name", flat=True).distinct().order_by("name")])
+    
+    #Calculating names take almost 5 seconds because I don't cache the full name in the user model.  Calculate and store them in a pickle.
 
     author_list_path = "/tmp/author-list-{}.pickle".format(settings.DATABASE)
 
@@ -193,8 +176,7 @@ def papers(request, year):
         author_list = pickle.load(open(author_list_path, 'rb'))
     else:
         author_names = set()
-        log.warning(
-            "Calculating author names for virtual paper page. This might take 10 seconds")
+        log.warning("Calculating author names for virtual paper page. This might take 10 seconds")
         for pap in all_papers:
             for speaker in pap.get_speakers():
                 author_names.add(speaker.get_full_name())
@@ -208,7 +190,10 @@ def papers(request, year):
 
 
 def ical(request, eventid, number):
+
     """number is either the first or 2nd instance of this presentation"""
+
+
 
     if request.user.is_authenticated:
         access_granted = True
@@ -234,8 +219,7 @@ def ical(request, eventid, number):
 
                     event.add('dtstart', conf_event.starttime + timedelta(minutes=30))
                 else:
-                    raise Http404(
-                        "An ical attachment cannot be generated.  An engineer has been notified. ")
+                    raise Http404("An ical attachment cannot be generated.  An engineer has been notified. ")
             elif number == 2:
                 if conf_event.starttime2 and conf_event.endtime2:
                     event.add('dtstart', conf_event.starttime2)
@@ -244,9 +228,9 @@ def ical(request, eventid, number):
                     event.add('dtstart', conf_event.starttime2)
                     event.add('dtstart', conf_event.starttime2 + timedelta(minutes=30))
                 else:
-                    raise Http404(
-                        "An ical attachment cannot be generated.  An engineer has been notified. ")
+                    raise Http404("An ical attachment cannot be generated.  An engineer has been notified. ")
             event.add('dtstamp', now())
+
 
             from icalendar import vCalAddress, vText
             domain = conf_event.session.conference.organization.get_domain()
@@ -259,17 +243,21 @@ def ical(request, eventid, number):
             else:
                 speaker = ''
 
+            
+
             event['organizer'] = organizer
 
+
+
             if conf_event.type == "Poster":
-                event['url'] = request.build_absolute_uri(reverse("virtual_paper_detail", args=[
-                                                          conf_event.session.conference.id, conf_event.id]))
+                event['url'] = request.build_absolute_uri(reverse("virtual_paper_detail", args=[conf_event.session.conference.id, conf_event.id]))
 
             event['uid'] = '{}'.format(request.get_full_path())
             event['location'] = vText(conf_event.get_semicolonSpeakerStr())
 
-            cal.add_component(event)
 
+            cal.add_component(event)
+            
             tmp = io.BytesIO()
             tmp.write(cal.to_ical())
             tmp.flush()
@@ -279,8 +267,7 @@ def ical(request, eventid, number):
             response['Content-Disposition'] = 'attachment; filename="{0}.ics"'.format(
                 event['uid'])
 
-            icaluserevent, created = IcalUserEvents.objects.get_or_create(
-                user=request.user, event=conf_event, number=number)
+            icaluserevent, created = IcalUserEvents.objects.get_or_create(user=request.user, event=conf_event, number=number)
             if created:
                 icaluserevent.save()
                 log.info("ICALEVENT {}".format(icaluserevent))
@@ -364,7 +351,7 @@ def tutorial_detail(request, year, eventid):
     confInfo = getConfInfo(request, year=year)
 
     tutorial = Events.objects.filter(
-        pk=eventid, session__conference__id=year).first()  # tutorial is actually a tutorial
+        pk=eventid, session__conference__id=year).first()  #tutorial is actually a tutorial
 
     urls = get_urls()
 
@@ -410,7 +397,7 @@ def invited_talk_detail(request, year, eventid):
     confInfo = getConfInfo(request, year=year)
 
     talk = Events.objects.filter(
-        pk=eventid, session__conference__id=year).first()  # talk is actually a talk
+        pk=eventid, session__conference__id=year).first()  #talk is actually a talk
 
     urls = get_urls()
 
@@ -461,7 +448,9 @@ def events(request, year, event_type):
     tz_name, tz_offset = get_timezone()
 
     events = Events.objects.filter(
-        session__conference__id=year, type__istartswith=event_type)  # This should probably be iexact but we have AffinityWorkshops which are workshops.
+        session__conference__id=year, type__istartswith=event_type)  #This should probably be iexact but we have AffinityWorkshops which are workshops.  
+
+
 
     if event_type == "paper":
         events = events.order_by("?")
@@ -490,12 +479,16 @@ def workshops(request, year):
 
     access_granted = get_access(request, year)
 
+    tz_name, tz_offset = get_timezone()
+
     urls = get_urls()
 
     wks = Events.objects.filter(
         session__conference__id=year, type__icontains="Workshop").order_by("?")
 
     return(render(request, "virtual/workshops.html", locals()))
+
+
 
 
 def workshop_detail(request, year, eventid):
@@ -508,25 +501,26 @@ def workshop_detail(request, year, eventid):
 
     workshop = Events.objects.filter(pk=eventid).first()
 
+
+
     if workshop:
         wkapp = workshop.get_application()
         if wkapp:
+            
+            wkapp = wkapp[0]  #This returns a list not queryset
 
-            wkapp = wkapp[0]  # This returns a list not queryset
-
-            meeting_opens = Events.objects.exclude(starttime=None).order_by("starttime").first(
-            ).starttime - timedelta(days=2)  # Show zoom links the day before the meeting starts
-            meeting_closes = Events.objects.exclude(endtime=None).order_by("endtime").last(
-            ).endtime + timedelta(days=2)  # Show zoom links the day before the meeting starts
+            meeting_opens = Events.objects.exclude(starttime=None).order_by("starttime").first().starttime - timedelta(days=2)  #Show zoom links the day before the meeting starts
+            meeting_closes = Events.objects.exclude(endtime=None).order_by("endtime").last().endtime + timedelta(days=2)  #Show zoom links the day before the meeting starts
 
             show_zoom_links = now() > meeting_opens and now() < meeting_closes
             show_zoom_links = True
 
-            show_start_link = wkapp.organizers.filter(
-                pk=request.user.pk).exists()
+            show_start_link = wkapp.organizers.filter(pk=request.user.pk).exists()
 
         else:
             wkapp = None
+
+
 
     from rocketchat_conferences import helpers as rch
 
@@ -562,6 +556,7 @@ def workshop_detail(request, year, eventid):
     return(render(request, "virtual/workshop_detail.html", locals()))
 
 
+
 def socials(request, year):
 
     confInfo = getConfInfo(request, year=year)
@@ -571,7 +566,7 @@ def socials(request, year):
     tz_name, tz_offset = get_timezone()
 
     urls = get_urls()
-
+    
     return(render(request, "virtual/socials.html", locals()))
 
 def awards(request, year):
@@ -614,7 +609,7 @@ def awards(request, year):
             msg = str(e) + traceback.format_exc()
 
             log.critical(msg)
-
+    
     return(render(request, "virtual/awards.html", locals()))
 
 def calendar(request, year):
@@ -626,5 +621,55 @@ def calendar(request, year):
     tz_name, tz_offset = get_timezone()
 
     urls = get_urls()
-
+    
     return(render(request, "virtual/calendar.html", locals()))
+
+
+def townhall(request, year):
+
+    confInfo = getConfInfo(request, year=year)
+
+    access_granted = get_access(request, year)
+
+    tz_name, tz_offset = get_timezone()
+
+    urls = get_urls()
+
+    event = Events.objects.filter(session__conference__id=settings.CURRENT_CONFERENCE, name__istartswith="Town Hall").first()
+
+
+
+    from rocketchat_conferences import helpers as rch
+
+    rci = rch.get_active_rocketchat_conf_inst_obj()
+
+
+
+    if access_granted and rci:
+
+        rcu = rch.find_or_create_user(request.user)
+
+        try:
+
+            event_channel = rch.find_or_create_channel("townhall", [])
+
+            if event_channel:
+
+                rocketchat_new_window_url = "{}?resumeToken={}".format(
+                    event_channel.get_url(), rcu.rocketchat_token)
+
+                rocketchat_iframe_url = "{}?layout=embedded".format(
+                    event_channel.get_url(), rcu.rocketchat_token)
+
+                rocketchat_iframe_id = 'eventPageChat'
+
+                event_channel_auth_js = rch.make_authenticate_script_js(
+                    rocketchat_iframe_id, rcu.rocketchat_token)
+
+        except Exception as e:
+
+            msg = str(e) + traceback.format_exc()
+
+            log.critical(msg)
+    
+    return(render(request, "virtual/townhall-detail.html", locals()))

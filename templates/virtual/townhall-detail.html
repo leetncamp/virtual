@@ -2,7 +2,7 @@
 {% load documenttags %}
 {% load cache %}
 
-{% block title %}{{confInfo.conference}} Workshop Detail{% endblock %}
+{% block title %}{{confInfo.conference}} Town Hall{% endblock %}
 
 {% block body %}
 
@@ -18,78 +18,86 @@
             <!-- Title -->
             <div class="pp-card m-3" style="">
                 <div class="card-header">
-                    
-                    <h3 class="text-center">{{workshop.type}}</h3>
+                    <h3 class="text-center">Town Hall</h3>
+
                     <h2 class="card-title main-title text-center" style="">
-                        {{workshop.name}}
+                        {{event.name}}
                     </h2>
-
+                    
                     <h3 class="card-subtitle mb-2 text-muted text-center">
-                        {{ workshop.get_eventSpeakerStr }}
-                           
+                        {{event.get_eventSpeakerStr}}
                     </h3>
+                    
+                    {% comment %}
                     <p class="card-text text-center"><span class="">Keywords:</span>
-                        {% for kw in workshop.subject_areas.all %}
-                             &nbsp;{{kw.name}} &nbsp;
+                        {% for kw in event.subject_areas.all %}
+                            [ <a href="{% url 'events' year %}?filter=keywords&search={{kw.name}}" class="text-secondary text-decoration-none">{{kw.name}}</a> ]
                         {% endfor %}
-
                     </p>
-                    <div class="text-center p-3">
-                        <a class="card-link" data-toggle="collapse" role="button" href="#details">
-                            Abstract 
-                        </a>
-                        
-                        <a class="card-link" target='_blank' role="button" href="{{wkapp.externaluri}}">Workshop Website </a> 
+                    {% endcomment %}
 
-                        {% if show_zoom_links %}
-                            <a class="card-link" target='_blank' href="{{workshop.zoom_join_link}}">Join Zoom</a> 
+
+                    <div class="text-center p-3">
+                        {% if event.abstract %}
+                            <a class="card-link" data-toggle="collapse" role="button" href="#details">
+                                Abstract
+                            </a>
                         {% endif %}
 
-                        <br><small  style="color:red;">Please do not share or post zoom links</small>
                         
-                        {% if workshop.starttime %}<div>{{workshop.starttime|date:"D M j P e "}}<a href="{% url 'ical' workshop.id 1 %}"> [iCal] </a></div>{% endif %}
-
-
+                        {% if event.starttime %}
+                            <div>{{event.starttime|date:"D M j P"}} &mdash; {{event.endtime|date:"P e "}}
+                                <a href="{% url 'ical' event.id 1 %}"> [iCal] </a>
+                                {% if event.zoom_join_link %} 
+                                    <a href="{{event.zoom_join_link}}"> [ Join Zoom ]</a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
                         
-                        
+                        {% if event.starttime2 %}
+                            <div>{{event.starttime2|date:"D M j P"}} &mdash; {{event.endtime2|date:"P e "}}
+                                <a href="{% url 'ical' event.id 2 %}"> [iCal] </a>
+                                {% if event.zoom_join_link %}   {# For ICML 2020, we used the same zoom session for both times #}
+                                    <a href="{{event.zoom_join_link}}"> [ Join Zoom ]</a>
+                                {% endif %}
+                            </div>
+                        {% endif %} 
 
+                        {% if event.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
+                        
 
 
                     </div>
                     <div class=" text-center text-muted text-monospace ">
-                        <div> {{workshop.get_session_str_virtualsite}}
+                        <div> {{event.get_session_str_virtualsite}}
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="details" class="pp-card m-3 collapse">
+            <div id="details" class="pp-card m-3 ">
                 <div class="card-body">
                     <p class="card-text">
                         <div id="abstractExample">
-                            <span class="font-weight-bold">Abstract:</span>
-                            {{ workshop.get_abstract }}
+
+                            {{ event.get_abstract }}
                         </div>
                     </p>
-
 
                 </div>
             </div>
         </div>
         <!-- SlidesLive -->
-        {% if workshop.slideslive_video %}
+        {% if event.slideslive_video %}
 
             <div class="container" style="background-color:white; padding: 0px;">
                 <div class="row m-2">
                     <div class="col-md-12 col-xs-12 my-auto p-2">
-                        
-                        {{workshop.get_slideslive_embed|safe}}
-                    
+
+                        {{event.get_slideslive_embed|safe}}
                     </div>
                 </div>
             </div>
         {% endif %}
-        
-       
 
 
         {# RocketChat #}
@@ -108,32 +116,9 @@
             </div>
         {% else %}
             <div class="container" >
-                <div style="color:#ccc;text-align:centered;"><h3>RocketChat is not active.</h3></div>
+                <div style="color:#ccc"><h3>RocketChat is not active.</h3></div>
             </div>
         {% endif %}
-
-        <div class="container" style="background-color:white; padding: 0px;">
-            <div class="row m-2">
-
-                <div class="col-md-12 col-xs-12 my-auto p-2">
-                    
-                    <div class="card card-default">
-                        <div class="card-header">
-                            <span class="pull-right">Timezone: <a href="/set_timezone?nextp={{request.get_full_path}}">{{request.session.django_timezone}} &raquo;</a></span>
-                            <h3>Schedule</h3>
-                            
-                        </div>
-
-
-                            <table class="table table-sm">
-                            {{wkapp.event.get_workshop_schedule}}
-
-                        </div>
-                    </div>
-                
-                </div>
-            </div>
-        </div>
 
 
 

@@ -146,6 +146,11 @@ def awards():
     return render_template("awards.html", **data)
 
 
+@app.route("/workshops.html")
+def workshops():
+    data = _data()
+    return render_template("workshops.html", **data)
+
 # @app.route("/calendar.html")
 # def schedule():
 #     data = _data()

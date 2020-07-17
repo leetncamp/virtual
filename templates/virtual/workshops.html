@@ -1,64 +1,119 @@
 {% extends "livebase.html" %}
-{% load documenttags %}
-{% load cache %}
-{% block title %}{{confInfo.conference}} Papers{% endblock %}
+{#{% load documenttags %}#}
+{#{% load cache %}#}
+{% block title %}{{ confInfo.conference }} Workshops{% endblock %}
 {% block body %}
-<br><br>
-<div class="container">
-    <div class="row">
-        <div class="col-md-12"></div>
-        <div class="title-centered" style="text-align:center">Workshops</div>
-    </div>
-</div>
-{% if access_granted %}
-<div class="container">
-    
-    <div class="row"></div>
-    <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
-        
-        {# =================================================================== #}
-        <div class="container">
-            <div class="cards row">
-                {% for wk in wks %}
-                {{wk.get_virtualcard_html|safe}}
-                {% endfor %}
+    <br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12"></div>
+            <div class="title-centered" style="text-align:center">Workshops
             </div>
+
+        </div>
+    </div>
+    {% if access_granted %}
+        <div class="container">
+
+        <div class="row">Your timezone is "{{ tz_name }}"</div>
+{#        <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">#}
+
+        {# =================================================================== #}
+        <div id="cards">
         </div>
         {# ======================================================================= #}
         <script>
-        function listmode() {
-            $(".cards_img").hide();
-            $(".pp-card").addClass("pp-mode-list").removeClass("pp-mode-compact");
-        }
+            const tz_name = "{{ tz_name }}";
+            const tz_offset = {{ tz_offset }};
 
-        function compactmode() {
-            $(".cards_img").show();
-            $(".pp-card").removeClass("pp-mode-list").addClass("pp-mode-compact");
-        }
+            $(document).ready(function () {
+                console.log(moment, "--- moment");
+                d3.json("{{ urls.data_dir }}/icml_workshops.json")
+                  .then(data => {
 
-        function changeSearch(e) {
-            $("#searchButtons label").removeClass("active");
-            $(e.parentElement).addClass("active");
-            searchtype = e.parentElement.textContent.trim();
-            $("#searchinput").val(searchtype);
 
-        }
-        $( document ).ready(function() {
-            listmode();
-        });
+                      data.forEach(d => {
+                          const s = moment.utc(d.start)
+                          d.start_moment = s
+                      })
+
+                      data = data.sort(
+                        (a, b) => a.start_moment - b.start_moment)
+                      const days = [];
+                      const day_data = {};
+                      data.forEach(d => {
+                          const day = d.start_moment.format(
+                            'MMM D, YYYY')
+
+                          if (day_data[day]) {
+                              day_data[day].push(d)
+                          } else {
+                              days.push(day);
+                              day_data[day] = [d];
+                          }
+                      })
+
+                      const rows = d3.select("#cards")
+                        .selectAll('.cardRow')
+                        .data(days)
+                        .join(enter => {
+                            const res = enter.append('div')
+                            res.append('div')
+                              .attr("class", "h4 col-12 bg-light")
+                              {#.style()#}
+                              .html(d => d +' (-/+ 1 day)')
+                            return res;
+                        })
+                        .attr('class', 'cards row cardRow')
+
+
+                      rows.selectAll('.myCard')
+                        .data(d => day_data[d])
+                        .join('div')
+                        .attr('class', 'myCard col-xs-6 col-md-4')
+                        .html(template)
+
+
+                      console.log(data, "--- data");
+
+                  })
+
+            })
+
+
+            const template = e => `
+{#        <div class="myCard col-xs-6 col-md-4">#}
+                    <div class="pp-card pp-mode-list">
+                        <div class="pp-card-header">
+                            <a href="/virtual/2020/workshop/${e.id}" class="">
+                                <h5 class="card-title" align="center"> ${e.title} </h5>
+                            </a>
+                            <h6 class="card-subtitle text-muted" align="center">
+
+                            </h6>
+
+                            <h5 class="card-title text-centered text-muted" align="center">${e.start_moment.utcOffset(tz_offset).format('hh:mm a')}</h5>
+
+                        </div>
+                    </div>
+                {#</div>#}
+        `;
+
+
         </script>
-        {% else %}
+    {% else %}
         <br><br><br>
         <div class="container" style="text-align:center;">
-            
+
             <h4>Registration Required</h4>
 
-            <p>You must be <a href="/Register/view-registration">registered</a> 
-                {% if not request.user.is_authenticated %} 
-                    and <a href="/login?nextp={{request.get_full_path}}">logged in</a>
-                {% endif %} 
+            <p>You must be <a href="/Register/view-registration">registered</a>
+                {% if not request.user.is_authenticated %}
+                    and<a href="/login?nextp={{ request.get_full_path }}">logged
+                    in</a>
+                {% endif %}
                 in order to view this content.</p>
 
         </div>
-        {% endif %}
-        {% endblock %}
+    {% endif %}
+{% endblock %}
