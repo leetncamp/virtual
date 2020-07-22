@@ -355,3 +355,7 @@ li:not(:last-child) {
 .workshopevent-date {
   font-size: .8em;
 }
+
+.author-card {
+  padding:10px;
+}
