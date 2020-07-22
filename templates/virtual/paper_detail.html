@@ -40,7 +40,14 @@
                             Abstract
                         </a>
 
-                        <a class="card-link" role="button" href="https://proceedings.{{confInfo.conference.organization.get_domain}}/static/paper_files/{{confInfo.orgName|lower}}/{{year}}/{{paper.sourceid}}-Paper.pdf">Paper</a>
+                        <a class="card-link" role="button" href="https://proceedings.{{confInfo.conference.organization.get_domain}}/static/paper_files/{{confInfo.orgName|lower}}/{{year}}/{{paper.sourceid}}-Paper.pdf">
+                            Paper
+                        </a>
+
+                        {% if paper.get_slide %}
+                            <a class="card-link" role="button" href="{{paper.get_slide_url}}" target="_blank">Slides</a>
+                        {% endif %}
+                        <br><br>
                         
                         {% if paper.starttime %}
                             <div>{{paper.starttime|date:"D M j P e "}}
@@ -65,7 +72,7 @@
                             
                         {% endif %}
                         
-                        {% if paper.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
+                        {% if paper.zoom_join_link %}<small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
                         
                         {% if request_user_is_author %}
 
