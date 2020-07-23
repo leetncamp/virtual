@@ -355,12 +355,14 @@ def paper_detail(request, year, eventid):
 
     if request.method == "POST":
         max_size = 30 #MB
+
         try:
             pk = int(request.POST.get("presenter"))
             event = Eventspeakers.objects.get(pk=request.POST.get('presenter')).event
             slideUploadForm = SlideUploadForm(request.POST, request.FILES, event=event)
 
             if slideUploadForm.is_valid():
+
                 presenter = Eventspeakers.objects.get(pk=pk)
                 presenter.presenting = True
                 presenter.save()

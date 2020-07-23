@@ -145,6 +145,18 @@
         </div>
     </nav>
 
+    {% if messages %}
+    <div class="section">
+        {% for message in messages %}
+            {# {% bootstrapalert message %} #}
+            <div class="alert alert-info alert-dismissable ">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <h4><span class="glyphicon glyphicon-{1} text-large"> </span> <small>&nbsp; {{message}}</small></h4>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
 
     {% block body %}
 
