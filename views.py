@@ -357,19 +357,21 @@ def paper_detail(request, year, eventid):
         max_size = 30 #MB
 
         try:
-            pk = int(request.POST.get("presenter"))
-            event = Eventspeakers.objects.get(pk=request.POST.get('presenter')).event
+            pk = request.POST.get("presenter")
+            event = paper
             slideUploadForm = SlideUploadForm(request.POST, request.FILES, event=event)
 
             if slideUploadForm.is_valid():
-
-                presenter = Eventspeakers.objects.get(pk=pk)
-                presenter.presenting = True
-                presenter.save()
-                if presenter.event.type in ['Spotlight', 'Oral']:
-                    #For an oral or spotlight, there can only be one presenter
-                    other_speakers = Eventspeakers.objects.filter(event=presenter.event).exclude(pk=presenter.pk)
-                    other_speakers.update(presenting=False)
+                try:
+                    presenter = Eventspeakers.objects.get(pk=pk)
+                    presenter.presenting = True
+                    presenter.save()
+                    if presenter.event.type in ['Spotlight', 'Oral']:
+                        #For an oral or spotlight, there can only be one presenter
+                        other_speakers = Eventspeakers.objects.filter(event=presenter.event).exclude(pk=presenter.pk)
+                        other_speakers.update(presenting=False)
+                except ValueError:
+                    pass
                 pdf_file = slideUploadForm.cleaned_data.get("pdf_file")
 
                 if len(pdf_file) > max_size * 1000000:
@@ -377,15 +379,15 @@ def paper_detail(request, year, eventid):
                 elif not os.path.splitext(pdf_file.name)[1].lower() == ".pdf":
                     messages.error(request, "File type must be PDF")
                 else:
-                    if not presenter.event.location:
-                        presenter.event.location = "Virtual" #A location is required in order to name the slide
+                    if not event.location:
+                        event.location = "Virtual" #A location is required in order to name the slide
 
-                    media_path = presenter.event.get_slide_path()
+                    media_path = event.get_slide_path()
                     media_dir = os.path.dirname(media_path)
                     os.makedirs(media_dir, exist_ok=True)
                     if len(pdf_file) > 0:
                         open(media_path, 'wb').write(pdf_file.read())
-                        messages.success(request, "Successfully saved your file.")
+                        messages.success(request, "Success.  You should see a publically visible link to your slides below.")
                         create_eventmedia = slideUploadForm.cleaned_data.get("downloadable", True)
                         create_eventmedia = True
                         if create_eventmedia:
@@ -400,7 +402,6 @@ def paper_detail(request, year, eventid):
                             em.visible = True
                             em.save()
                             event.save()
-                            messages.success(request, u"{0} a link to the <a target='_blank' href='{1}'>schdule for this event &raquo;</a>".format(verb, event.get_schedule_url()))
                         else:
                             em = Eventmedia.objects.filter(event=event, name="Spotlight Slides", type="PDF")
                             if em:
