@@ -87,7 +87,7 @@
                                     </div>
                                     {% endif %}
                                     <div class="col-md-12 card">
-                                            <h5 class="card-title">Author Upload Slides (PDF)</h5>
+                                            <h5 class="card-title">Author Slide Upload (PDF)</h5>
                                             <form method="POST" enctype="multipart/form-data">{% csrf_token %}
                                                 {{slideUploadForm.as_p}}
                                                 {% if talk.get_slide %}
