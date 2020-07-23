@@ -524,6 +524,20 @@ def invited_talk_detail(request, year, eventid):
 
             log.critical(msg)
 
+    if request.user.is_authenticated and talk:
+        request_user_is_author = talk.eventspeakers_set.filter(speaker__in=request.user.get_all_user_links()).exists()
+
+        if request_user_is_author:
+            slideUploadForm = SlideUploadForm(event=talk)
+            if not talk.location:
+                talk.location = "Virtual"  #This is required to get a slide path or to get the url to a slide.  Location cannot be empty
+
+
+    if request.method == "POST":
+
+        process_slide_upload(request, talk)
+
+
     return(render(request, "virtual/invited_talk_detail.html", locals()))
 
 def events(request, year, event_type):
