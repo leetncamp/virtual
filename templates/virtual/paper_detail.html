@@ -16,7 +16,7 @@
 
         <div class="container">
             <!-- Title -->
-            <div class="pp-card m-3" style="">
+            <div class="" style="">
                 <div class="card-header">
                     <h2 class="card-title main-title text-center" style="">
                         {{paper.name}}
@@ -35,7 +35,20 @@
 
                     </p>
                     {% endcomment %}
+
                     <div class="text-center p-3">
+                        {% if paper.awards.all %}
+                            <div>
+                                <table style="display:inline">
+                                    <tr>
+                                        <td><img src="/static/nips/img/award.svg" alt="award" width="100px"></td>
+                                        <td>{{ paper.awards.all|join:"<br>" }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        {% endif %}
+
                         <a class="card-link" data-toggle="collapse" role="button" href="#details">
                             Abstract
                         </a>

@@ -300,7 +300,7 @@ def paper_vis(request, year):
 
 
 def process_slide_upload(request, event):
-    max_size = 30 #MB
+    max_size = 100 #MB
 
     try:
         pk = request.POST.get("presenter")
