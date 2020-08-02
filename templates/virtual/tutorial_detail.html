@@ -69,6 +69,8 @@
                         
                         {% if tutorial.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
 
+                        {{tutorial.get_media_for_schedulecard|safe}}
+
 
                         {% if request_user_is_author %}
 
