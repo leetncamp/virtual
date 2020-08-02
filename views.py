@@ -738,8 +738,7 @@ def townhall(request, year):
 
     urls = get_urls()
 
-    event = Events.objects.filter(session__conference__id=settings.CURRENT_CONFERENCE, name__istartswith="Town Hall").first()
-
+    event = Events.objects.filter(session__conference__id=settings.CURRENT_CONFERENCE, name__istartswith="Town Hall").order_by("starttime").first()
 
 
     from rocketchat_conferences import helpers as rch

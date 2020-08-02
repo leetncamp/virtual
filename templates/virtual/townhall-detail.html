@@ -64,6 +64,8 @@
                         {% endif %} 
 
                         {% if event.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
+
+                        {{ event.get_media_for_schedulecard|safe }}
                         
 
 
