@@ -62,27 +62,31 @@
                         {% endif %}
                         <br><br>
                         
-                        {% if paper.starttime %}
-                            <div>{{paper.starttime|date:"D M j P e "}}
-                                <a href="{% url 'ical' paper.id 1 %}"> [iCal] </a>
-                                {% if paper.zoom_join_link %} 
-                                    <a href="{{paper.zoom_join_link}}"> [ Join Zoom ]</a>
-                                {% endif %}
-                            </div>
-                            
-                        {% endif %}
-                        
-                        {% if paper.starttime2 %}
-                            <div>{{paper.starttime2|date:"D M j P e "}}
+                        {% if not meeting_over %}
 
-                                {# Note that we use the same zoom link for both presentations of a poster.  #}
-
-                                <a href="{% url 'ical' paper.id 2 %}"> [iCal] </a>
-                                {% if paper.zoom_join_link %} 
-                                    <a href="{{paper.zoom_join_link}}"> [ Join Zoom ]</a>
-                                {% endif %}
-                            </div>
+                            {% if paper.starttime %}
+                                <div>{{paper.starttime|date:"D M j P e "}}
+                                    <a href="{% url 'ical' paper.id 1 %}"> [iCal] </a>
+                                    {% if paper.zoom_join_link %} 
+                                        <a href="{{paper.zoom_join_link}}"> [ Join Zoom ]</a>
+                                    {% endif %}
+                                </div>
+                                
+                            {% endif %}
                             
+                            {% if paper.starttime2 %}
+                                <div>{{paper.starttime2|date:"D M j P e "}}
+
+                                    {# Note that we use the same zoom link for both presentations of a poster.  #}
+
+                                    <a href="{% url 'ical' paper.id 2 %}"> [iCal] </a>
+                                    {% if paper.zoom_join_link %} 
+                                        <a href="{{paper.zoom_join_link}}"> [ Join Zoom ]</a>
+                                    {% endif %}
+                                </div>
+                                
+                            {% endif %}
+
                         {% endif %}
                         
                         {% if paper.zoom_join_link %}<small  style="color:red;">Please do not share or post zoom links</small>{% endif %}

@@ -48,27 +48,28 @@
                             <a class="card-link" role="button" href="{{tutorial.get_slide_url}}" target="_blank">Slides</a>
                         {% endif %}
 
-                        
-                        {% if talk.starttime %}
-                            <div>{{talk.starttime|date:"D M j P"}} &mdash; {{talk.endtime|date:"P e "}}
-                                <a href="{% url 'ical' talk.id 1 %}"> [iCal] </a>
-                                {% if talk.zoom_join_link %} 
-                                    <a href="{{talk.zoom_join_link}}"> [ Join Zoom ]</a>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                        
-                        {% if talk.starttime2 %}
-                            <div>{{talk.starttime2|date:"D M j P"}} &mdash; {{talk.endtime2|date:"P e "}}
-                                <a href="{% url 'ical' talk.id 2 %}"> [iCal] </a>
-                                {% if talk.zoom_join_link %}   {# For ICML 2020, we used the same zoom session for both times #}
-                                    <a href="{{talk.zoom_join_link}}"> [ Join Zoom ]</a>
-                                {% endif %}
-                            </div>
-                        {% endif %} 
+                        {% if not meeting_over %}            
+                            {% if talk.starttime %}
+                                <div>{{talk.starttime|date:"D M j P"}} &mdash; {{talk.endtime|date:"P e "}}
+                                    <a href="{% url 'ical' talk.id 1 %}"> [iCal] </a>
+                                    {% if talk.zoom_join_link %} 
+                                        <a href="{{talk.zoom_join_link}}"> [ Join Zoom ]</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            
+                            {% if talk.starttime2 %}
+                                <div>{{talk.starttime2|date:"D M j P"}} &mdash; {{talk.endtime2|date:"P e "}}
+                                    <a href="{% url 'ical' talk.id 2 %}"> [iCal] </a>
+                                    {% if talk.zoom_join_link %}   {# For ICML 2020, we used the same zoom session for both times #}
+                                        <a href="{{talk.zoom_join_link}}"> [ Join Zoom ]</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %} 
 
-                        {% if talk.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
-                        
+                            {% if talk.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
+                            
+                        {% endif %}
 
                         {% if request_user_is_author %}
 

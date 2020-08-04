@@ -44,26 +44,27 @@
                             </a>
                         {% endif %}
 
-                        
-                        {% if event.starttime %}
-                            <div>{{event.starttime|date:"D M j P"}} &mdash; {{event.endtime|date:"P e "}}
-                                <a href="{% url 'ical' event.id 1 %}"> [iCal] </a>
-                                {% if event.zoom_join_link %} 
-                                    <a href="{{event.zoom_join_link}}"> [ Join Zoom ]</a>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                        
-                        {% if event.starttime2 %}
-                            <div>{{event.starttime2|date:"D M j P"}} &mdash; {{event.endtime2|date:"P e "}}
-                                <a href="{% url 'ical' event.id 2 %}"> [iCal] </a>
-                                {% if event.zoom_join_link %}   {# For ICML 2020, we used the same zoom session for both times #}
-                                    <a href="{{event.zoom_join_link}}"> [ Join Zoom ]</a>
-                                {% endif %}
-                            </div>
-                        {% endif %} 
+                        {% if not meeting_over %}                    
+                            {% if event.starttime %}
+                                <div>{{event.starttime|date:"D M j P"}} &mdash; {{event.endtime|date:"P e "}}
+                                    <a href="{% url 'ical' event.id 1 %}"> [iCal] </a>
+                                    {% if event.zoom_join_link %} 
+                                        <a href="{{event.zoom_join_link}}"> [ Join Zoom ]</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            
+                            {% if event.starttime2 %}
+                                <div>{{event.starttime2|date:"D M j P"}} &mdash; {{event.endtime2|date:"P e "}}
+                                    <a href="{% url 'ical' event.id 2 %}"> [iCal] </a>
+                                    {% if event.zoom_join_link %}   {# For ICML 2020, we used the same zoom session for both times #}
+                                        <a href="{{event.zoom_join_link}}"> [ Join Zoom ]</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %} 
 
-                        {% if event.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
+                            {% if event.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
+                        {% endif %}
 
                         {{ event.get_media_for_schedulecard|safe }}
                         

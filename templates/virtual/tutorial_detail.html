@@ -48,26 +48,28 @@
                             <a class="card-link" role="button" href="{{tutorial.get_slide_url}}" target="_blank">Slides</a>
                         {% endif %}
 
-                        
-                        {% if tutorial.starttime %}
-                            <div>{{tutorial.starttime|date:"D M j P"}} &mdash; {{tutorial.endtime|date:"P e "}}
-                                <a href="{% url 'ical' tutorial.id 1 %}"> [iCal] </a>
-                                {% if tutorial.zoom_join_link %} 
-                                    <a href="{{tutorial.zoom_join_link}}"> [ Join Zoom ]</a>
-                                {% endif %}
-                            </div>
+                        {% if not meeting_over %}
+                            {% if tutorial.starttime %}
+                                <div>{{tutorial.starttime|date:"D M j P"}} &mdash; {{tutorial.endtime|date:"P e "}}
+                                    <a href="{% url 'ical' tutorial.id 1 %}"> [iCal] </a>
+                                    {% if tutorial.zoom_join_link %} 
+                                        <a href="{{tutorial.zoom_join_link}}"> [ Join Zoom ]</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            
+                            {% if tutorial.starttime2 %}
+                                <div>{{tutorial.starttime2|date:"D M j P"}} &mdash; {{tutorial.endtime2|date:"P e "}}
+                                    <a href="{% url 'ical' tutorial.id 2 %}"> [iCal] </a>
+                                    {% if tutorial.zoom_join_link %}   {# For ICML 2020, we used the same zoom session for both times #}
+                                        <a href="{{tutorial.zoom_join_link}}"> [ Join Zoom ]</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %} 
+                            
+                            {% if tutorial.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
+
                         {% endif %}
-                        
-                        {% if tutorial.starttime2 %}
-                            <div>{{tutorial.starttime2|date:"D M j P"}} &mdash; {{tutorial.endtime2|date:"P e "}}
-                                <a href="{% url 'ical' tutorial.id 2 %}"> [iCal] </a>
-                                {% if tutorial.zoom_join_link %}   {# For ICML 2020, we used the same zoom session for both times #}
-                                    <a href="{{tutorial.zoom_join_link}}"> [ Join Zoom ]</a>
-                                {% endif %}
-                            </div>
-                        {% endif %} 
-                        
-                        {% if tutorial.zoom_join_link %} <br><small  style="color:red;">Please do not share or post zoom links</small>{% endif %}
 
                         {{tutorial.get_media_for_schedulecard|safe}}
 

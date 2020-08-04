@@ -368,6 +368,8 @@ def paper_detail(request, year, eventid):
 
     urls = get_urls()
 
+    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + timedelta(days=2)
+
     access_granted = get_access(request, year)
 
     """Create or get the rocketchat channel for this paper and make sure the request user has a rocketchat account"""
@@ -431,6 +433,8 @@ def tutorial_detail(request, year, eventid):
 
     access_granted = get_access(request, year)
 
+    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + timedelta(days=2)
+
     """Create or get the rocketchat channel for this tutorial and make sure the request user has a rocketchat account"""
     from rocketchat_conferences import helpers as rch
 
@@ -491,6 +495,8 @@ def invited_talk_detail(request, year, eventid):
     urls = get_urls()
 
     access_granted = get_access(request, year)
+
+    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + timedelta(days=2)
 
     """Create or get the rocketchat channel for this talk and make sure the request user has a rocketchat account"""
     from rocketchat_conferences import helpers as rch
@@ -604,7 +610,7 @@ def workshop_detail(request, year, eventid):
 
     workshop = Events.objects.filter(pk=eventid).first()
 
-
+    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + timedelta(days=2)
 
     if workshop:
         wkapp = workshop.get_application()
@@ -733,6 +739,8 @@ def townhall(request, year):
     confInfo = getConfInfo(request, year=year)
 
     access_granted = get_access(request, year)
+
+    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + timedelta(days=2)
 
     tz_name, tz_offset = get_timezone()
 

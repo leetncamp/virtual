@@ -28,12 +28,15 @@
                         {{ workshop.get_eventSpeakerStr }}
                            
                     </h3>
-                    <p class="card-text text-center"><span class="">Keywords:</span>
-                        {% for kw in workshop.subject_areas.all %}
-                             &nbsp;{{kw.name}} &nbsp;
-                        {% endfor %}
+                    
+                    {% if workshop.subject_areas.all %}
+                        <p class="card-text text-center"><span class="">Keywords:</span>
+                            {% for kw in workshop.subject_areas.all %}
+                                 &nbsp;{{kw.name}} &nbsp;
+                            {% endfor %}
+                        </p>
+                    {% endif %}
 
-                    </p>
                     <div class="text-center p-3">
                         <a class="card-link" data-toggle="collapse" role="button" href="#details">
                             Abstract 
@@ -41,13 +44,18 @@
                         
                         <a class="card-link" target='_blank' role="button" href="{{wkapp.externaluri}}">Workshop Website </a> 
 
-                        {% if show_zoom_links %}
-                            <a class="card-link" target='_blank' href="{{workshop.zoom_join_link}}">Join Zoom</a> 
-                        {% endif %}
-
-                        <br><small  style="color:red;">Please do not share or post zoom links</small>
                         
-                        {% if workshop.starttime %}<div>{{workshop.starttime|date:"D M j P e "}}<a href="{% url 'ical' workshop.id 1 %}"> [iCal] </a></div>{% endif %}
+                        {% if not meeting_over %}
+
+                            {% if show_zoom_links %}
+                                <a class="card-link" target='_blank' href="{{workshop.zoom_join_link}}">Join Zoom</a> 
+                            {% endif %}
+                            
+
+                            <br><small  style="color:red;">Please do not share or post zoom links</small>
+                            
+                            {% if workshop.starttime %}<div>{{workshop.starttime|date:"D M j P e "}}<a href="{% url 'ical' workshop.id 1 %}"> [iCal] </a></div>{% endif %}
+                        {% endif %}
 
 
                         
