@@ -119,8 +119,12 @@
                                                 <p><input type="submit" value="Submit &raquo;" class="btn btn-primary btn-sm"/></p>
 
                                             </form>
-
                                     </div>
+                                    {% if paper.page_visits %}
+                                        <div class="col-sm-12 card">
+                                            <h5 class="card-title" title="Page visits count is only visible to authors of this paper">This page has been visited {{paper.page_visits}} times.</h5>
+                                        </div>
+                                    {% endif %}    
                                 </div>
                             </div>
                             
