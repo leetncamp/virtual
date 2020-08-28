@@ -721,7 +721,7 @@ def awards(request, year):
     
     return(render(request, "virtual/awards.html", locals()))
 
-def calendar(request, year):
+def miniconf_calendar(request, year):
 
     confInfo = getConfInfo(request, year=year)
 
@@ -731,6 +731,19 @@ def calendar(request, year):
 
     urls = get_urls()
     
+    return(render(request, "virtual/miniconf-calendar.html", locals()))
+
+
+def calendar(request, year):
+
+    confInfo = getConfInfo(request, year=year)
+
+    access_granted = get_access(request, year)
+
+    tz_name, tz_offset = get_timezone()
+
+    urls = get_urls()
+
     return(render(request, "virtual/calendar.html", locals()))
 
 

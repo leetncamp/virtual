@@ -1,0 +1,151 @@
+body {
+    margin: 40px;
+    font-family: 'open sans', arial, sans-serif;
+    font-size: 14px;
+}
+
+.grid {
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    margin: 1em 0;
+    /*grid-template-columns: repeat(6, 1fr);*/
+}
+
+.hdrbox {
+    background-color: #0072bc;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 200%;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+
+}
+
+.container {
+    background-color: none;
+}
+
+.gcol {
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.plain {
+    background-color: none;
+}
+
+.time {
+    text-align: center;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+    margin: 15px 0 8px;
+    background-color: rgb(255, 255, 255, .7);
+}
+
+.content {
+    padding: 1px;
+    display: list-item;
+    margin-left: 1.3em;
+    list-style-type: circle;
+    font-size: .85em;
+    margin-bottom: 5px;
+}
+
+.content a {
+    text-decoration: none;
+}
+
+.content a:hover {
+    text-decoration: underline;
+}
+
+.hdr {
+    text-align: center;
+    margin-top: 3px;
+}
+
+.days {
+    background-color: #f2f2f2;
+}
+
+.session {
+    padding: 5px;
+    margin-bottom: 12px;
+    border-radius: 5px;
+}
+
+.expo {
+    background-color: #f9d4a9;
+}
+
+.tutorials {
+    background: #bae4ed;
+}
+
+/*d5efc2*/
+.workshops {
+    background: #d5efc2;
+}
+
+.talks {
+    background: #efd1e4;
+}
+
+.posters {
+    background-color: #e0c296;
+}
+
+.pad {
+    margin: 5px;
+    padding: 5px;
+}
+
+.break {
+    border: 2px solid #87634d;
+    margin: 25px 0;
+}
+
+.bump {
+    padding-top: -1px;
+}
+
+.green {
+    background-color: #c1ebd6;
+}
+
+.orange {
+    background-color: #e9d191;
+}
+
+.pink {
+    background-color: #ebc0e9;
+}
+
+.box {
+    background-color: #f0f0f0;
+    color: #222;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 110%;
+    min-height: 80px;
+    margin-bottom: 5px;
+}
+
+.box .box {
+    background-color: #999;
+}
+
+.sticky {
+    position: sticky;
+    top: 78px;
+}
+
+.buffer {
+    background: #fff;
+    max-width: 100%;
+    padding: 2px 0;
+}
