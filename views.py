@@ -767,8 +767,8 @@ def calendar(request, year):
             starttimeevents[starttime] = events.filter(starttime=starttime)
         data[day] = starttimeevents
 
-    print(time.time() - begin)
-    debug()
+    print("Calendar PROCEESSING TIME MS {}".format(time.time() - begin))
+
     return(render(request, "virtual/calendar.html", locals()))
 
 
