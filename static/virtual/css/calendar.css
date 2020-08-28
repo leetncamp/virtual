@@ -24,6 +24,18 @@ body {
 
 }
 
+.session {
+    background-color: #0072bc;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 200%;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+
+}
+
 .whitebar {
     width:100%;
     padding:5px;
@@ -76,30 +88,26 @@ body {
     background-color: #f2f2f2;
 }
 
-.session {
-    padding: 5px;
-    margin-bottom: 12px;
-    border-radius: 5px;
-}
+
 
 .expo {
     background-color: #f9d4a9;
 }
 
-.tutorials {
+.tutorial {
     background: #bae4ed;
 }
 
 /*d5efc2*/
-.workshops {
+.workshop {
     background: #d5efc2;
 }
 
-.talks {
+.invited_talk {
     background: #efd1e4;
 }
 
-.posters {
+.poster {
     background-color: #e0c296;
 }
 
@@ -129,6 +137,17 @@ body {
     background-color: #ebc0e9;
 }
 
+.session {
+    background-color: #f0f0f0;
+    color: #222;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 110%;
+    min-height: 80px;
+    margin-bottom: 5px;
+}
+
+
 .box {
     background-color: #f0f0f0;
     color: #222;
@@ -139,7 +158,7 @@ body {
     margin-bottom: 5px;
 }
 
-.box .box {
+.box {
     background-color: #999;
 }
 

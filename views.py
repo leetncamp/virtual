@@ -750,7 +750,7 @@ def calendar(request, year):
 
     urls = get_urls()
 
-    siso = Events.objects.filter(session__conference__id=year, show_in_schedule_overview=True)  #sis show_in_schedule_overview
+    siso = Events.objects.filter(session__conference__id=year, show_in_schedule_overview=True).order_by("starttime")  #sis show_in_schedule_overview
 
     for event in siso:
         event.starttime = user_tz.normalize(event.starttime)
@@ -759,11 +759,16 @@ def calendar(request, year):
 
     data = {}
     for day in days:
-        events = siso.filter(starttime__date=day)
-        data[day] = events
+        events = siso.filter(starttime__date=day).order_by("starttime")
+        starttimes = events.values_list("starttime", flat=True)
+        starttimeevents = {}
+
+        for starttime in starttimes:
+            starttimeevents[starttime] = events.filter(starttime=starttime)
+        data[day] = starttimeevents
 
     print(time.time() - begin)
-
+    debug()
     return(render(request, "virtual/calendar.html", locals()))
 
 

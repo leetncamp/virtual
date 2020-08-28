@@ -19,10 +19,37 @@
 
 
         <div class='grid'>
-            {% for day in days %}
+            {% for day, starttimeevents in data.items %}
             <div class="daycontainer">
                 <div class="buffer sticky">
+                    
                     <div class="hdrbox">{{ day|date:"D"|upper }}</div>
+
+                    <div class="gcol days">
+
+                      {% for starttime, events in starttimeevents.items %}
+                        <div class="time">{{starttime|date:"P e"}}</div>
+
+                        {% for event in events %}
+
+                          {% if event.type == "Session" %}
+
+                            <div class="session hdr {{event.get_slugified_type}}"><h5>{{event.name}}</h5></div>
+
+                            {% for subevent in event.get_children %}
+                              <div class="content">{{subevent.name}}</div>
+                            {% endfor %}
+
+                          {% else %}
+
+                          {% endif %}
+
+                        {% endfor %}
+                      
+                      {% endfor %}
+
+                    </div>
+
                 </div>
             </div>
             {% endfor %}
