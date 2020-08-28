@@ -37,14 +37,21 @@
                               <div class="session hdr {{event.get_children.0.get_slugified_type}} {{event.get_slugified_type}}">
                                 <h5>{{event.name}}</h5>
                               </div>
-                              
-                                {% for subevent in event.get_children %}
-                                  <div class="content">{{subevent.name}}</div>
-                                {% endfor %}
+
+                                {% if not event.get_children.0.type in "Poster"  %}
+                                  {% for subevent in event.get_children %}
+                                    <div class="content">{{subevent.name}}</div>
+                                  {% endfor %}
+                                {% endif %}
                             </div>
 
                           {% else %}
-
+                            <div class="content {{event.get_slugified_type}}">
+                              <b>{{event.type}}:</b> {{event.name}}
+                              {% if event.type in "Invited Talk" %}
+                                <br><i>{{ event.get_eventSpeakerStr }}</i>
+                              {% endif %}
+                            </div>
                           {% endif %}
 
                         {% endfor %}
