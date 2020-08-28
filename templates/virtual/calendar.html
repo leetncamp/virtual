@@ -33,12 +33,15 @@
                         {% for event in events %}
 
                           {% if event.type == "Session" %}
-
-                            <div class="session hdr {{event.get_slugified_type}}"><h5>{{event.name}}</h5></div>
-
-                            {% for subevent in event.get_children %}
-                              <div class="content">{{subevent.name}}</div>
-                            {% endfor %}
+                            <div class="{{event.get_children.0.get_slugified_type}}">
+                              <div class="session hdr {{event.get_children.0.get_slugified_type}} {{event.get_slugified_type}}">
+                                <h5>{{event.name}}</h5>
+                              </div>
+                              
+                                {% for subevent in event.get_children %}
+                                  <div class="content">{{subevent.name}}</div>
+                                {% endfor %}
+                            </div>
 
                           {% else %}
 

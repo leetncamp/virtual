@@ -24,17 +24,6 @@ body {
 
 }
 
-.session {
-    background-color: #0072bc;
-    color: #fff;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-size: 200%;
-    text-align: center;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-
-}
 
 .whitebar {
     width:100%;
@@ -79,7 +68,7 @@ body {
     text-decoration: underline;
 }
 
-.hdr {
+.hdr h5 {
     text-align: center;
     margin-top: 3px;
 }
@@ -138,13 +127,13 @@ body {
 }
 
 .session {
-    background-color: #f0f0f0;
+
     color: #222;
     border-radius: 5px;
-    padding: 20px;
+    padding: 5px;
     font-size: 110%;
-    min-height: 80px;
-    margin-bottom: 5px;
+    min-height: 40px;
+    margin-bottom: 1px;
 }
 
 
