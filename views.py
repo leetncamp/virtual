@@ -13,6 +13,8 @@ import os
 import io
 from django.urls import reverse
 from django.contrib import messages
+import pytz
+import time
 
 
 from nips.models import Events, Eventspeakers, Timezones, Conferences, Registrations, Users, \
@@ -736,13 +738,31 @@ def miniconf_calendar(request, year):
 
 def calendar(request, year):
 
+    begin = time.time()
+
     confInfo = getConfInfo(request, year=year)
 
     access_granted = get_access(request, year)
 
     tz_name, tz_offset = get_timezone()
 
+    user_tz = pytz.timezone(tz_name)
+
     urls = get_urls()
+
+    siso = Events.objects.filter(session__conference__id=year, show_in_schedule_overview=True)  #sis show_in_schedule_overview
+
+    for event in siso:
+        event.starttime = user_tz.normalize(event.starttime)
+
+    days = siso.values_list("starttime__date", flat=True)
+
+    data = {}
+    for day in days:
+        events = siso.filter(starttime__date=day)
+        data[day] = events
+
+    print(time.time() - begin)
 
     return(render(request, "virtual/calendar.html", locals()))
 

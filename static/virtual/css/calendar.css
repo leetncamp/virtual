@@ -24,12 +24,16 @@ body {
 
 }
 
-.container {
-    background-color: none;
+.whitebar {
+    width:100%;
+    padding:5px;
+    background-color: white;
+    position: sticky;
+    top: 70px;
 }
 
 .gcol {
-    padding: 3px;
+    padding: 5px;
     border-radius: 5px;
 }
 
