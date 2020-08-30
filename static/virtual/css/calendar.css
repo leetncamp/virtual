@@ -1,6 +1,6 @@
 body {
     font-family: 'open sans', arial, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .grid {
@@ -158,6 +158,10 @@ body {
 .award {
     border: 7px solid gold;
 
+}
+
+.hidden {
+    display:none;
 }
 
 .sessiontitle {

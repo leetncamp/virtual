@@ -16,7 +16,6 @@ urlpatterns = [
 
     path("<int:year>/papers.html", virtual.views.papers, name="miniconf-papers"),
 
-    path("<int:year>/socials.html", virtual.views.socials, name="miniconf-socials"),
 
     path("<int:year>/calendar.html", virtual.views.miniconf_calendar, name="miniconf-calendar"),
 
@@ -24,10 +23,11 @@ urlpatterns = [
 
     path("<int:year>/awards.html", virtual.views.awards, name="miniconf-awards"),
 
-    path("<int:year>/townhall", virtual.views.townhall, name="townhall"),    
     
     path("<int:year>/poster/<int:eventid>",
          virtual.views.paper_detail, name="virtual_paper_detail"),
+
+
     
     path("<int:year>/events/<event_type>",
          virtual.views.events, name="virtual_events"),
@@ -35,8 +35,8 @@ urlpatterns = [
     path("<int:year>/workshop/<int:eventid>",
          virtual.views.workshop_detail, name="virtual_workshop_detail"),
 
-    path("<int:year>/affinityworkshop/<int:eventid>",
-         virtual.views.workshop_detail, name="virtual_workshop_detail"),
+    re_path(r"(?P<year>\d+)/affinity[\s_]*workshop/(?P<eventid>\d+)",
+         virtual.views.workshop_detail, name="virtual_affinityworkshop_detail"),
 
     path("<int:year>/tutorial/<int:eventid>",
          virtual.views.tutorial_detail, name="virtual_tutorial_detail"),
@@ -45,10 +45,23 @@ urlpatterns = [
     
     path("ical/<int:eventid>/<int:number>", virtual.views.ical, name="ical"),
 
-    re_path(r"(?P<year>\d+)/invited\stalk/(?P<eventid>\d*)",
+
+
+    re_path(r"(?P<year>\d+)/invited[\s_-]talk/(?P<eventid>\d*)",
      virtual.views.invited_talk_detail, name="virtual_invited_talk_detail"),
 
-    path("<int:year>/invited%20talk/<int:eventid>",
-         virtual.views.invited_talk_detail, name="virtual_invited_talk_detail"),
+    path("<int:year>/test-of-time/<int:eventid>",
+         virtual.views.paper_detail, name="test-of-time"),
+
+    path("<int:year>/socials.html", virtual.views.socials, name="miniconf-socials"),
+    path("<int:year>/social/<int:eventid>", virtual.views.socials, name="social_detail"),
+
+
+    path("<int:year>/townhall", virtual.views.townhall, name="townhall"),    
+    path("<int:year>/town-hall/<int:eventid>",
+         virtual.views.townhall, name="townallwithid"),
+
+    
+
     
 ]

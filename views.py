@@ -671,7 +671,10 @@ def workshop_detail(request, year, eventid):
 
 
 
-def socials(request, year):
+def socials(request, year, eventid=None):
+
+    """In the future, I might support showing detail on a social if an eventid is passed in. Now it's ignored. The level
+    5 calendar passes it in."""
 
     confInfo = getConfInfo(request, year=year)
 
@@ -738,8 +741,6 @@ def miniconf_calendar(request, year):
     
     return(render(request, "virtual/miniconf-calendar.html", locals()))
 
-#@cache_page(60*15)
-#@vary_on_cookie
 
 def calendar(request, year):
 
@@ -755,31 +756,58 @@ def calendar(request, year):
 
     urls = get_urls()
 
-    siso = Events.objects.filter(session__conference__id=year, show_in_schedule_overview=True).order_by("starttime")  #sis show_in_schedule_overview
+    html = cache.get(str(user_tz))
+    if not html:
 
-    for event in siso:
-        event.starttime = user_tz.normalize(event.starttime)
 
-    days = siso.values_list("starttime__date", flat=True)
+        siso = Events.objects.exclude(starttime=None).filter(session__conference__id=year, show_in_schedule_overview=True).order_by("starttime")  #sis show_in_schedule_overview
 
-    data = {}
-    for day in days:
-        events = siso.filter(starttime__date=day).order_by("starttime")
-        starttimes = events.values_list("starttime", flat=True)
-        starttimeevents = {}
+        #"""we may have replays on these events at a virtual conference. Create a dupliicate event with the startime2 and
+        #endtime2 copyied into starttime1 and endtime1, so they show up in the calendar. """
+#
+        #replays = siso.exclude(starttime2=None).order_by("starttime2")
+#
+        #for replay in replays:
+        #    replay.startime = replay.starttime2
+        #    replay.endtime = replay.endtime2
+#
 
-        for starttime in starttimes:
-            starttimeevents[starttime] = events.filter(starttime=starttime)
-        data[day] = starttimeevents
+        """Now we have to sort these in python.  The database can't do the sort for us becuase the replays aren't stored
+        in the database. Turn the queryset into a list and sort it."""
 
-    template = get_template("virtual/calendar.html")
-    html = template.render(locals())
+        #all_events = [i or i in siso ] + [i for i in replays]
+
+        for event in siso:
+            event.starttime = user_tz.normalize(event.starttime)
+
+        days = siso.values_list("starttime__date", flat=True)
+
+        data = {}
+        for day in days:
+            events = siso.filter(Q(starttime__date=day)|Q(starttime2__date=day)).order_by("starttime")
+            starttimes = events.filter(starttime__date=day).values_list("starttime", flat=True)
+            starttimes2 = events.exclude(starttime2=None).filter(starttime2__date=day).values_list("starttime2", flat=True)
+            all_starttimes = starttimes.union(starttimes2).distinct()
+            starttimeevents = {}
+
+            for starttime in all_starttimes:
+                starttimeevents[starttime] = events.filter(Q(starttime=starttime)|Q(starttime2=starttime))
+            data[day] = starttimeevents
+
+        template = get_template("virtual/calendar.html")
+        html = template.render(locals())
+        cache.set(str(user_tz), html, 60 * 15)
+
+
     print("Calendar PROCEESSING TIME (ms) {}".format(int((time.time() - begin) * 1000)))
 
     return(HttpResponse(html))
 
 
-def townhall(request, year):
+def townhall(request, year, eventid=None):
+
+    """The event.get_virtualsite_url method returns a url  /virtual/2020/town-hall/7035. The eventid at the end isn't
+    needed or used but needs to be accepted"""
 
     confInfo = getConfInfo(request, year=year)
 
