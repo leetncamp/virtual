@@ -9,12 +9,11 @@
 
     {% if access_granted %}
         
-        <div class="row">
-            <div class="col-9">
-                Timezone: {{ tz_name }}. <a
-                    href="https://icml.cc/virtual/2020/index.html">Change &raquo;</a>
-            </div>
+
+        <div class="container">
+                <p>Timezone: <a href="/set_timezone?nextp={{request.get_full_path}}">{{request.session.django_timezone}} &raquo;</a></p>
         </div>
+
         <div class="whitebar"></div>
 
 
@@ -29,9 +28,9 @@
                             <div class="time">{{starttime|date:"P e"}}</div>
                             {% for event in events %}
                               {% if event.type == "Session" %}
-                                  <div class="{{event.get_children.0.get_slugified_type}}">
-                                      <div class="session hdr {{event.get_children.0.get_slugified_type}} {{event.get_slugified_type}}">
-                                          <h5>{{event.name}}</h5>
+                                  <div class="{{event.get_children.0.get_slugified_type}} pad">
+                                      <div class="hdr  {{event.get_slugified_type}}">
+                                          <div class="sessiontitle">{{event.name}}</div>
                                       </div>
                                       {% if not event.get_children.0.type in "Poster" %}
                                           {% for subevent in event.get_children %}
@@ -40,7 +39,8 @@
                                       {% endif %}
                                   </div>
                               {% else %}
-                                <div class="content {{event.get_slugified_type}}">
+                                <div class="eventsession pad {{event.get_slugified_type}}"
+                                <div class="content">
                                     <b>{{event.type}}:</b> {{event.name}}
                                     {% if event.type in "Invited Talk" %}
                                       <br><i>{{ event.get_eventSpeakerStr }}</i>
@@ -57,346 +57,7 @@
         </div>
 
 
-        <div class="grid">
-            <!--Sunday -->
-            <div class="daycontainer">
-                <div class="buffer sticky">
-              <div class="hdrbox">Sun</div>
-            </div>
-                <div class="gcol days">
-                    <h5 style="text-align: center;">Sponsor EXPO</h5>
-                    <div class="time">1:30 AM UTC</div>
-                    <div class="session expo">
-                        <div class="content"><a href="#">NAS Technology at Huawei</a></div>
-                    </div>
-                    <div class="time">5:15 AM UTC</div>
-                    <div class="session expo">
-                        <div class="content"><a href="#">Data-Driven based Keyword Matching</a></div>
-                    </div>
-                    <div class="time">6:30 AM UTC</div>
-                    <div class="session expo">
-                    <div class="content"><a href="#">Baidu AutoDL: Automated and Interpretable Deep Learning</a></div>
-                      <div class="content"><a href="#">Federated Reinforcement Learning for Financial Portfolio Optimization</a></div>
-                    </div>
-                      <div class="time">7:45 AM UTC</div>
-                      <div class="content"><a href="#">AutoAI at IBM Research</a></div>
-                      <div class="content"><a href="#">How We Leverage Machine Learning and AI to Develop Life-Changing Medicines</a></div>
-                      <div class="time">9 AM UTC</div>
-                      <div class="content"><a href="#">Machine Learning in Health: What’s next?</a></div>
-                      <div class="time">10:15 AM UTC</div>
-                      <div class="content"><a href="#">Machine Learning for Drug Discovery in the era of SARS-CoV-2</a></div>
-                      <div class="time">11:30 AM UTC</div>
-                      <div class="content"><a href="#">On-Device Machine Learning with Apple</a></div>
-                      <div class="time">12:45 PM UTC</div>
-                      <div class="content"><a href="#">Introducing the AI Model Efficiency Toolkit (AIMET)</a></div>
-                      <div class="time">2 PM UTC</div>
-                      <div class="content"><a href="#">Google Dataset Search: Building an open ecosystem for dataset discovery</a></div>
-                      <div class="time">3:15 PM UTC</div>
-                      <div class="content"><a href="#">End-to-end Bayesian inference workflows in TensorFlow Probability</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-                      <div class="time">11 AM UTC</div>
-                      <div class="content"><a href="#">text</a></div>
-
-            </div>
-            <div class="break"></div>
-            </div>
-
-            <!--Monday -->
-            <div class="container2">
-                <div class="buffer sticky">
-              <div class="hdrbox">Mon</div>
-            </div>
-                <div class="gcol days">
-                    <div class="time">4 AM UTC</div>
-                    <div class="workshop">
-                    <div class="content"><a href="#"><strong>Workshop:</strong> New in ML</a></div>
-                    </div>
-                    <div class="time">4:30 AM UTC</div>
-                    <div class="workshop">
-                    <div class="content"><a href="#"><strong>Workshop:</strong> LatinX in AI</a></div>
-                    </div>
-                    <div class="time">9 AM UTC</div>
-                        <h5 class="hdr">Tutorial Session 1</h5>
-                        <div class="content"><a href="#">Representation Learning Without Labels</a></div>
-                        <div class="content"><a href="#">Machine Learning with Signal Processing</a></div>
-                        <div class="content"><a href="#">Machine Learning for Healthcare: Challenges, Methods, Frontiers</a></div>
-                    <div class="time">11 AM UTC</div>
-                    <div class="workshop">
-                    <div class="content"><a href="#"><strong>Workshop:</strong> Women in Machine Learning Un-Workshop</a></div>
-                    </div>
-                    <div class="time">11:50 AM UTC</div>
-                    <div class="workshop">
-                    <div class="content"><a href="#"><strong>Workshop:</strong> WiML D&I Chairs Remarks</a></div>
-                </div>
-                    <div class="time">1 PM UTC</div>
-                        <h5 class="hdr">Tutorial Session 2</h5>
-                        <div class="content"><a href="#">Tutorial #1</a></div>
-                        <div class="content"><a href="#">Tutorial #2</a></div>
-                        <div class="content"><a href="#">Tutorial #3</a></div>
-                    <div class="time">2 PM UTC</div>
-                    <div class="workshop">
-                    <div class="content"><a href="#"><strong>Workshop:</strong> Queer In AI</a></div>     
-                    </div>
-                    <div class="time">4 PM UTC</div>
-                    <h5 class="hdr">Tutorial Session 3</h5>
-                        <div class="content"><a href="#">Tutorial #1</a></div>
-                        <div class="content"><a href="#">Tutorial #2</a></div>
-                        <div class="content"><a href="#">Tutorial #3</a></div>
-                    <div class="pad"></div>  
-                </div>
-            <div class="break"></div>
-            </div>
-
-            <!--Tuesday -->
-            <div class="container2">
-                <div class="buffer sticky">
-              <div class="hdrbox">Tue</div>
-            </div>
-                <div class="gcol days">
-                <div class="time">8 AM UTC</div>
-                  <div class="session talks">
-                    <h5 class="hdr">Invited Talk</h5>
-                    <div class="content"><strong><a href="#">Doing Some Good with Machine Learning</a></strong><br/>Lester Mackey<br /><br /></div>
-                </div>
-                <div class="time">10 AM UTC</div>
-                <div class="session posters">
-                <h5 class="hdr">Session 1 Tracks</h5>
-                <div class="content"><a href="#">Adversarial Examples</a></div>
-                <div class="content"><a href="#">Deep Learning</a></div>
-                <div class="content"><a href="#">Approximate Inference</a></div>
-                <div class="content"><a href="#">Optimization</a></div>
-                <div class="content"><a href="#">Applications</a></div>
-                <div class="content"><a href="#">Supervised Learning</a></div>
-                </div>
-                <div class="session workshops">
-                  <div class="content"><a href="#"><strong>Workshop:</strong> New in ML</a></div>
-                </div>
-                <div class="session workshops">
-                  <div class="content"><a href="#"><strong>Workshop:</strong> New in ML</a></div>
-                </div>
-                <div class="time">12 PM UTC</div>
-                <div class="content">Lunch Break</div>
-                <div class="content"><strong><a href="#">Poster session 1</a></strong></div>
-                <div class="time">2 PM UTC</div>
-                <h5 class="hdr">Session 2 Tracks</h5>
-                 <div class="content"><a href="#">Adversarial Examples</a></div>
-                 <div class="content"><a href="#">Deep Learning</a></div>
-                 <div class="content"><a href="#">Approximate Inference</a></div>
-                 <div class="content"><a href="#">Optimization</a></div>
-                 <div class="content"><a href="#">Applications</a></div>
-                 <div class="content"><a href="#">Supervised Learning</a></div>
-                <div class="time">5 PM UTC</div>
-                  <h5 class="hdr">Session 3 Tracks</h5>
-                  <div class="content"><a href="#">Adversarial Examples</a></div>
-                  <div class="content"><a href="#">Deep Learning</a></div>
-                  <div class="content"><a href="#">Approximate Inference</a></div>
-                  <div class="content"><a href="#">Optimization</a></div>
-                  <div class="content"><a href="#">Applications</a></div>
-                  <div class="content"><a href="#">Supervised Learning</a></div>
-                <div class="time">7 PM UTC</div>
-                <div class="content"><strong><a href="#">Poster session 2</a></strong></div>
-             </div>
-            <div class="break"></div>
-            </div>
-
-            <!--Wednesday -->
-            <div class="container2">
-                <div class="buffer sticky">
-              <div class="hdrbox">Wed</div>
-            </div>
-                <div class="gcol days">
-                <div class="time">8 AM UTC</div>
-                  <div class="session talks">
-                    <h5 class="hdr">Invited Talk</h5>
-                    <div class="content"><strong><a href="#">Human and Machine Learning for Assistive Autonomy</a></strong><br/>Brenna Argall</div>
-                </div>
-                <div class="time">10 AM UTC</div>
-                <h5 class="hdr">Session 1 Tracks</h5>
-                <div class="content"><a href="#">Adversarial Examples</a></div>
-                <div class="content"><a href="#">Deep Learning</a></div>
-                <div class="content"><a href="#">Approximate Inference</a></div>
-                <div class="content"><a href="#">Optimization</a></div>
-                <div class="content"><a href="#">Applications</a></div>
-                <div class="content"><a href="#">Supervised Learning</a></div>
-                <div class="time">12 PM UTC</div>
-                <div class="content">Lunch Break</div>
-              <div class="content"><strong><a href="#">Poster session 1</a></strong></div>
-                <div class="time">2 PM UTC</div>
-                <h5 class="hdr">Session 2 Tracks</h5>
-                 <div class="content"><a href="#">Adversarial Examples</a></div>
-                 <div class="content"><a href="#">Deep Learning</a></div>
-                 <div class="content"><a href="#">Approximate Inference</a></div>
-                 <div class="content"><a href="#">Optimization</a></div>
-                 <div class="content"><a href="#">Applications</a></div>
-                 <div class="content"><a href="#">Supervised Learning</a></div>
-                <div class="time">5 PM UTC</div>
-                  <h5 class="hdr">Session 3 Tracks</h5>
-                  <div class="content"><a href="#">Adversarial Examples</a></div>
-                  <div class="content"><a href="#">Deep Learning</a></div>
-                  <div class="content"><a href="#">Approximate Inference</a></div>
-                  <div class="content"><a href="#">Optimization</a></div>
-                  <div class="content"><a href="#">Applications</a></div>
-                  <div class="content"><a href="#">Supervised Learning</a></div>
-                <div class="time">7 PM UTC</div>
-              <div class="content"><strong><a href="#">Poster session 2</a></strong></div>
-            </div>
-            <div class="break"></div>
-            </div>
-
-            <!--Thursday -->
-            <div class="container2">
-                <div class="buffer sticky">
-              <div class="hdrbox">Thu</div>
-            </div>
-                <div class="gcol days">
-                <div class="time">8 AM UTC</div>
-                  <div class="session talks">
-                    <h5 class="hdr">Invited Talk</h5>
-                    <div class="content"><strong><a href="#">Quantum Machine Learning: Prospects and Challenges</a></strong><br/>Iordanis Kerenidis<br /><br /></div>
-                </div>
-              <div class="time">10 AM UTC</div>
-                <h5 class="hdr">Session 1 Tracks</h5>
-                <div class="content"><a href="#">Adversarial Examples</a></div>
-                <div class="content"><a href="#">Deep Learning</a></div>
-                <div class="content"><a href="#">Approximate Inference</a></div>
-                <div class="content"><a href="#">Optimization</a></div>
-                <div class="content"><a href="#">Applications</a></div>
-                <div class="content"><a href="#">Supervised Learning</a></div>
-                <div class="time">12 PM UTC</div>
-                <div class="content">Lunch Break</div>
-              <div class="content"><strong><a href="#">Poster session 1</a></strong></div>
-                <div class="time">2 PM UTC</div>
-                <h5 class="hdr">Session 2 Tracks</h5>
-                 <div class="content"><a href="#">Adversarial Examples</a></div>
-                 <div class="content"><a href="#">Deep Learning</a></div>
-                 <div class="content"><a href="#">Approximate Inference</a></div>
-                 <div class="content"><a href="#">Optimization</a></div>
-                 <div class="content"><a href="#">Applications</a></div>
-                 <div class="content"><a href="#">Supervised Learning</a></div>
-                <div class="time">5 PM UTC</div>
-                  <h5 class="hdr">Session 3 Tracks</h5>
-                  <div class="content"><a href="#">Adversarial Examples</a></div>
-                  <div class="content"><a href="#">Deep Learning</a></div>
-                  <div class="content"><a href="#">Approximate Inference</a></div>
-                  <div class="content"><a href="#">Optimization</a></div>
-                  <div class="content"><a href="#">Applications</a></div>
-                  <div class="content"><a href="#">Supervised Learning</a></div>
-                <div class="time">7 PM UTC</div>
-              <div class="content"><strong><a href="#">Poster session 2</a></strong></div> 
-            </div>
-            <div class="break"></div>
-            </div>
-
-            <!--Friday -->
-            <div class="container2">
-                <div class="buffer sticky">
-              <div class="hdrbox">Fri</div>
-            </div>
-                <div class="gcol days">
-              <h5 class="hdr">Workshops</h5>
-              <div class="time">8 AM UTC</div>
-              <div class="content"><a href="#">Graph Representation Learning and Beyond (GRL+)</a></div>
-              <div class="content"><a href="#">XXAI: Extending Explainable AI Beyond Deep Models and Classifiers</a></div>
-              <div class="content"><a href="#">Self-supervision in Audio and Speech</a></div>
-              <div class="content"><a href="#">5th ICML Workshop on Human Interpretability in Machine Learning (WHI)</a></div>
-              <div class="content"><a href="#">Law & Machine Learning</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-            </div>
-            <div class="break"></div>
-            </div>
-
-            <!--Saturday -->
-            <div class="container2">
-                <div class="buffer sticky">
-              <div class="hdrbox">Sat</div>
-            </div>
-                <div class="gcol days">
-              <h5 class="hdr">Workshops</h5>
-              <div class="time">8 AM UTC</div>
-              <div class="content"><a href="#">4th Lifelong Learning Workshop</a></div>
-              <div class="content"><a href="#">INNF+: Invertible Neural Networks, Normalizing Flows, and Explicit Likelihood Models</a></div>
-              <div class="content"><a href="#">Inductive Biases, Invariances and Generalization in Reinforcement Learning</a></div>
-              <div class="content"><a href="#">Negative Dependence and Submodularity: Theory and Applications in Machine Learning</a></div>
-              <div class="content"><a href="#">Machine Learning for Global Health</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-              <div class="content"><a href="#">Workshop Title</a></div>
-            </div>
-            <div class="break"></div>
-            </div>
-
-        </div>
-
-
+        
 
 
     {% else %}

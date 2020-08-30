@@ -15,6 +15,9 @@ from django.urls import reverse
 from django.contrib import messages
 import pytz
 import time
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 
 
 from nips.models import Events, Eventspeakers, Timezones, Conferences, Registrations, Users, \
@@ -735,6 +738,8 @@ def miniconf_calendar(request, year):
     
     return(render(request, "virtual/miniconf-calendar.html", locals()))
 
+#@cache_page(60*15)
+#@vary_on_cookie
 
 def calendar(request, year):
 
@@ -767,9 +772,11 @@ def calendar(request, year):
             starttimeevents[starttime] = events.filter(starttime=starttime)
         data[day] = starttimeevents
 
-    print("Calendar PROCEESSING TIME MS {}".format(time.time() - begin))
+    template = get_template("virtual/calendar.html")
+    html = template.render(locals())
+    print("Calendar PROCEESSING TIME (ms) {}".format(int((time.time() - begin) * 1000)))
 
-    return(render(request, "virtual/calendar.html", locals()))
+    return(HttpResponse(html))
 
 
 def townhall(request, year):
