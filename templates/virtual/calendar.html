@@ -37,14 +37,16 @@
                                               <div class="content">{{subevent.name}}</div>
                                           {% endfor %}
                                       {% endif %}
+                                      <div class="hours">{{event.duration}} hr</div>
                                   </div>
                               {% else %}
-                                <div class="eventsession pad {{event.get_slugified_type}}"
+                                <div class="eventsession pad {{event.get_slugified_type}} {% if event.awards.exists %}award{% endif %}"
                                 <div class="content">
                                     <b>{{event.type}}:</b> {{event.name}}
                                     {% if event.type in "Invited Talk" %}
                                       <br><i>{{ event.get_eventSpeakerStr }}</i>
                                     {% endif %}
+                                    <div class="hours">{{event.duration}} hr</div>
                                 </div>
                               {% endif %}
                             {% endfor %}

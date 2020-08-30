@@ -79,6 +79,17 @@ body {
 
 
 
+.hours {
+    /*display of hours inside an eventsession*/
+    text-align: center;
+    font-size: .9em;
+    color:666;
+
+    before {
+        content: "&emdash;";
+    }
+}
+
 .expo {
     background-color: #f9d4a9;
 }
@@ -101,7 +112,7 @@ body {
 
 .affinityworkshop {
     background: #d5efc2;
-    border: 5px solid #ddd;
+    border: 5px solid rgb(154, 203, 119, .3);
 }
 
 .invited-talk {
@@ -139,6 +150,16 @@ body {
     background-color: #ebc0e9;
 }
 
+.social {
+    background-color: rgb(230, 230, 210);  
+    border: 5px solid white;
+}
+
+.award {
+    border: 7px solid gold;
+
+}
+
 .sessiontitle {
     text-align:center;
     font-weight: 600;
@@ -147,7 +168,7 @@ body {
 
     color: #222;
     border-radius: 5px;
-    padding: 4px;
+    padding: px;
     font-size: 110%;
     margin-bottom: 1px !important;
 }
