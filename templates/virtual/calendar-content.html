@@ -1,0 +1,50 @@
+
+
+
+        <div class='grid'>
+            {% for day, starttimeevents in data.items %}
+                <div class="container2">
+                    <div class="buffer sticky">
+                        <div class="hdrbox">{{ day|date:"D"|upper }}</div>
+                    </div>
+                    <div class="gcol days">
+                        {% for starttime, events in starttimeevents.items %}
+                            <div class="time">{{starttime|date:"P e"}}</div>
+                            {% for event in events %}
+                              {% if event.type == "Session" %}
+                                  <div class="{{event.get_children.0.get_slugified_type}} pad">
+                                      <div class="hdr  {{event.get_slugified_type}}">
+                                          <div class="sessiontitle">{{event.name}}</div>
+                                      </div>
+                                      {% if not event.get_children.0.type in "Poster" %}
+                                          {% for subevent in event.get_children %}
+                                              <div class="content"><a href="{{subevent.get_virtualsite_url}}">{{subevent.name}}</a></div>
+                                          {% endfor %}
+                                      {% else %}
+                                        {% if events.count == 1 %}
+                                          <div class="posteronly"></div>
+                                        {% endif %}
+                                      {% endif %}
+                                      <div class="hours">{{event.duration}} hr</div>
+                                  </div>
+                              {% else %}
+                                <div class="eventsession pad {{event.get_slugified_type}} {% if event.awards.exists %}award{% endif %}"
+                                <div class="content">
+                                    <b>{{event.type}}:</b> <a href="{{event.get_virtualsite_url}}">{{event.name}}</a>
+                                    {% if event.type in "Invited Talk" %}
+                                      <br><i>{{ event.get_eventSpeakerStr }}</i>
+                                    {% endif %}
+                                    <div class="hours">{{event.duration}} hr</div>
+                                </div>
+                              {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        
+                    </div>
+                    <div class="break"></div>
+                </div>
+            {% endfor %}
+        </div>
+
+
+        
