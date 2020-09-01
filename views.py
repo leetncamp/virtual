@@ -18,6 +18,7 @@ import time
 from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
+from expo.models import Expo_talkpanelapplication, Expo_workshopapplication, Expo_demonstrationapplication
 
 
 from nips.models import Events, Eventspeakers, Timezones, Conferences, Registrations, Users, \
@@ -760,38 +761,53 @@ def calendar(request, year):
     if not html:
 
 
-        siso = Events.objects.exclude(starttime=None).filter(session__conference__id=year, show_in_schedule_overview=True).order_by("starttime")  #sis show_in_schedule_overview
+        #Get Expo events
 
-        #"""we may have replays on these events at a virtual conference. Create a dupliicate event with the startime2 and
-        #endtime2 copyied into starttime1 and endtime1, so they show up in the calendar. """
-#
-        #replays = siso.exclude(starttime2=None).order_by("starttime2")
-#
-        #for replay in replays:
-        #    replay.startime = replay.starttime2
-        #    replay.endtime = replay.endtime2
-#
+        expo_demos     = Expo_demonstrationapplication.objects.filter(conference__id=year, status="Accepted").exclude(starttime=None)
+        expo_workshops = Expo_workshopapplication.objects.filter(conference__id=year, status="Accepted").exclude(starttime=None)
+        expo_talks     = Expo_talkpanelapplication.objects.filter(conference__id=year, status="Accepted").exclude(starttime=None)
 
-        """Now we have to sort these in python.  The database can't do the sort for us becuase the replays aren't stored
-        in the database. Turn the queryset into a list and sort it."""
+        for eventtype in [expo_demos, expo_workshops, expo_talks]:
+            for event in eventtype:
+                event.starttime = user_tz.normalize(event.starttime)
+                if event.starttime2:
+                    event.starttime2 = user_tz.normalize(event.starttime2)
 
-        #all_events = [i or i in siso ] + [i for i in replays]
+
+        expo_days = expo_demos.values_list("starttime__date", flat=True).union(expo_talks.values_list("starttime__date", flat=True))\
+            .union(expo_workshops.values_list("starttime__date", flat=True))
+
+
+        #sis show_in_schedule_overview
+        siso = Events.objects.exclude(starttime=None).filter(session__conference__id=year, show_in_schedule_overview=True).order_by("starttime")
 
         for event in siso:
             event.starttime = user_tz.normalize(event.starttime)
+            if event.starttime2:
+                event.starttime2 = user_tz.normalize(event.starttime2)
 
-        days = siso.values_list("starttime__date", flat=True)
+        days = sorted(siso.values_list("starttime__date", flat=True).union(expo_days))
 
         data = {}
         for day in days:
             events = siso.filter(Q(starttime__date=day)|Q(starttime2__date=day)).order_by("starttime")
             starttimes = events.filter(starttime__date=day).values_list("starttime", flat=True)
             starttimes2 = events.exclude(starttime2=None).filter(starttime2__date=day).values_list("starttime2", flat=True)
-            all_starttimes = starttimes.union(starttimes2).distinct()
+            demo_starttimes = expo_demos.values_list("starttime", flat=True)
+            workshop_starttimes = expo_workshops.values_list("starttime", flat=True)
+            talks_starttimes = expo_talks.values_list("starttime", flat=True)
+
+            all_starttimes = starttimes.union(starttimes2).union(demo_starttimes).union(workshop_starttimes).union(talks_starttimes)
             starttimeevents = {}
 
             for starttime in all_starttimes:
-                starttimeevents[starttime] = events.filter(Q(starttime=starttime)|Q(starttime2=starttime))
+                conference_events = events.filter(Q(starttime=starttime)|Q(starttime2=starttime))
+                expo_talk_events = expo_talks.filter(Q(starttime=starttime)|Q(starttime2=starttime))
+                expo_demo_events = expo_demos.filter(Q(starttime=starttime)|Q(starttime2=starttime))
+                expo_workshop_events = expo_workshops.filter(Q(starttime=starttime)|Q(starttime2=starttime))
+                all_events = [i for i in conference_events] + [i for i in expo_talk_events] + [i for i in expo_demo_events] + [i for i in expo_workshop_events]
+                all_events = sorted(all_events, key=lambda x:x.starttime)
+                starttimeevents[starttime] = all_events
             data[day] = starttimeevents
 
         template = get_template("virtual/calendar-content.html")
