@@ -794,14 +794,14 @@ def calendar(request, year):
                 starttimeevents[starttime] = events.filter(Q(starttime=starttime)|Q(starttime2=starttime))
             data[day] = starttimeevents
 
-        template = get_template("virtual/calendar.html")
+        template = get_template("virtual/calendar-content.html")
         html = template.render(locals())
         cache.set(str(user_tz), html, 60 * 15)
 
 
     print("Calendar PROCEESSING TIME (ms) {}".format(int((time.time() - begin) * 1000)))
 
-    return(HttpResponse(html))
+    return(render(request, "virtual/calendar.html", locals()))
 
 
 def townhall(request, year, eventid=None):
