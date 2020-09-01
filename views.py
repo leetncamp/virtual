@@ -790,14 +790,21 @@ def calendar(request, year):
 
         data = {}
         for day in days:
-            events = siso.filter(Q(starttime__date=day)|Q(starttime2__date=day)).order_by("starttime")
+            events = siso.filter(Q(starttime__date=day)|Q(starttime2__date=day))
             starttimes = events.filter(starttime__date=day).values_list("starttime", flat=True)
             starttimes2 = events.exclude(starttime2=None).filter(starttime2__date=day).values_list("starttime2", flat=True)
-            demo_starttimes = expo_demos.values_list("starttime", flat=True)
-            workshop_starttimes = expo_workshops.values_list("starttime", flat=True)
-            talks_starttimes = expo_talks.values_list("starttime", flat=True)
+            demo_starttimes = expo_demos.filter(starttime__date=day).values_list("starttime", flat=True)
+            demo_starttimes2 = expo_demos.filter(starttime2__date=day).values_list("starttime", flat=True)
+            workshop_starttimes = expo_workshops.filter(starttime__date=day).values_list("starttime", flat=True)
+            workshop_starttimes2 = expo_workshops.filter(starttime2__date=day).values_list("starttime2", flat=True)
+            talks_starttimes = expo_talks.filter(starttime__date=day).values_list("starttime", flat=True)
+            talks_starttimes2 = expo_talks.filter(starttime2__date=day).values_list("starttime", flat=True)
 
-            all_starttimes = starttimes.union(starttimes2).union(demo_starttimes).union(workshop_starttimes).union(talks_starttimes)
+            #This is a very awkward way to collect these.  All events should inherit from a single abstract parent. 
+            all_starttimes = starttimes.union(starttimes2).union(demo_starttimes).union(workshop_starttimes).union(talks_starttimes)\
+                .union(demo_starttimes2).union(workshop_starttimes2).union(talks_starttimes2)
+
+
             starttimeevents = {}
 
             for starttime in all_starttimes:
@@ -805,7 +812,8 @@ def calendar(request, year):
                 expo_talk_events = expo_talks.filter(Q(starttime=starttime)|Q(starttime2=starttime))
                 expo_demo_events = expo_demos.filter(Q(starttime=starttime)|Q(starttime2=starttime))
                 expo_workshop_events = expo_workshops.filter(Q(starttime=starttime)|Q(starttime2=starttime))
-                all_events = [i for i in conference_events] + [i for i in expo_talk_events] + [i for i in expo_demo_events] + [i for i in expo_workshop_events]
+                all_events = [i for i in conference_events] + [i for i in expo_talk_events] + [i for i in expo_demo_events] \
+                    + [i for i in expo_workshop_events]
                 all_events = sorted(all_events, key=lambda x:x.starttime)
                 starttimeevents[starttime] = all_events
             data[day] = starttimeevents
