@@ -746,6 +746,7 @@ def miniconf_calendar(request, year):
 def calendar(request, year):
 
     begin = time.time()
+    log.info("CALENDAR BEGIN")
 
     confInfo = getConfInfo(request, year=year)
 
