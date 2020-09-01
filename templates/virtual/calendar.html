@@ -11,10 +11,11 @@
     {% if access_granted %}
         
 
-        <div class="container">
+        <div class="pad">
+                <a class="btn btn-light btn-sm float-right" onClick="togglePosters();">Toggle Posters</a>
                 <div>Timezone: 
                   <a href="/set_timezone?nextp={{request.get_full_path}}">{{request.session.django_timezone}} &raquo;</a>
-                  <a class="btn btn-default" onClick="togglePosters();">Toggle Posters</a>
+                  <br>
                 </div>
 
         </div>

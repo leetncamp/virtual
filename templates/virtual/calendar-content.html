@@ -21,7 +21,7 @@
                                               <div class="content"><a href="{{subevent.get_virtualsite_url}}">{{subevent.name}}</a></div>
                                           {% endfor %}
                                       {% else %}
-                                        {% if events.count == 1 %}
+                                        {% if events|length == 1 %}
                                           <div class="posteronly"></div>
                                         {% endif %}
                                       {% endif %}
