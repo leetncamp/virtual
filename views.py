@@ -800,32 +800,62 @@ def calendar(request, year):
             """Once you union two querysets, you cannot filter them again. Rebuild the query. """
 
             events = Events.objects.filter(pk__in=events.values("pk"))
-            starttimes = events.values_list("starttime", flat=True)
-            starttimes2 = events.exclude(starttime2=None).values_list("starttime2", flat=True)
+
+            starttimes = events.filter(starttime__date=day).values_list("starttime", flat=True)
+            starttimes2 = events.exclude(starttime2=None).filter(starttime2__date=day).values_list("starttime2", flat=True)
             demo_starttimes = expo_demos.filter(starttime__date=day).values_list("starttime", flat=True)
-            demo_starttimes2 = expo_demos.exclude(starttime2=None).filter(starttime2__date=start).values_list("starttime2", flat=True)
+            demo_starttimes2 = expo_demos.filter(starttime2__date=day).values_list("starttime", flat=True)
             workshop_starttimes = expo_workshops.filter(starttime__date=day).values_list("starttime", flat=True)
-            workshop_starttimes2 = expo_workshops.exclude(starttime2=None).filter(starttime2__date=day).values_list("starttime2", flat=True)
+            workshop_starttimes2 = expo_workshops.filter(starttime2__date=day).values_list("starttime2", flat=True)
             talks_starttimes = expo_talks.filter(starttime__date=day).values_list("starttime", flat=True)
-            talks_starttimes2 = expo_talks.exclude(starttime2=None).filter(starttime2__date=day).values_list("starttime2", flat=True)
+            talks_starttimes2 = expo_talks.filter(starttime2__date=day).values_list("starttime", flat=True)
 
             #This is a very awkward way to collect these.  All events should inherit from a single abstract parent. 
-
             all_starttimes = starttimes.union(starttimes2).union(demo_starttimes).union(workshop_starttimes).union(talks_starttimes)\
                 .union(demo_starttimes2).union(workshop_starttimes2).union(talks_starttimes2)
 
             all_starttimes = sorted(all_starttimes)
-
             starttimeevents = {}
 
             for starttime in all_starttimes:
+                all_events = []
+                conference_events = events.filter(starttime=starttime)
+                for ev in conference_events:
+                    #we are matching on either starttime or starttime2. Store the relevant one in .start so we can sort on it later
+                    ev.start = ev.starttime
+                    all_events.append(ev)
+                conference_events2 = events.filter(starttime2=starttime)
+                for ev in conference_events2:
+                    ev.start = ev.starttime2
+                    all_events.append(ev)
+               
+                expo_talk_events = expo_talks.filter(starttime=starttime)
+                for ev in expo_talk_events:
+                    ev.start = ev.starttime
+                    all_events.append(ev)
+                expo_talk_events2 = expo_talks.filter(starttime2=starttime)
+                for ev in expo_talk_events2:
+                    ev.start = ev.starttime2
+                    all_events.append(ev)
 
-                conference_events = events.filter(Q(starttime=starttime)|Q(starttime2=starttime))
-                expo_talk_events = expo_talks.filter(Q(starttime=starttime)|Q(starttime2=starttime))
-                expo_demo_events = expo_demos.filter(Q(starttime=starttime)|Q(starttime2=starttime))
-                expo_workshop_events = expo_workshops.filter(Q(starttime=starttime)|Q(starttime2=starttime))
-                all_events = [i for i in conference_events] + [i for i in expo_talk_events] + [i for i in expo_demo_events] \
-                    + [i for i in expo_workshop_events]
+                expo_demo_events = expo_demos.filter(starttime=starttime)
+                for ev in expo_demo_events:
+                    ev.start = ev.starttime
+                    all_events.append(ev)
+                expo_demo_events2 = expo_demos.filter(starttime2=starttime)
+                for ev in expo_demo_events2:
+                    ev.start = ev.starttime2
+                    all_events.append(ev)
+
+                expo_workshop_events = expo_workshops.filter(starttime=starttime)
+                for ev in expo_demo_events2:
+                    ev.start = ev.starttime2
+                    all_events.append(ev)
+                expo_workshop_events2 = expo_workshops.filter(starttime2=starttime)
+                for ev in expo_workshop_events2:
+                    ev.start = ev.starttime2
+                    all_events.append(ev)
+                
                 all_events = sorted(all_events, key=lambda x:x.starttime)
                 starttimeevents[starttime] = all_events
             data[day] = starttimeevents
