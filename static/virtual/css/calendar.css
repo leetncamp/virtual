@@ -97,6 +97,7 @@ body {
 .tutorial {
     background: #bae4ed;
     border: 5px solid rgb(113, 180, 194, .3);
+    border-radius:5px;
 }
 
 .workshop {

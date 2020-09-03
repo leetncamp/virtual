@@ -819,12 +819,12 @@ def calendar(request, year):
 
             for starttime in all_starttimes:
                 all_events = []
-                conference_events = events.filter(starttime=starttime)
+                conference_events = events.filter(starttime=starttime).order_by("sortkey")
                 for ev in conference_events:
                     #we are matching on either starttime or starttime2. Store the relevant one in .start so we can sort on it later
                     ev.start = ev.starttime
                     all_events.append(ev)
-                conference_events2 = events.filter(starttime2=starttime)
+                conference_events2 = events.filter(starttime2=starttime).order_by("sortkey")
                 for ev in conference_events2:
                     ev.start = ev.starttime2
                     all_events.append(ev)
