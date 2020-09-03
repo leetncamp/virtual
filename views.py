@@ -804,11 +804,11 @@ def calendar(request, year):
             starttimes = events.filter(starttime__date=day).values_list("starttime", flat=True)
             starttimes2 = events.exclude(starttime2=None).filter(starttime2__date=day).values_list("starttime2", flat=True)
             demo_starttimes = expo_demos.filter(starttime__date=day).values_list("starttime", flat=True)
-            demo_starttimes2 = expo_demos.filter(starttime2__date=day).values_list("starttime", flat=True)
+            demo_starttimes2 = expo_demos.filter(starttime2__date=day).values_list("starttime2", flat=True)
             workshop_starttimes = expo_workshops.filter(starttime__date=day).values_list("starttime", flat=True)
             workshop_starttimes2 = expo_workshops.filter(starttime2__date=day).values_list("starttime2", flat=True)
             talks_starttimes = expo_talks.filter(starttime__date=day).values_list("starttime", flat=True)
-            talks_starttimes2 = expo_talks.filter(starttime2__date=day).values_list("starttime", flat=True)
+            talks_starttimes2 = expo_talks.filter(starttime2__date=day).values_list("starttime2", flat=True)
 
             #This is a very awkward way to collect these.  All events should inherit from a single abstract parent. 
             all_starttimes = starttimes.union(starttimes2).union(demo_starttimes).union(workshop_starttimes).union(talks_starttimes)\
@@ -838,6 +838,7 @@ def calendar(request, year):
                     ev.start = ev.starttime2
                     all_events.append(ev)
 
+
                 expo_demo_events = expo_demos.filter(starttime=starttime)
                 for ev in expo_demo_events:
                     ev.start = ev.starttime
@@ -848,8 +849,8 @@ def calendar(request, year):
                     all_events.append(ev)
 
                 expo_workshop_events = expo_workshops.filter(starttime=starttime)
-                for ev in expo_demo_events2:
-                    ev.start = ev.starttime2
+                for ev in expo_workshop_events:
+                    ev.start = ev.starttime
                     all_events.append(ev)
                 expo_workshop_events2 = expo_workshops.filter(starttime2=starttime)
                 for ev in expo_workshop_events2:
