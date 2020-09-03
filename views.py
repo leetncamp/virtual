@@ -6,7 +6,7 @@ from nips.conference import ConferenceInfo
 from django.template.loader import get_template
 from django.conf import settings
 from django.urls import reverse
-from datetime import datetime, timedelta
+import datetime
 import pickle
 import json
 import os
@@ -95,7 +95,7 @@ def get_timezone():
 
     tz = get_current_timezone()
     tz_name = tz.zone
-    local_now = datetime.now(tz)
+    local_now = datetime.datetime.now(tz)
     tz_offset = local_now.utcoffset().total_seconds() /60
 
     return(tz_name, tz_offset)
@@ -225,7 +225,7 @@ def ical(request, eventid, number):
                 elif conf_event.starttime:  #Workshop organizers sometimes don't fill in the endtime
                     event.add('dtstart', conf_event.starttime)
 
-                    event.add('dtstart', conf_event.starttime + timedelta(minutes=30))
+                    event.add('dtstart', conf_event.starttime + datetime.timedelta(minutes=30))
                 else:
                     raise Http404("An ical attachment cannot be generated.  An engineer has been notified. ")
             elif number == 2:
@@ -234,7 +234,7 @@ def ical(request, eventid, number):
                     event.add('dtend', conf_event.endtime2)
                 elif conf_event.starttime2:
                     event.add('dtstart', conf_event.starttime2)
-                    event.add('dtstart', conf_event.starttime2 + timedelta(minutes=30))
+                    event.add('dtstart', conf_event.starttime2 + datetime.timedelta(minutes=30))
                 else:
                     raise Http404("An ical attachment cannot be generated.  An engineer has been notified. ")
             event.add('dtstamp', now())
@@ -374,7 +374,7 @@ def paper_detail(request, year, eventid):
 
     urls = get_urls()
 
-    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + timedelta(days=2)
+    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + datetime.timedelta(days=2)
 
     access_granted = get_access(request, year)
 
@@ -439,7 +439,7 @@ def tutorial_detail(request, year, eventid):
 
     access_granted = get_access(request, year)
 
-    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + timedelta(days=2)
+    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + datetime.timedelta(days=2)
 
     """Create or get the rocketchat channel for this tutorial and make sure the request user has a rocketchat account"""
     from rocketchat_conferences import helpers as rch
@@ -502,7 +502,7 @@ def invited_talk_detail(request, year, eventid):
 
     access_granted = get_access(request, year)
 
-    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + timedelta(days=2)
+    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + datetime.timedelta(days=2)
 
     """Create or get the rocketchat channel for this talk and make sure the request user has a rocketchat account"""
     from rocketchat_conferences import helpers as rch
@@ -616,7 +616,7 @@ def workshop_detail(request, year, eventid):
 
     workshop = Events.objects.filter(pk=eventid).first()
 
-    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + timedelta(days=2)
+    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + datetime.timedelta(days=2)
 
     if workshop:
         wkapp = workshop.get_application()
@@ -624,8 +624,8 @@ def workshop_detail(request, year, eventid):
             
             wkapp = wkapp[0]  #This returns a list not queryset
 
-            meeting_opens = Events.objects.exclude(starttime=None).order_by("starttime").first().starttime - timedelta(days=2)  #Show zoom links the day before the meeting starts
-            meeting_closes = Events.objects.exclude(endtime=None).order_by("endtime").last().endtime + timedelta(days=2)  #Show zoom links the day before the meeting starts
+            meeting_opens = Events.objects.exclude(starttime=None).order_by("starttime").first().starttime - datetime.timedelta(days=2)  #Show zoom links the day before the meeting starts
+            meeting_closes = Events.objects.exclude(endtime=None).order_by("endtime").last().endtime + datetime.timedelta(days=2)  #Show zoom links the day before the meeting starts
 
             show_zoom_links = now() > meeting_opens and now() < meeting_closes
             show_zoom_links = True
@@ -759,8 +759,8 @@ def calendar(request, year):
     urls = get_urls()
 
     html = cache.get(str(user_tz))
+    
     if not html:
-
 
         #Get Expo events
 
@@ -778,7 +778,6 @@ def calendar(request, year):
         expo_days = expo_demos.values_list("starttime__date", flat=True).union(expo_talks.values_list("starttime__date", flat=True))\
             .union(expo_workshops.values_list("starttime__date", flat=True))
 
-
         #sis show_in_schedule_overview
         siso = Events.objects.exclude(starttime=None).filter(session__conference__id=year, show_in_schedule_overview=True).order_by("starttime")
 
@@ -787,11 +786,21 @@ def calendar(request, year):
             if event.starttime2:
                 event.starttime2 = user_tz.normalize(event.starttime2)
 
+        """the Django ORM returns dates that are correct for the activated user timezone when using .values_list("starttime__date")"""
         days = sorted(siso.values_list("starttime__date", flat=True).union(expo_days))
 
+        midnight = datetime.time(0,0)
+        oneday = datetime.timedelta(days=1)
         data = {}
         for day in days:
-            events = siso.filter(Q(starttime__date=day)|Q(starttime2__date=day))
+            start = user_tz.localize(datetime.datetime.combine(day, midnight))
+            end = start + oneday
+
+            events = siso.filter(starttime__gte=start).filter(starttime__lt=end).union( siso.filter(starttime2__gte=start).filter(starttime2__lt=end)  )
+            """Once you union two querysets, you cannot filter them again. Rebuild the query. """
+
+            events = Events.objects.filter(pk__in=events.values("pk"))
+
             starttimes = events.filter(starttime__date=day).values_list("starttime", flat=True)
             starttimes2 = events.exclude(starttime2=None).filter(starttime2__date=day).values_list("starttime2", flat=True)
             demo_starttimes = expo_demos.filter(starttime__date=day).values_list("starttime", flat=True)
@@ -838,7 +847,7 @@ def townhall(request, year, eventid=None):
 
     access_granted = get_access(request, year)
 
-    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + timedelta(days=2)
+    meeting_over = now().date() > Conferences.objects.get(pk=settings.CURRENT_CONFERENCE).enddate + datetime.timedelta(days=2)
 
     tz_name, tz_offset = get_timezone()
 
